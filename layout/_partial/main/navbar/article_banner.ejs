@@ -43,6 +43,21 @@ function layoutBreadcrumb() {
   el += `</div>`
   // 3.left.bottom
   el += partial('dateinfo')
+  //字数显示
+  el += '<div class="flex-row" id="page-words"><span>&nbsp;本文字数：' + page.content.length + '字</span></div>';
+  //标签显示
+  if (page.layout == "post" && page.tags && page.tags.length > 0) {
+    el += '<div class="flex-row" id="tag">'; // 将标签容器的创建移动到条件内部
+    el += ' <span>&nbsp标签：</span>';
+    el += list_categories(page.tags, {
+      class: "cap breadcrumb",
+      show_count: false,
+      separator: '&nbsp; ',
+      style: "none"
+    });
+    el += '&nbsp</div>';
+  }
+  
   // end 2.left
   el += `</div>`
   // end 1.main
