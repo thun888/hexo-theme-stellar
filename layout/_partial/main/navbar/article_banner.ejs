@@ -44,7 +44,7 @@ function layoutBreadcrumb() {
   // 3.left.bottom
   el += partial('dateinfo')
   //字数显示
-  el += '<div class="flex-row" id="page-words"><span>&nbsp;本文字数：' + page.content.length + '字</span></div>';
+  el += '<div class="flex-row" id="page-words"><span style="padding: 4px;">本文字数：' + page.content.length + '字</span><span class="sep updated" style="padding: 4px;"></span><span class="text updated" style="padding: 4px;">阅读时长：' + parseInt(page.content.length/250) + '分</span></div>';
   //标签显示
   if (page.layout == "post" && page.tags && page.tags.length > 0) {
     el += '<div class="flex-row" id="tag">'; // 将标签容器的创建移动到条件内部
