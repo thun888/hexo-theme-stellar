@@ -28,7 +28,7 @@ meta:
   older: 较早文章
   newer: 较新文章
   references: 参考资料
-  related_posts: 您可能感兴趣的文章
+  related_posts: 这些怎么样（￣︶￣）↗　
   back_to_top: 回到顶部
   more: 更多
   created_author: 本文由 %s 发布于
@@ -50,7 +50,7 @@ page:
     action: 返回主页
 
 search:
-  search: 站内搜索
+  search: 搜搜看
   search_in: 在 %s 中搜索
   no_results: 没有找到内容！
 
