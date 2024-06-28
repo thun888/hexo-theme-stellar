@@ -1,7 +1,8 @@
 <% 
 const { field } = theme.plugins.tianli_gpt;
+const useai = (page.useai === undefined) ? true : page.useai;
 const matchesField = field === 'all' || field === page.layout || (field === 'wiki' && page.wiki) || (field === 'topic' && page.topic);
-if (matchesField) { %>
+if (matchesField && useai) { %>
   <script defer src="<%- theme.plugins.tianli_gpt?.js %>"></script>
   <script defer>
     window.addEventListener('DOMContentLoaded', (event) => {
