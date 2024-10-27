@@ -197,6 +197,7 @@ search:
     field: all # post, page, all
     path: /search.json # 搜索文件存放位置
     content: true # 是否搜索内容
+    skip_search:  # 指定 path 中的内容不被搜索。
   algolia_search: # Docsearch https://docsearch.algolia.com/apply/ 申请
     appId: 
     apiKey: 
@@ -451,6 +452,15 @@ data_services:
     js: /js/services/weibo.js
   memos:
     js: /js/services/memos.js
+  # 最新评论获取类
+  twikoo:
+    js: /js/services/twikoo_latest_comment.js
+  waline:
+    js: /js/services/waline_latest_comment.js
+  artalk:
+    js: /js/services/artalk_latest_comment.js
+  giscus:
+    js: /js/services/giscus_latest_comment.js
 
 
 # 扩展插件接入方法：(插件名下面用 #plugin# 代替)
