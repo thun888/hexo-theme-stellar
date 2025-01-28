@@ -49,7 +49,7 @@ function layoutBreadcrumb() {
   el += '<div class="flex-row" id="page-words"><span style="padding: 4px;">本文字数：' + wordcount(page.content) + '字</span><span class="sep updated" style="padding: 4px;"></span><span class="text updated" style="padding: 4px;">阅读时长：' + min2read(page.content) + '分</span></div>';
   //标签显示
   if (page.layout == "post" && page.tags && page.tags.length > 0) {
-    el += '<div class="flex-row" id="tag">'; // 将标签容器的创建移动到条件内部
+    el += '<div class="flex-row" id="tag" itemprop="keywords">'; // 将标签容器的创建移动到条件内部
     el += ' <span>&nbsp标签：</span>';
     el += list_categories(page.tags, {
       class: "cap breadcrumb",
@@ -69,7 +69,7 @@ function layoutBreadcrumb() {
 
 function layoutTitle() {
   if (banner.title?.length > 0) {
-    return `<h1 class="text title"><span>${banner.title}</span></h1>`
+    return `<h1 class="text title" itemprop="headline"><span>${banner.title}</span></h1>`
   } else {
     return ''
   }
@@ -122,7 +122,7 @@ function layoutDiv() {
   const top = layoutBreadcrumb()
   var style = ``
   var el = ``
-  el += `<div class="article banner top">`
+  el += `<div class="article banner top" itemscope itemtype="http://schema.org/BlogPosting">`
   if (banner.url?.length > 0) {
     el += `<img class="bg" src="${banner.url}">`
     if (banner.color) {
