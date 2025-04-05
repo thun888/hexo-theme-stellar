@@ -11,6 +11,8 @@ utils.jq(() => {
         }
         utils.request(el, api, function (data) {
           data = data.data || [];
+          // 过滤掉page_key为"/friends/"的评论
+          data = data.filter(item => item.page_key !== "/friends/");
           data.forEach((item, i) => {
             // 去掉hidename
             if (item.nick == hidename) {
@@ -26,7 +28,7 @@ utils.jq(() => {
             var cell = '<div class="timenode" index="' + i + '">';
             cell += '<div class="header">';
             cell += '<div class="user-info">';
-            // cell += '<img src="https://cravatar.cn/avatar/' + (item.email_encrypted) + '?d=mp&s=240">';
+            // cell += '<img src="https://weavatar.com/avatar/' + (item.email_encrypted) + '?d=mp&s=240">';
             cell += '<span>' + item.nick + '</span>';
             cell += '</div>';
             cell += '<span>' + new Date(item.date).toLocaleString() + '</span>';
