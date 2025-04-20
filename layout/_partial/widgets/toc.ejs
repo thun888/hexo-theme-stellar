@@ -76,6 +76,12 @@ function layoutDiv(fallback) {
   el += `<span>${__('btn.delmode')}</span>`
   el += `</a>`
 
+  <!-- 有害内容反馈 -->
+  el += `<a class="report-btn" href="https://wj.qq.com/s2/21008541/d4f8/">`
+    el += icon('myself:alert-twotone')
+    el += `<span>${__('btn.report')}</span>`
+    el += `</a>`
+
   el += `</div>`
   el += `</widget>`
   return el

@@ -17,6 +17,7 @@ btn:
   top: 回到顶部
   comments: 参与讨论
   delmode: 删除模式
+  report: 内容举报
 
 meta:
   recent_update: 最近更新
