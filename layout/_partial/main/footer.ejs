@@ -25,11 +25,12 @@ function layoutDiv() {
   }
   // footer
   el += '<div class="text">'
-  if (content) {
-    el += markdown(content)
+    if (content) {
+      el += markdown(content)
+    }
+    el += '<script> var allpostscount = "' + site.posts.length + '" ;var allpostswords = "' + totalcount(site) + '";gtime_days = Math.floor((new Date() - new Date(' + page.updated + ')) / 1000 / 60 / 60 / 24);</script>'
+    el += '</div></footer>'
+    return el
   }
-  el += '</div></footer>'
-  return el
-}
-%>
-<%- layoutDiv() %>
+  %>
+  <%- layoutDiv() %>
