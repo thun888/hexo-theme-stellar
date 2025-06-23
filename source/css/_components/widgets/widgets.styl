@@ -61,11 +61,6 @@
   display: block
   padding-bottom: 32px
 
-.l_left .widgets
-  .widget-wrapper
-    &:first-child
-      margin-top: 32px
-
 .l_right .widgets
   &:empty 
     display: none
@@ -77,7 +72,7 @@
   @media screen and (max-width: $device-laptop)
     .widget-wrapper
       margin-top: var(--gap-margin)
-      border-radius: $border-card
+      border-radius: $border-card-s
   // 大屏幕
   @media screen and (min-width: $device-laptop)
     .widget-wrapper.markdown .widget-body
