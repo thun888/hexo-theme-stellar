@@ -10,8 +10,10 @@ utils.jq(() => {
           continue;
         }
         utils.request(el, api, async resp => {
-          const data = await resp.json();
+          var data = await resp.json();
           data = data.data || [];
+          // 过滤掉page_key为"/friends/"的评论
+          data = data.filter(item => item.page_key !== "/friends/");
           data.forEach((item, i) => {
             // 去掉hidename
             if (item.nick == hidename) {
@@ -42,4 +44,3 @@ utils.jq(() => {
       }
     });
   });
-  
