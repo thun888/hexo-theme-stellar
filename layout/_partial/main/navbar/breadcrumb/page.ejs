@@ -3,7 +3,9 @@ function layoutDiv() {
   // 普通页面就显示当前页面
   return `
   <span class="sep"></span>
-  <a class="cap breadcrumb" href="${url_for(page.path)}">${page.title}</a>
+  <div  itemscope itemtype="http://schema.org/BlogPosting">
+    <a class="cap breadcrumb" href="${url_for(page.path)}" itemprop="headline">${page.title}</a>
+  </div>
   `
 }
 %>
