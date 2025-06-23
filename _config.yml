@@ -1,6 +1,6 @@
 ######## Stellar info ########
 stellar:
-  version: '1.30.2'
+  version: '1.31.0'
   homepage: 'https://xaoxuu.com/wiki/stellar/'
   repo: 'https://github.com/xaoxuu/hexo-theme-stellar'
   main_css: /css/main.css
@@ -13,9 +13,19 @@ preconnect:
   # - https://gcore.jsdelivr.net
   # - https://unpkg.com
 
+# 一旦设置源站地址，非源站地址将不会被SEO收录，并且访问时弹出提示
+# 如果访问地址不在备用站主机列表，则警告信息为非法克隆
+canonical:
+  originalHost: # 主站点域名主机，例如 xaoxuu.com
+  officialHosts: # 官方主机列表，每行一个，例如 xaoxuu.vercel.app
+    - localhost
+
 open_graph:
   enable: true
   twitter_id: # for open_graph meta
+
+structured_data:
+  links: [] # your social links.
 
 
 ######## Sidebar ########
@@ -302,10 +312,10 @@ comments:
   # Artalk
   # https://artalk.js.org/
   artalk:
-    css: https://unpkg.com/artalk@2.8/dist/Artalk.css
-    js: https://unpkg.com/artalk@2.8/dist/Artalk.js
+    css: https://unpkg.com/artalk@2.9/dist/Artalk.css
+    js: https://unpkg.com/artalk@2.9/dist/Artalk.js
     server: # 后端服务地址
-    placeholder: ''
+    site: '' # 站点名称
     darkMode: auto
 
 
@@ -439,7 +449,7 @@ data_services:
   siteinfo:
     js: /js/services/siteinfo.js
     # 设置 api 可以自动提取网页标题、图标，服务部署方法：https://github.com/xaoxuu/site-info-api/
-    # 接口测试通过后，把按钮的 href 部分替换成 {href} 之后填写到下方，例如：https://api.vlts.cc/site_info/v1?url={href}
+    # 接口测试通过后，把按钮的 href 部分替换成 {href} 之后填写到下方，例如：https://api.xaox.cc/site_info/v1?url={href}
     api: 
   ghinfo:
     js: /js/services/ghinfo.js
@@ -478,7 +488,7 @@ data_services:
 
 
 # 扩展插件接入方法：(插件名下面用 #plugin# 代替)
-# 1. 在这里增加 #plugin# 配置，至少赢含有 enable 字段，默认为空（不启用）
+# 1. 在这里增加 #plugin# 配置，至少应含有 enable 字段，默认为空（不启用）
 # 2. 新建文件 layout/_plugins/#plugin#.ejs 文件中设置编写加载代码。
 # 2.1. 在该文件中可以直接使用 conf 来读取用户在【步骤 1】填写的配置字段内容
 # 2.2. 如果需要引入 css 或 js，可以使用 utils.css(xxx)、utils.js(xxx)，具体可参考 layout/_plugins/fancybox.ejs
@@ -498,6 +508,12 @@ plugins:
     enable: true # [hexo clean && hexo s] is required after changing this value.
     js: https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js
     transition: fade # blur, fade
+    # TODO: 宽高比获取到后修改md源文件，这样后续就不用每次重复获取了
+    fix_ratio: true # true / false # 是否固定宽高比，true 时会在图片上添加 style="aspect-ratio: 16/9;"，false 时则不添加，开启此功能会导致增加 generate 耗时
+    loading_image:
+      src: # https://github.githubassets.com/images/mona-loading-dark.gif
+      width: 3rem # 图片宽度
+      height: 3rem # 图片高度
 
   # https://fancyapps.com/docs/ui/fancybox/
   # available for {% image xxx %}
@@ -617,7 +633,7 @@ style:
     card: 16px # 文章内大部分卡片的圆角
     card-s: 12px # 文章内小型卡片的圆角
     bar: 8px # 横条类元素的圆角
-    image: 12px # 图片圆角
+    image: 24px # 图片圆角
   color:
     # 动态颜色（会根据明暗主题重设明度值，只用关心色相和饱和度即可）
     background: 'hsl(212 16% 98%)' # 浅色背景颜色
@@ -673,6 +689,8 @@ default:
 
 
 api_host:
-  ghapi: https://api.github.com
-  ghraw: https://raw.githubusercontent.com
-  gist: https://gist.github.com
+  ghapi: api.github.com
+  ghraw: raw.githubusercontent.com
+  gist: gist.github.com
+  # https://github.com/anuraghazra/github-readme-stats
+  ghcard: github-readme-stats.vercel.app
