@@ -592,7 +592,7 @@ plugins:
     enable: # true # 可以在特定文章的 front-matter 中设置 mermaid: true 来开启，也可以在这里设置全局开启
     style_optimization: false # use custom style in stellar
     # js: https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js
-    js: https://gcore.jsdelivr.net/npm/mermaid@v9/dist/mermaid.min.js
+    js: https://static.hzchu.top/npm/mermaid@v9/dist/mermaid.min.js
     # Available themes: default | dark | forest | neutral
     theme: neutral
   
@@ -650,7 +650,7 @@ style:
     background: https://static.hzchu.top/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp
   codeblock:
     scrollbar: 4px
-    highlightjs_theme: https://gcore.jsdelivr.net/gh/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css
+    highlightjs_theme: https://static.hzchu.top/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css
   loading:
     loading: 正在加载
     error: 加载失败，请稍后重试。
