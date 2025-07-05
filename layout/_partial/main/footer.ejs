@@ -38,6 +38,7 @@ function layoutDiv() {
   if (content) {
     el += markdown(content)
   }
+  el += '<script> var allpostscount = "' + site.posts.length + '" ;var allpostswords = "' + totalcount(site) + '";upgrade_time_days = Math.floor((new Date() - new Date(' + page.updated + ')) / 1000 / 60 / 60 / 24);</script>'
   el += '</div></footer>'
   return el
 }
