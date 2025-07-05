@@ -26,6 +26,7 @@ function layoutToc(fallback) {
     return ''
   }
   var el = ''
+  var relativePath = page.source;
   el += `<widget class="widget-wrapper${scrollreveal(' ')} toc" id="data-toc" collapse="${item.collapse}">`
   el += layoutTocHeader()
   el += `<div class="widget-body">`
@@ -50,17 +51,33 @@ function layoutDiv(fallback) {
   }
   el += `<div class="widget-footer">`
   el += `<a class="top" onclick="util.scrollTop()">`
-  el += icon('default:upup')
+  el += icon('myself:upload-outline')
   el += `<span>${__('btn.top')}</span>`
   el += `</a>`
   if (theme.comments.service && theme.comments.service.length > 0) {
     if (page.comments == undefined || page.comments != false) {
       el += `<a class="buttom" onclick="util.scrollComment()">`
-      el += icon('default:tocomment')
+      el += icon('myself:chat')
       el += `<span>${__('btn.comments')}</span>`
       el += `</a>`
     }
   }
+  <!-- 编辑本页 -->
+  el += `<a class="edit-btn" href="https://github.com/thun888/myblog/edit/main/source/${relativePath}">`
+  el += icon('myself:edit-twotone')
+  el += `<span>${__('btn.edit')}</span>`
+  el += `</a>`
+  <!-- 删除模式 -->
+  el += `<a class="delmode-btn" onclick="toggleDeleteMode()">`
+  el += icon('myself:close-circle')
+  el += `<span>${__('btn.delmode')}</span>`
+  el += `</a>`
+  <!-- 有害内容反馈 -->
+  el += `<a class="report-btn" href="https://wj.qq.com/s2/21008541/d4f8/">`
+  el += icon('myself:alert')
+  el += `<span>${__('btn.report')}</span>`
+  el += `</a>`
+  
   el += `</div>`
   el += `</widget>`
   return el

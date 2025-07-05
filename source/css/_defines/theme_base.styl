@@ -22,8 +22,8 @@ x-set-link-with-color($color)
   $hue = hue($color)
   $sat = saturation($color)
   $light = lightness($color)
-  --link: x-hsla($hue, $sat, $light, 1)
-  --link-a20: x-hsla($hue, $sat, $light, 0.2)
+  --link: var(--theme)
+  --link-a20: x-theme-alpha(0.2)
 
 // 设置背景色
 x-set-bg-colors($scheme)
