@@ -26,7 +26,6 @@ function layoutToc(fallback) {
     return ''
   }
   var el = ''
-  var relativePath = page.source;
   el += `<widget class="widget-wrapper${scrollreveal(' ')} toc" id="data-toc" collapse="${item.collapse}">`
   el += layoutTocHeader()
   el += `<div class="widget-body">`
@@ -62,6 +61,7 @@ function layoutDiv(fallback) {
       el += `</a>`
     }
   }
+  var relativePath = page.source;
   <!-- 编辑本页 -->
   el += `<a class="edit-btn" href="https://github.com/thun888/myblog/edit/main/source/${relativePath}">`
   el += icon('myself:edit-twotone')
