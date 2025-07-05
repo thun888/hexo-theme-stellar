@@ -16,7 +16,8 @@ btn:
   edit: Edit This Page
   top: Scroll to Top
   comments: Join Discussion
-
+  delmode: Enter Delete Mode
+  
 meta:
   recent_update: Recent Update
   tag_tree: Tags
