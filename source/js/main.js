@@ -265,3 +265,9 @@ init.sidebar()
 init.relativeDate(document.querySelectorAll('#post-meta time'))
 init.registerTabsTag()
 init.canonicalCheck()
+
+
+function cardClick(event, url) {
+  if (event.target.closest('a')) return;
+  window.open(url, '_blank');
+}
