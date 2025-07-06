@@ -1,6 +1,6 @@
 ######## Stellar info ########
 stellar:
-  version: '1.32.4'
+  version: '1.33.0'
   homepage: 'https://xaoxuu.com/wiki/stellar/'
   repo: 'https://github.com/xaoxuu/hexo-theme-stellar'
   main_css: /css/main.css
@@ -392,12 +392,12 @@ tag_plugins:
       prefix: ph:seal-question-fill
   # {% emoji %}
   emoji:
-    default: https://static.hzchu.top/cdn-x/emoji/qq/{name}.gif
-    twemoji: https://gcore.jsdelivr.net/gh/twitter/twemoji/assets/svg/{name}.svg
-    qq: https://static.hzchu.top/cdn-x/emoji/qq/{name}.gif
-    aru: https://static.hzchu.top/cdn-x/emoji/aru-l/{name}.gif
-    tieba: https://static.hzchu.top/cdn-x/emoji/tieba/{name}.png
-    blobcat: https://gcore.jsdelivr.net/gh/norevi/waline-blobcatemojis@1.0/blobs/{name}.png
+    default: https://static.hzchu.top/cdn-x/emoji@2.1.2/qq/{name}.gif
+    twemoji: https://jsd.hzchu.top/gh/twitter/twemoji/assets/svg/{name}.svg
+    qq: https://static.hzchu.top/cdn-x/emoji@2.1.2/qq/{name}.gif
+    aru: https://static.hzchu.top/cdn-x/emoji@2.1.2/aru/{name}.gif
+    tieba: https://static.hzchu.top/cdn-x/emoji@2.1.2/tieba/{name}.png
+    blobcat: https://static.hzchu.top/cdn-x/emoji@2.1.2/blobcat/{name}.gif
   icon:
     # 留空时，图标和文字颜色相同
     default_color: accent # theme, accent, red, orange, yellow, green, cyan, blue, purple
@@ -595,6 +595,7 @@ plugins:
   # 需在Markdown文件开头加入mathjax: true
   # 推荐使用Pandoc: npm uninstall hexo-renderer-marked --save & npm install hexo-renderer-pandoc --save
   mathjax:
+    v3: false # 若使用 v3，需將 js 設置為 https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js
     enable: # true # 可以在特定文章的 front-matter 中设置 mathjax: true 来开启，也可以在这里设置全局开启
     js: https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
