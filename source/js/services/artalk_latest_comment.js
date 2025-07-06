@@ -29,7 +29,7 @@ utils.jq(() => {
           var cell = '<div class="timenode" index="' + i + '">';
           cell += '<div class="header">';
           cell += '<div class="user-info">';
-          cell += '<img src="https://weavatar.com/avatar/' + (item.email_encrypted) + '?d=mp&s=240">';
+          // cell += '<img src="https://weavatar.com/avatar/' + (item.email_encrypted) + '?d=mp&s=240">';
           cell += '<span>' + item.nick + '</span>';
           cell += '</div>';
           cell += '<span>' + new Date(item.date).toLocaleString() + '</span>';
