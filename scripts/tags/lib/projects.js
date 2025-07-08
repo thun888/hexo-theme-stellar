@@ -33,7 +33,7 @@ module.exports = ctx => function(args) {
         var tagsHtml = '';
         var content = item.content ? ":" + item.content : '';
         var tagsList = item.tags ? item.tags : [];
-        tagsList.unshift({name: item.time, icon: 'myself:calendar',color:"#6b6c6c"});
+        tagsList.unshift({name: item.time, icon: 'line-md:calendar',color:"#6b6c6c"});
         // console.log(tagsList);          
         tagsList.forEach(element => {
         var icon = '';
@@ -56,7 +56,7 @@ module.exports = ctx => function(args) {
         el += `<article class="md-text">`
         el += item.logo ? `<div class="preview"><img src="${item.logo}"></div>` : '<div class="preview"><img src="https://onep.hzchu.top/mount/pic/myself/2025/07/no_media.png?fmt=webp"></div>'
         el += `<div class="excerpt">`
-        el += `<h2 class="post-title">${item.name}</h2>`
+        el += `<span class="post-title">${item.name}</span>`
         el += `<p>${item.description}</p>`
         el += tagsHtml ? `<div class="caps">${tagsHtml}</div>` : ''
         el += `</div>`
