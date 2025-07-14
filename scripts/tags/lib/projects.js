@@ -19,9 +19,7 @@ module.exports = ctx => function(args) {
   
   var el = '<div class="tag-plugin projects-wrap">'
   if (api) {
-    el += '<div class="data-service ds-projects"'
-    el += ` data-api="${api}"`
-    el += '>'
+    el += `<div class="data-service ds-projects" data-api="${api}">`
     el += '<div class="grid-box"></div>'
     el += '</div>'
   } else if (args.group) {
@@ -33,7 +31,23 @@ module.exports = ctx => function(args) {
         var tagsHtml = '';
         var content = item.content ? ":" + item.content : '';
         var tagsList = item.tags ? item.tags : [];
-        tagsList.unshift({name: item.time, icon: 'line-md:calendar',color:"#6b6c6c"});
+        // 添加语言标签
+        
+        if (item.language) {
+          if (Array.isArray(item.language)) {
+            item.language.forEach(lang => {
+              var [icon,color] = getLanguageIcon(lang);
+              tagsList.unshift({name: lang, icon: icon,color:color});
+            });
+          } else {
+            var [icon,color] = getLanguageIcon(item.language);
+            tagsList.unshift({name: item.language, icon: icon,color:color});
+          }
+        }
+        // 添加时间标签
+        if (item.time) {
+          tagsList.unshift({name: item.time, icon: 'line-md:calendar',color:"#6b6c6c"});
+        }
         // console.log(tagsList);          
         tagsList.forEach(element => {
         var icon = '';
@@ -70,4 +84,23 @@ module.exports = ctx => function(args) {
 
   el += '</div>'
   return el
+}
+
+function getLanguageIcon(language) {
+  switch (language) {
+    case 'Python':
+      return ['mdi:language-python', '#3572a5'];
+    case 'JS':
+      return ['mdi:language-javascript', '#d5a900'];
+    case 'Go':
+      return ['mdi:language-go', '#00c9ff'];
+    case 'HTML':
+      return ['mdi:language-html5', '#e34c26'];
+    case 'Bash':
+      return ['hugeicons:bash', '#181818'];
+    case 'Next.js':
+      return ['cib:next-js', '#181818'];
+    default:
+      return ['hugeicons:bash', '#181818'];
+  }
 }
