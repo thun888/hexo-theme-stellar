@@ -1,12 +1,4 @@
-function addCopyButtons(id) {
-  if (id){
-    document.querySelectorAll(`#${id} div tbody tr .code`).forEach((codeElement) => {
-      const codeCopyBtn = document.createElement('div');
-      codeCopyBtn.className = 'copy-btn';
-      codeCopyBtn.textContent = ctx.copycode.default_text;
-      codeElement.appendChild(codeCopyBtn);
-    });
-  }
+function addCopyButtons() {
   window.codeElements.forEach((codeElement) => {
     const codeCopyBtn = document.createElement('div');
     codeCopyBtn.className = 'copy-btn';
