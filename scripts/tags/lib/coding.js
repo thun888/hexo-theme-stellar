@@ -16,7 +16,10 @@ module.exports = (ctx) => {
     const api = ctx.theme.config.tag_plugins.coding?.api.replace(/\/$/, '')
 
     // 拼接完整的请求 URL
-    args.url = api + '/api/v1/generate?usejson=true&showsupporter=false' + '&url=' + args.url + '&lang=' + args.lang 
+    args.url = api + '/api/v1/generate?usejson=true&showsupporter=false' + '&url=' + args.url
+    if (args.lang) {
+      args.url += '&lang=' + args.lang
+    }
 
     // 设置默认 withcss 参数
     args.withcss = args.withcss || 'true'
