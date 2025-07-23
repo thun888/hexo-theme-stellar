@@ -54,7 +54,7 @@ function getMeaning(message) {
   const secondLetter = message.charAt(1);
   var firstLetterMeaning = '';
   switch (firstLetter) {
-    // A（新增）	D（移除）	M（修改）	E（修订） 	F（修复）
+    // A（新增）	D（移除）	M（修改）	E（修订） 	F（修复）  U（升级）
     case 'A':
       firstLetterMeaning = '新增';
       break;
@@ -70,6 +70,9 @@ function getMeaning(message) {
     case 'F':
       firstLetterMeaning = '修复';
       break;
+      case 'U':
+        firstLetterMeaning = '升级';
+        break;
     default:
       firstLetterMeaning = '未知';
   }
