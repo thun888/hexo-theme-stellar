@@ -24,7 +24,7 @@
     .header:before
       left: calc(6px - var(--gap-padding))
     .body
-      border-radius: $border-card
+      border-radius: $border-card-s
       padding: 0.5rem 1rem
       p,li
         --fsp: $fsp3
@@ -33,10 +33,10 @@
         padding: 0
         margin: 0
       .highlight, pre:not([class]):has(>code)
-        background: var(--alpha50)
+        background: var(--bg-a50)
       
       
-  .tag-plugin.timeline[api] .body .footer
+  .tag-plugin.timeline[data-api] .body .footer
     background: none
 
 .l_left .widget-wrapper.timeline
@@ -46,4 +46,4 @@
       content: none
 .l_left .widget-wrapper.timeline .body
   box-shadow: none
-  background: var(--alpha50)
+  background: var(--bg-a50)

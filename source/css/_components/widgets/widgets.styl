@@ -1,7 +1,7 @@
 .widgets 
   .loading-wrap
     margin: 0.5rem 0
-    background: var(--alpha50)
+    background: var(--bg-a50)
 
 .widgets
   overflow: scroll
@@ -43,11 +43,11 @@
           transform: scale(1.2)
           fill: var(--text-p2)
         &:hover
-          color: $color-hover
-          background: var(--alpha100)
+          color: var(--accent)
+          background: var(--bg-a100)
           opacity 1
           svg
-            fill: $color-hover
+            fill: var(--accent)
 
     .widget-body
       color: var(--text-p1)
@@ -61,11 +61,6 @@
   display: block
   padding-bottom: 32px
 
-.l_left .widgets
-  .widget-wrapper
-    &:first-child
-      margin-top: 32px
-
 .l_right .widgets
   &:empty 
     display: none
@@ -77,8 +72,12 @@
   @media screen and (max-width: $device-laptop)
     .widget-wrapper
       margin-top: var(--gap-margin)
-      border-radius: $border-card
+      border-radius: $border-card-s
   // 大屏幕
   @media screen and (min-width: $device-laptop)
     .widget-wrapper.markdown .widget-body
       background: var(--block)
+
+.leftbar-container
+  .header+.widgets
+    margin-top: 1rem

@@ -36,6 +36,7 @@ meta:
   updated: 更新於
   license: 授權條款
   share: 分享文章
+  contributors: 本文貢獻者
   date_suffix:
     just: 剛剛
     min: 分鐘前
@@ -50,8 +51,8 @@ page:
     action: 返回首頁
 
 search:
-  search: 站內搜索
-  search_in: 在 %s 中搜索
+  search: 站內搜尋
+  search_in: 在 %s 中搜尋
   no_results: 沒有找到內容！
 
 message:

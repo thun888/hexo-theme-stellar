@@ -1,10 +1,23 @@
 .widget-wrapper.user-card
   .widget-header+.widget-body
     margin: 0.75rem 0
+.widget-wrapper.user-card .widget-header
+  a
+    display: flex
+    align-items: center
+    color: var(--text-p2)
+    trans1 all
+    svg
+      margin-right: 4px
+      width 1em
+      height: 1em
+    &:hover
+      color: var(--text)
+
 .widget-wrapper.user-card .widget-body
   text-align: center
   background: var(--card)
-  border-radius: $border-card
+  border-radius: $border-card-s
   padding: 1rem
   box-shadow: $boxshadow-card
 
@@ -33,10 +46,10 @@
   .follow 
     font-weight: 500
     border-radius: 64px
-    margin: 1rem 0 0
+    margin-top: 1rem
     padding: 0.5rem 1rem
-    background: $color-theme
-    color: var(--card)
+    background: var(--theme)
+    color: white
     font-size: 1rem
     align-self: stretch
     text-align: center
@@ -50,10 +63,10 @@
       height: 1.5em
       width: auto
     &:hover
-      background: $color-hover
+      background: var(--accent)
 
   .buttons
-    margin: 1rem 0
+    margin-top: 1rem
     align-self: stretch
     display: grid
     grid-gap: 2px
@@ -77,3 +90,6 @@
       font-size: $fs-12
       color: var(--text-p3)
       font-weight: 500
+
+.widget-wrapper.user-card .widget-header+.widget-body
+  margin-top: 4px

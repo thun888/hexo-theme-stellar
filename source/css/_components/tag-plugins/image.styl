@@ -1,17 +1,28 @@
 .tag-plugin.image
   margin-top: 1rem
   margin-bottom: 1rem
+  box-sizing: border-box
   .image-bg
     text-align: center
     border-radius: $border-image
     position: relative
     overflow: hidden
+    display: flex
+    box-sizing: border-box
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    margin: auto
+    max-width: 100%
+    &:has(img.lazy.loading),&:has(img.lazy.error)
+      background-color: var(--block)
     &:hover
       .image-download
         opacity: 1 !important
     img
       display: block
       object-fit: cover
+      border-radius: $border-image
     .image-download
       position: absolute
       bottom: 8px
@@ -24,7 +35,7 @@
       color: var(--text-p1)
       &:hover
         background: var(--card) !important
-        color: $color-theme
+        color: var(--theme)
   .image-meta
     display: flex
     justify-content: center

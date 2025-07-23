@@ -1,6 +1,10 @@
 *
   outline: none
 html
+  height: 100%
+  width: 100%
+  scrollbar(8px,8px)
+  overflow-y: scroll
   font-family: $ff-body
   font-size: $fs-root
   -webkit-text-size-adjust: 100%
@@ -9,7 +13,7 @@ html
   if hexo-config('style.smooth_scroll')
     scroll-behavior: smooth
 body
-  background: var(--site-bg)
+  background: var(--background)
   margin: 0
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
