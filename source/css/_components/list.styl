@@ -92,17 +92,25 @@
   width: 'calc(100% + 2 * %s)' % 1rem
   border-radius: 0
   margin-left: -1rem
-  margin-top: -1rem
+  // margin-top: -1rem
   margin-right: -1rem
   background: var(--block)
   &:not(.lazy)
     trans1: transform 1s
   img
-    object-fit: cover
-    width: 100%
-    border-radius: 0
-    aspect-ratio: hexo-config('article.cover_ratio')
-    
+    height: 100%;
+    margin: 0;
+    -webkit-mask: linear-gradient(90deg,transparent,#fff 50%);
+    mask: linear-gradient(90deg,transparent,#fff 50%);
+    -o-object-fit: cover;
+    object-fit: cover;
+    opacity: .8;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: all .2s;
+    width: min(320px,50%);
+
 .post-list .post-card.post.photo
   .cover
     position: relative

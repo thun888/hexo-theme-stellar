@@ -11,7 +11,6 @@ if (poster) {
 }
 function div_default() {
   var el = '';
-  el += '<article class="md-text">';
 
   // 封面
   if (obj.image || theme.article.auto_cover) {
@@ -43,7 +42,11 @@ function div_default() {
       el += '</div>';
     }
   }
-
+  if (cover_url) {
+    el += '<article class="md-text" style="width: 60%;">';
+  }else{
+    el += '<article class="md-text">';
+  }
   // 标题
   el += '<h2 class="post-title">';
   el += post.title ? post.title : date(post.date, config.date_format);
