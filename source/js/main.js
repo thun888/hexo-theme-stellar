@@ -265,9 +265,93 @@ init.sidebar()
 init.relativeDate(document.querySelectorAll('#post-meta time'))
 init.registerTabsTag()
 init.canonicalCheck()
-
+drawClouds()
 
 function cardClick(event, url) {
   if (event.target.closest('a')) return;
   window.open(url, '_blank');
+}
+
+
+function generatePoints(w, h, n, maxd, mind, circle_radius, maxAttempts = 1000) {
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    // 先随机一个中心，让圆都能在边界内
+    let cx = randRange(circle_radius, w - circle_radius);
+    let cy = randRange(circle_radius, h - circle_radius);
+    let clusterR = maxd / 2;
+
+    // 极坐标生成 n 个点
+    let pts = [];
+    for (let i = 0; i < n; i++) {
+      let theta = Math.random() * 2 * Math.PI;
+      let r = clusterR * Math.sqrt(Math.random());
+      let x = cx + r * Math.cos(theta);
+      let y = cy + r * Math.sin(theta);
+      pts.push({x, y});
+    }
+
+    // 检查两两距离约束
+    let ok = true;
+    for (let i = 0; i < n && ok; i++) {
+      for (let j = i + 1; j < n; j++) {
+        let dx = pts[i].x - pts[j].x;
+        let dy = pts[i].y - pts[j].y;
+        let d = Math.hypot(dx, dy);
+        if (d < mind || d > maxd) {
+          ok = false;
+          break;
+        }
+      }
+    }
+
+    if (ok) {
+      // 再附加检查：每个点离边界 ≥ circle_radius
+      let inBounds = pts.every(p => p.x >= circle_radius && p.x <= w - circle_radius && p.y >= circle_radius && p.y <= h - circle_radius);
+      if (inBounds) return pts;
+    }
+  }
+  return null;
+}
+
+// 获取 [min, max] 随机浮点
+function randRange(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+// 主画图函数
+function drawClouds() {
+  const w = document.querySelector('.sidebg').getBoundingClientRect().width
+  const h = document.querySelector('.sidebg').getBoundingClientRect().height
+  const pointCount = 5
+  const minDist = 10
+  const maxDist = 40
+  const circle_radius = 25
+  fetch("https://generate-cloud-image.hzchu.top/v1/image?format=json")
+  .then(res => res.json())
+  .then(data => {
+    const cloudCount = data.cloud_count
+    const color = data.color
+
+    const canvas = document.getElementById("cloud-canvas");
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext("2d");
+
+    // 透明背景
+    ctx.clearRect(0, 0, w, h);
+
+    for (let ci = 0; ci < cloudCount; ci++) {
+      const pts = generatePoints(w, h, pointCount, maxDist, minDist, circle_radius);
+      if (!pts) {
+        alert(`第 ${ci+1} 朵云生成失败，请调整参数！`);
+        return;
+      }
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      for (let p of pts) {
+        ctx.moveTo(p.x + circle_radius, p.y);
+        ctx.arc(p.x, p.y, circle_radius, 0, 2 * Math.PI);
+      }
+      ctx.fill();
+    }
+  })
 }
