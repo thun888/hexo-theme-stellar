@@ -258,15 +258,6 @@ const init = {
 
 }
 
-
-// init
-init.toc()
-init.sidebar()
-init.relativeDate(document.querySelectorAll('#post-meta time'))
-init.registerTabsTag()
-init.canonicalCheck()
-drawClouds()
-
 function cardClick(event, url) {
   if (event.target.closest('a')) return;
   window.open(url, '_blank');
@@ -320,38 +311,74 @@ function randRange(min, max) {
 
 // 主画图函数
 function drawClouds() {
+  // 检查本地缓存
+  const cachedData = localStorage.getItem('cloudDataCache');
+  const cachedTime = localStorage.getItem('cloudDataCacheTime');
+  const currentTime = new Date().getTime();
+
+  // 如果缓存存在且未超过30分钟
+  if (cachedData && cachedTime && (currentTime - cachedTime < 30 * 60 * 1000)) {
+    const data = JSON.parse(cachedData);
+    console.log('[drawClouds] 使用缓存数据:', data);
+    renderClouds(data);
+    return;
+  }
+
+  // 如果缓存不存在或已过期，重新获取
+  fetch("https://generate-cloud-image.hzchu.top/v1/image?format=json")
+  .then(res => res.json())
+  .then(data => {
+    // 存储数据和时间戳到 localStorage
+    localStorage.setItem('cloudDataCache', JSON.stringify(data));
+    localStorage.setItem('cloudDataCacheTime', currentTime.toString());
+
+    renderClouds(data);
+  })
+  .catch(error => {
+    console.error('[drawClouds] 获取云朵数据失败:', error);
+  });
+}
+
+function renderClouds(data) {
   const w = document.querySelector('.sidebg').getBoundingClientRect().width
   const h = document.querySelector('.sidebg').getBoundingClientRect().height
   const pointCount = 5
   const minDist = 10
   const maxDist = 40
   const circle_radius = 25
-  fetch("https://generate-cloud-image.hzchu.top/v1/image?format=json")
-  .then(res => res.json())
-  .then(data => {
-    const cloudCount = data.cloud_count
-    const color = data.color
 
-    const canvas = document.getElementById("cloud-canvas");
-    canvas.width = w; canvas.height = h;
-    const ctx = canvas.getContext("2d");
+  const cloudCount = data.cloud_count
+  const color = data.color
 
-    // 透明背景
-    ctx.clearRect(0, 0, w, h);
+  const canvas = document.getElementById("cloud-canvas");
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext("2d");
 
-    for (let ci = 0; ci < cloudCount; ci++) {
-      const pts = generatePoints(w, h, pointCount, maxDist, minDist, circle_radius);
-      if (!pts) {
-        alert(`第 ${ci+1} 朵云生成失败，请调整参数！`);
-        return;
-      }
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      for (let p of pts) {
-        ctx.moveTo(p.x + circle_radius, p.y);
-        ctx.arc(p.x, p.y, circle_radius, 0, 2 * Math.PI);
-      }
-      ctx.fill();
+  // 透明背景
+  ctx.clearRect(0, 0, w, h);
+
+  for (let ci = 0; ci < cloudCount; ci++) {
+    const pts = generatePoints(w, h, pointCount, maxDist, minDist, circle_radius);
+    if (!pts) {
+      console.log(`[drawClouds] 第 ${ci+1} 朵云生成失败！`);
+      return;
     }
-  })
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    for (let p of pts) {
+      ctx.moveTo(p.x + circle_radius, p.y);
+      ctx.arc(p.x, p.y, circle_radius, 0, 2 * Math.PI);
+    }
+    ctx.fill();
+  }
 }
+
+
+// init
+init.toc()
+init.sidebar()
+init.relativeDate(document.querySelectorAll('#post-meta time'))
+init.registerTabsTag()
+init.canonicalCheck()
+drawClouds()
+

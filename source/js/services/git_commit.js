@@ -70,9 +70,9 @@ function getMeaning(message) {
     case 'F':
       firstLetterMeaning = '修复';
       break;
-      case 'U':
-        firstLetterMeaning = '升级';
-        break;
+    case 'U':
+      firstLetterMeaning = '升级';
+      break;
     default:
       firstLetterMeaning = '未知';
   }
