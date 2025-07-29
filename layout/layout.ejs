@@ -34,7 +34,7 @@ if (page.indent != null) {
 var site_background = ''
 if (theme.style.site && theme.style.site['background-image']) {
   site_background += `<div class="sitebg">`
-  site_background += `<div class="siteblur"></div>`
+  site_background += `<div class="siteblur"><canvas id="background-canvas"></canvas></div>`
   site_background += `</div>`
 }
 
