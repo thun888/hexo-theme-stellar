@@ -2,31 +2,19 @@
  * projects.js v2 | https://github.com/xaoxuu/hexo-theme-stellar/
  * 格式与官方标签插件一致使用空格分隔，中括号内的是可选参数（中括号不需要写出来）
  *
- * {% projects [group] [repo:owner/repo] [api:http] %}
+ * {% projects name %}
  */
 
 'use strict'
 
 module.exports = ctx => function(args) {
-  args = ctx.args.map(args, ['repo', 'api'], ['group'])
-  const host = ctx.theme.config.api_host.ghraw
-  var api
-  if (args.api) {
-    api = args.api
-  } else if (args.repo) {
-    api = `https://${host}/${args.repo}/output/v2/data.json`
-  }
-  
-  var el = '<div class="tag-plugin projects-wrap">'
-  if (api) {
-    el += `<div class="data-service ds-projects" data-api="${api}">`
-    el += '<div class="grid-box"></div>'
-    el += '</div>'
-  } else if (args.group) {
+  let name = args[0]
+  var el = '<div class="tag-plugin-wrap">'
+  if (name) {
     const links = ctx.theme.config.links || {}
     el += '<div class="grid-box"><div class="post-list wiki">'
 
-    for (let item of (links[args.group] || [])) {
+    for (let item of (links[name] || [])) {
       if (item?.name) {
         var tagsHtml = '';
         var content = item.content ? ":" + item.content : '';
