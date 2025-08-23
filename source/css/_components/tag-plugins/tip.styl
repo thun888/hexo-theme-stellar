@@ -1,0 +1,58 @@
+.annotated
+  position relative                  // 让伪元素定位于此
+  border-bottom 1px dashed rgba(0,0,0,0.35) // 虚线下划
+  cursor help
+  display inline-block               // 使 padding/margin 行为可控
+  outline none                       // 然后我们会提供 :focus 样式
+
+  &::before
+    content attr(data-note)          // 从 data-note 属性读取注解文本
+    position absolute
+    left 50%                         // 水平居中
+    bottom calc(100% + 10px)         // 在词上方稍微留空
+    transform translateX(-50%) translateY(6px)
+    white-space nowrap                // 防止换行
+    padding 8px 10px
+    font-size 13px
+    line-height 1.2
+    border-radius 6px
+    background rgba(249, 251, 253, 0.95)
+    box-shadow 0 6px 18px rgba(0,0,0,0.2)
+    opacity 0
+    pointer-events none               // 悬浮时不阻挡鼠标
+    transition opacity 140ms linear, transform 140ms cubic-bezier(.2,.9,.3,1)
+    z-index 999
+
+  &::after
+    content ""
+    position absolute
+    left 50%
+    bottom calc(100% - 2px)
+    transform translateX(-50%) translateY(6px)
+    border-width 6px
+    border-style solid
+    border-color rgba(249, 251, 253, 0.95) transparent transparent transparent
+    opacity 0
+    transition opacity 140ms linear, transform 140ms cubic-bezier(.2,.9,.3,1)
+    z-index 999
+    pointer-events none
+
+  &:hover::before,
+  &:focus::before
+    opacity 1
+    transform translateX(-50%) translateY(0)
+
+  &:hover::after,
+  &:focus::after
+    opacity 1
+    transform translateX(-50%) translateY(0)
+
+  &:focus
+    box-shadow 0 0 0 3px rgba(30,144,255,0.12)
+    border-bottom-color rgba(30,144,255,0.7)
+    border-bottom-style dashed
+
+@media (max-width: $device-mobile-max)
+  .annotated::before
+    white-space normal
+    max-width 80vw

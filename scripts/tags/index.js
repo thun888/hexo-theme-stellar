@@ -26,6 +26,8 @@ hexo.extend.tag.register('timeline', require('./lib/timeline')(hexo), {ends: tru
 hexo.extend.tag.register('md', require('./lib/md')(hexo))
 hexo.extend.tag.register('chat', require('./lib/chat')(hexo), {ends: true})
 hexo.extend.tag.register('coding', require('./lib/coding')(hexo))
+hexo.extend.tag.register('office', require('./lib/office')(hexo))
+
 
 // express
 hexo.extend.tag.register('checkbox', require('./lib/checkbox')(hexo, 'checkbox'))
@@ -49,6 +51,7 @@ hexo.extend.tag.register('audio', require('./lib/audio')(hexo))
 hexo.extend.tag.register('video', require('./lib/video')(hexo))
 hexo.extend.tag.register('rating', require('./lib/rating')(hexo))
 hexo.extend.tag.register('vote', require('./lib/vote')(hexo))
+hexo.extend.tag.register('tip', require('./lib/tip')(hexo))
 
 // read 阅读类
 hexo.extend.tag.register('reel', require('./lib/read/reel')(hexo), true)
