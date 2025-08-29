@@ -42,6 +42,8 @@ hexo.extend.tag.register('button', require('./lib/button')(hexo))
 hexo.extend.tag.register('mark', require('./lib/mark')(hexo))
 hexo.extend.tag.register('navbar', require('./lib/navbar')(hexo))
 hexo.extend.tag.register('note', require('./lib/note')(hexo))
+hexo.extend.tag.register('bignote', require('./lib/bignote')(hexo), true)
+
 hexo.extend.tag.register('poetry', require('./lib/poetry')(hexo), true)
 hexo.extend.tag.register('quot', require('./lib/quot')(hexo))
 hexo.extend.tag.register('blockquote', require('./lib/blockquote')(hexo), true)
