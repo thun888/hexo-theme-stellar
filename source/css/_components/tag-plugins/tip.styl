@@ -2,7 +2,6 @@
   position relative                  // 让伪元素定位于此
   border-bottom 1px dashed rgba(0,0,0,0.35) // 虚线下划
   cursor help
-  display inline-block               // 使 padding/margin 行为可控
   outline none                       // 然后我们会提供 :focus 样式
 
   &::before
@@ -56,3 +55,4 @@
   .annotated::before
     white-space normal
     max-width 80vw
+    min-width 80vw
