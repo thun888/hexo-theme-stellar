@@ -51,6 +51,7 @@
       dark: `<%- __('message.theme_switched.dark') %>`,
       auto: `<%- __('message.theme_switched.auto') %>`,
     }
+    targetPageRerender()
     hud?.toast?.(messages[newTheme])
   }
 
