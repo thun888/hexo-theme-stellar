@@ -3,7 +3,14 @@
  * 格式与官方标签插件一致使用空格分隔，中括号内的是可选参数（中括号不需要写出来）
  *
  * {% video src %}
+ * {% video bilibili:BV1GP4y1d729 %}
+ * {% video bilibili:BV1GP4y1d729 width:100% autoplay:0 %}
+ * {% video youtube:LB8KwiiUGy0 %}
+ * {% video youtube:LB8KwiiUGy0 width:100% autoplay:0 %}
  *
+ * 支持的参数
+ * width: 500px # 须带单位 80% 20em 100mm...
+ * autoplay: 1/0 # 自动播放/手动播放 # 不设置默认为0手动播放
  */
 
 'use strict';
