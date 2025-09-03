@@ -9,8 +9,9 @@
 
 'use strict'
 
-module.exports = ctx => function(content, args) {
+module.exports = ctx => function(args, content) {
   args = ctx.args.map(args, ['color'], ['title'])
+
   if (content == undefined || content.length <= 0) {
     content = args.title
     args.title = ''
