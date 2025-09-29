@@ -16,7 +16,7 @@
 'use strict';
 
 module.exports = ctx => function (args) {
-  args = ctx.args.map(args, ['type', 'bilibili', 'youtube', 'ratio', 'width', 'autoplay'], ['src'])
+  args = ctx.args.map(args, ['type', 'bilibili', 'youtube', 'ratio', 'width', 'autoplay', 'cachetime','lowLatencyMode'], ['src'])
   if (args.width == null) {
     args.width = '100%'
   }
@@ -38,14 +38,18 @@ module.exports = ctx => function (args) {
 
   // m3u8 HLS 播放
   if (args.src && args.src.endsWith('.m3u8')) {
+    let lowLatencyMode = false;
+    if (args.lowLatencyMode){
+      lowLatencyMode = (args.lowLatencyMode == 'true');
+    }
     return `<div class="tag-plugin video-player" style="aspect-ratio:${args.ratio || 16 / 9};max-width:${args.width};">
-    <video id="video_hls_${Date.now()}" controls preload playsinline webkit-playsinline></video>
+    <video id="video_hls_${Date.now()}" controls playsinline webkit-playsinline></video>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         var video = document.getElementById('video_hls_${Date.now()}');
         var src = "${args.src}";
         if (Hls.isSupported()) {
-          var hls = new Hls();
+          var hls = new Hls({maxBufferLength:${args.cachetime || 30},maxBufferSize:6000000000,lowLatencyMode:${lowLatencyMode}});
           hls.loadSource(src);
           hls.attachMedia(video);
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
