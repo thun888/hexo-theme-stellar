@@ -28,6 +28,7 @@ hexo.extend.tag.register('md', require('./lib/md')(hexo))
 hexo.extend.tag.register('chat', require('./lib/chat')(hexo), {ends: true})
 hexo.extend.tag.register('coding', require('./lib/coding')(hexo))
 hexo.extend.tag.register('office', require('./lib/office')(hexo))
+hexo.extend.tag.register('biliinfo', require('./lib/biliinfo')(hexo))
 
 
 // express

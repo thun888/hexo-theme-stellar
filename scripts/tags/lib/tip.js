@@ -14,7 +14,6 @@ module.exports = ctx => function(args) {
   if (args.key == null) {
     return '';
   }
-  var el = '';
-  el += '<span class="annotated" data-note="' + args.content + '">' + args.key + '</span>'
+  let el = `<span class="annotated" data-tippy-content="${args.content}">${args.key}</span>`
   return el;
 }
