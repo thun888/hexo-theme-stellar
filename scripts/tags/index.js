@@ -56,6 +56,7 @@ hexo.extend.tag.register('video', require('./lib/video')(hexo))
 hexo.extend.tag.register('rating', require('./lib/rating')(hexo))
 hexo.extend.tag.register('vote', require('./lib/vote')(hexo))
 hexo.extend.tag.register('tip', require('./lib/tip')(hexo))
+hexo.extend.tag.register('printhide', require('./lib/print-hide')(hexo), {ends: true})
 
 // read 阅读类
 hexo.extend.tag.register('reel', require('./lib/read/reel')(hexo), true)
