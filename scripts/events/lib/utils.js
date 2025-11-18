@@ -71,6 +71,9 @@ module.exports = hexo => {
     }
   };
   hexo.utils = {
+    // SVG Sprites 存储
+    svgSprites: new Map(),
+    
     icon: (key, args) => {
       const { icons } = hexo.theme.config
       var result = ''
@@ -82,8 +85,56 @@ module.exports = hexo => {
       if (result.startsWith('/') || result.startsWith('https://') || result.startsWith('http://')) {
         return `<img ${args?.length > 0 ? args : ''} src="${result}" />`
       } else {
+        // 检查是否使用 SVG Sprites
+        const useSvgSprites = hexo.theme.config.svg_sprites?.enable === true
+        
+        if (useSvgSprites && result.includes('<svg')) {
+          // 提取 SVG 内容并生成唯一 ID
+          const iconId = `icon-${key.replace(/[^a-zA-Z0-9]/g, '-')}`
+          // 解析 SVG 标签属性和内容
+          const svgTagMatch = result.match(/<svg([^>]*)>([\s\S]*?)<\/svg>/)
+          if (!svgTagMatch) return result
+          const svgAttrsRaw = svgTagMatch[1]
+          const svgContent = svgTagMatch[2]
+          // 解析属性为对象
+          const attrsObj = {}
+          svgAttrsRaw.replace(/([a-zA-Z0-9\-:]+)="([^"]*)"/g, (m, k, v) => { attrsObj[k] = v })
+          // 构造属性字符串，去掉 id
+          let attrsStr = ''
+          Object.keys(attrsObj).forEach(k => {
+            if (k !== 'id') attrsStr += ` ${k}="${attrsObj[k]}"`
+          })
+          // 存储到 sprites map
+          if (!hexo.utils.svgSprites.has(iconId)) {
+            hexo.utils.svgSprites.set(iconId, {
+              attrs: attrsStr,
+              content: svgContent
+            })
+          }
+          // 返回 use 引用，允许传递额外属性
+          const argsStr = args?.length > 0 ? ` ${args}` : ''
+          return `<svg${attrsStr}${argsStr}><use href="#${iconId}"/></svg>`
+        }
+        
+        // 默认行为：直接返回完整 SVG
         return result
       }
+    },
+    
+    // 生成 SVG Sprites 定义
+    getSvgSpritesHtml: () => {
+      if (hexo.utils.svgSprites.size === 0) {
+        return ''
+      }
+      
+      let html = '<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n'
+      hexo.utils.svgSprites.forEach((data, id) => {
+        html += `  <symbol id="${id}"${data.attrs}>\n`
+        html += `    ${data.content}\n`
+        html += `  </symbol>\n`
+      })
+      html += '</svg>'
+      return html
     }
   };
 };
