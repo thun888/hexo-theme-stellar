@@ -88,7 +88,7 @@ module.exports = hexo => {
         // 检查是否使用 SVG Sprites
         const useSvgSprites = hexo.theme.config.svg_sprites?.enable === true
         
-        if (useSvgSprites && result.includes('<svg')) {
+        if (useSvgSprites && result.includes('<svg') && !result.includes('Loop')) {
           // 提取 SVG 内容并生成唯一 ID
           const iconId = `icon-${key.replace(/[^a-zA-Z0-9]/g, '-')}`
           // 解析 SVG 标签属性和内容
@@ -129,7 +129,7 @@ module.exports = hexo => {
       
       let html = '<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n'
       hexo.utils.svgSprites.forEach((data, id) => {
-        html += `  <symbol id="${id}"${data.attrs}>\n`
+        html += `  <symbol id="${id}">\n`
         html += `    ${data.content}\n`
         html += `  </symbol>\n`
       })
