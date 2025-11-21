@@ -97,16 +97,18 @@ function layoutDiv() {
   } else if (page.share) {
     showSharePlugin = true
   }
+  let thispagelink = page.shortlink || page.permalink;
   if (theme.article.share && showSharePlugin) {
     function socialButtons() {
       var el = ''
+      // console.log(page.shortlink);
       theme.article.share.forEach((item, i) => {
-        if (['wechat', 'weibo', 'email', 'link'].includes(item)) {
+        if (['qrcode1', 'weibo', 'email', 'link'].includes(item)) {
           el += '<a class="social share-item ' + item + '"';
           if (item == 'weibo') {
             el += ' target="_blank" rel="external nofollow noopener noreferrer"';
           }
-          if (item == 'wechat') {
+          if (item == 'qrcode1') {
             el += ' onclick="util.toggle(&quot;qrcode-wechat&quot;)"';
           } else if (item == 'weibo') {
             el += ' href="https://service.weibo.com/share/share.php?url=' + page.permalink;
@@ -122,7 +124,7 @@ function layoutDiv() {
             el += ' href="mailto:?subject=' + page.title + ' - ' + config.title + '&amp;'
             el += 'body=' + page.permalink + '"';
           } else if (item == 'link') {
-            el += ' onclick="util.copy(&quot;copy-link&quot;, &quot;' + __('message.copied') + '&quot;)"';
+            el += ' onclick="util.copy(&quot;copy-link&quot;)"';
           }
           el += '>';
           el += icon(`share:${item}`)
@@ -132,10 +134,10 @@ function layoutDiv() {
       return el;
     }
     function qrcode() {
-      if (theme.article.share.includes('wechat')) {
+      if (theme.article.share.includes('qrcode1')) {
         return `
         <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${page.permalink}"/>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${thispagelink}"/>
         </div>
         `
       } else {
@@ -146,7 +148,7 @@ function layoutDiv() {
     <section id="share">
       <div class="header"><span>${__('meta.share')}</span></div>
       <div class="body">
-        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="${page.permalink}" /></div>
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="${thispagelink}" /></div>
         <div class="social-wrap dis-select">${socialButtons()}</div>
         ${qrcode()}
       </div>

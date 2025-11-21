@@ -72,7 +72,7 @@ function div_default() {
   // meta
   el += '<div class="meta cap">';
   el += '<span class="cap" id="post-meta">';
-  el += icon('default:calendar')
+  el += icon('line-md:calendar')
   // time
   el += `<time datetime="${date_xml(post.date)}">${date(post.date, config.date_format)}</time>`
   el += '</span>';
@@ -89,7 +89,7 @@ function div_default() {
         let str = cats.join(' / ');
         let lastCat = cats.pop();
         el += '<span class="cap breadcrumb"' + category_color(lastCat) + '>';
-        el += icon('default:category')
+        el += icon('line-md:folder')
         el += `<span>${str}</span>`
         el += '</span>';
       }
