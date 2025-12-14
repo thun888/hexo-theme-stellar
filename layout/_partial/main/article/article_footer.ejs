@@ -137,7 +137,14 @@ function layoutDiv() {
       if (theme.article.share.includes('qrcode1')) {
         return `
         <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${thispagelink}"/>
+          <img 
+            class="lazy"
+            src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${thispagelink}"
+            data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${thispagelink}"
+            alt="页面二维码"
+            loading="lazy"
+            onerror="this.src='${theme.default.image_onerror}'"
+          />
         </div>
         `
       } else {
