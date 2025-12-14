@@ -55,7 +55,7 @@ function layoutDiv() {
   el += `<header class="header${where == 'main' ? ' mobile-only' : ''}">`
   el += `<div class="logo-wrap">`
   if (logo.icon) {
-    el += `<div class="icon"><img no-lazy class="icon" src="${md_text(logo.icon)}"></div>`
+    el += `<div class="icon"><img no-lazy class="icon" src="${md_text(logo.icon)}" alt="logo"></div>`
   } else if (md_text(logo.avatar)) {
     el += `<a class="avatar" href="${url_for(md_link(logo.avatar) || '/')}">`
     if (theme.style.animated_avatar.animate) {
