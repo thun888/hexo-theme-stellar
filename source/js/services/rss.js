@@ -11,10 +11,12 @@ utils.jq(() => {
         const text = await resp.text();
 
         const head = text.slice(0, 1024).trim();
+        const content_type = el.getAttribute('content_type');
+        const show_title = el.getAttribute('show_title') === 'true';
 
         // JSON Feed
         if (head.startsWith('{') && head.includes('jsonfeed.org/version')) {
-          handleJsonFeed(el, JSON.parse(text));
+          handleJsonFeed(el, JSON.parse(text), content_type, show_title);
           return;
         }
 
@@ -28,17 +30,17 @@ utils.jq(() => {
         // Atom Feed
         if (doc.documentElement.nodeName === 'feed' &&
             doc.documentElement.namespaceURI === 'http://www.w3.org/2005/Atom') {
-          handleAtom(el, doc);
+          handleAtom(el, doc, content_type, show_title);
           return;
         }
         // RSS 2.0 Feed
         if (doc.documentElement.nodeName === 'rss') {
-          handleRSS2(el, doc);
+          handleRSS2(el, doc, content_type, show_title);
           return;
         }
         // RSS 1.0 Feed
         if (doc.documentElement.nodeName === 'rdf:RDF') {
-          handleRSS1(el, doc);
+          handleRSS1(el, doc, content_type, show_title);
           return;
         }
       });
@@ -47,8 +49,7 @@ utils.jq(() => {
 });
 
 
-function handleAtom(el, doc) {
-  const content_type = el.getAttribute('content_type');
+function handleAtom(el, doc, content_type, show_title) {
   // const feedTitle = doc.querySelector('feed > title')?.textContent || '未命名订阅源';
   const entries = doc.querySelectorAll('entry');
   const feedAuthorName = doc.querySelector('feed > author > name')?.textContent || '匿名';
@@ -72,11 +73,14 @@ function handleAtom(el, doc) {
     cell += '</div>';
 
     cell += '<div class="body">';
-    cell += '<p class="title">';
-    cell += '<a href="' + link + '" target="_blank" rel="external nofollow noopener noreferrer">';
-    cell += title;
-    cell += '</a>';
-    cell += '</p>';
+    if(show_title){
+      cell += '<p class="title">';
+      cell += '<a href="' + link + '" target="_blank" rel="external nofollow noopener noreferrer">';
+      cell += title;
+      cell += '</a>';
+      cell += '</p>';
+    }
+
     
     cell += '<div class="content">' + (content_type === 'summary' ? summary : content) + '</div>';
     cell += '</div>';
@@ -86,9 +90,7 @@ function handleAtom(el, doc) {
   });
 }
 
-function handleRSS2(el, doc) {
-  const content_type = el.getAttribute('content_type');
-  const show_title = el.getAttribute('show_title') === 'true';
+function handleRSS2(el, doc, content_type, show_title) {
   const items = doc.querySelectorAll('item');
   const feedAuthorName = doc.querySelector('channel > managingEditor, channel > webMaster, channel > title')?.textContent || '匿名';
 
@@ -127,9 +129,7 @@ function handleRSS2(el, doc) {
   });
 }
 
-function handleRSS1(el, doc) {
-  const content_type = el.getAttribute('content_type');
-  const show_title = el.getAttribute('show_title') === 'true';
+function handleRSS1(el, doc, content_type, show_title) {
   const items = doc.querySelectorAll('item');
   
   const feedTitle = doc.querySelector('channel > title')?.textContent || '匿名';
@@ -168,9 +168,7 @@ function handleRSS1(el, doc) {
     $(el).append(cell); 
   });
 }
-function handleJsonFeed(el, data) {
-  const content_type = el.getAttribute('content_type');
-  const show_title = el.getAttribute('show_title') === 'true';
+function handleJsonFeed(el, data, content_type, show_title) {
   const items = data.items || [];
   const feedAuthorName = data.authors?.[0]?.name || data.title || '匿名';
 
