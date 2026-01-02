@@ -13,10 +13,10 @@ utils.jq(() => {
         const head = text.slice(0, 1024).trim();
         const content_type = el.getAttribute('content_type');
         const show_title = el.getAttribute('show_title') === 'true';
-
+        const limit = parseInt(el.getAttribute('limit')) || 10;
         // JSON Feed
         if (head.startsWith('{') && head.includes('jsonfeed.org/version')) {
-          handleJsonFeed(el, JSON.parse(text), content_type, show_title);
+          handleJsonFeed(el, JSON.parse(text), content_type, show_title, limit);
           return;
         }
 
@@ -30,17 +30,17 @@ utils.jq(() => {
         // Atom Feed
         if (doc.documentElement.nodeName === 'feed' &&
             doc.documentElement.namespaceURI === 'http://www.w3.org/2005/Atom') {
-          handleAtom(el, doc, content_type, show_title);
+          handleAtom(el, doc, content_type, show_title, limit);
           return;
         }
         // RSS 2.0 Feed
         if (doc.documentElement.nodeName === 'rss') {
-          handleRSS2(el, doc, content_type, show_title);
+          handleRSS2(el, doc, content_type, show_title, limit);
           return;
         }
         // RSS 1.0 Feed
         if (doc.documentElement.nodeName === 'rdf:RDF') {
-          handleRSS1(el, doc, content_type, show_title);
+          handleRSS1(el, doc, content_type, show_title, limit);
           return;
         }
       });
@@ -49,12 +49,13 @@ utils.jq(() => {
 });
 
 
-function handleAtom(el, doc, content_type, show_title) {
-  // const feedTitle = doc.querySelector('feed > title')?.textContent || '未命名订阅源';
+function handleAtom(el, doc, content_type, show_title, limit) {
   const entries = doc.querySelectorAll('entry');
   const feedAuthorName = doc.querySelector('feed > author > name')?.textContent || '匿名';
 
-  entries.forEach((item, i) => {
+  const limitedEntries = Array.from(entries).slice(0, limit);
+  
+  const htmlBuffer = limitedEntries.map((item, i) => {
     const title = item.querySelector('title')?.textContent || '无题';
     const link = item.querySelector('link')?.getAttribute('href') || '#';
     const published = item.querySelector('published, updated')?.textContent;
@@ -62,158 +63,122 @@ function handleAtom(el, doc, content_type, show_title) {
     const summary = item.querySelector('summary')?.textContent || '';
     const authorName = item.querySelector('author > name')?.textContent || feedAuthorName;
 
-    let cell = '<div class="timenode" index="' + i + '">';
+    let cell = `<div class="timenode" index="${i}">`;
+    cell += `<div class="header">`;
+    cell += `<span class="user-info"><strong>${authorName}</strong></span>`;
     
-    cell += '<div class="header">';
-    cell += '<span class="user-info"><strong>' + authorName + '</strong></span>';
     if (published) {
-      let date = new Date(published);
-      cell += '<span>' + date.toLocaleString() + '</span>';
+      const date = new Date(published);
+      cell += `<span>${date.toLocaleString()}</span>`;
     }
-    cell += '</div>';
+    cell += `</div>`;
 
-    cell += '<div class="body">';
-    if(show_title){
-      cell += '<p class="title">';
-      cell += '<a href="' + link + '" target="_blank" rel="external nofollow noopener noreferrer">';
-      cell += title;
-      cell += '</a>';
-      cell += '</p>';
+    cell += `<div class="body">`;
+    if (show_title) {
+      cell += `<p class="title"><a href="${link}" target="_blank" rel="external nofollow noopener noreferrer">${title}</a></p>`;
     }
-
     
-    cell += '<div class="content">' + (content_type === 'summary' ? summary : content) + '</div>';
-    cell += '</div>';
-    cell += '</div>';
+    cell += `<div class="content">${content_type === 'summary' ? summary : content}</div>`;
+    cell += `</div></div>`;
+    
+    return cell;
+  }).join('');
 
-    $(el).append(cell); 
-  });
+  $(el).append(htmlBuffer);
 }
 
-function handleRSS2(el, doc, content_type, show_title) {
-  const items = doc.querySelectorAll('item');
+function handleRSS2(el, doc, content_type, show_title, limit) {
+  const items = Array.from(doc.querySelectorAll('item')).slice(0, limit);
   const feedAuthorName = doc.querySelector('channel > managingEditor, channel > webMaster, channel > title')?.textContent || '匿名';
 
-  items.forEach((item, i) => {
+  const htmlBuffer = items.map((item, i) => {
     const title = item.querySelector('title')?.textContent || '无题';
     const link = item.querySelector('link')?.textContent || '#';
     const pubDate = item.querySelector('pubDate')?.textContent;
-    const content = item.querySelector('content\\:encoded')?.textContent || '';
-    const description = item.querySelector('description')?.textContent || '';
+    const content = item.getElementsByTagName('content:encoded')[0]?.textContent || '';
+    const description = item.getElementsByTagName('description')[0]?.textContent || '';
     const authorName = item.querySelector('author, creator')?.textContent || feedAuthorName;
 
-    let cell = '<div class="timenode" index="' + i + '">';
-    
-    cell += '<div class="header">';
-    cell += '<span class="user-info"><strong>' + authorName + '</strong></span>';
+    let cell = `<div class="timenode" index="${i}">`;
+    cell += `<div class="header">`;
+    cell += `<span class="user-info"><strong>${authorName}</strong></span>`;
     if (pubDate) {
-      let date = new Date(pubDate);
-      cell += '<span>' + (isNaN(date) ? pubDate : date.toLocaleString()) + '</span>';
+      const date = new Date(pubDate);
+      cell += `<span>${isNaN(date) ? pubDate : date.toLocaleString()}</span>`;
     }
-    cell += '</div>';
-
-    cell += '<div class="body">';
+    cell += `</div>`;
+    cell += `<div class="body">`;
     if (show_title) {
-      cell += '<p class="title">';
-      cell += '<a href="' + link + '" target="_blank" rel="external nofollow noopener noreferrer">';
-      cell += title;
-      cell += '</a>';
-      cell += '</p>';
+      cell += `<p class="title"><a href="${link}" target="_blank" rel="external nofollow noopener noreferrer">${title}</a></p>`;
     }
-    
-    cell += '<div class="content">' + (content_type === 'summary' ? description : content) + '</div>';
-    cell += '</div>';
-    cell += '</div>';
+    cell += `<div class="content">${content_type === 'summary' ? description : content}</div>`;
+    cell += `</div></div>`;
+    return cell;
+  }).join('');
 
-    $(el).append(cell); 
-  });
+  $(el).append(htmlBuffer);
 }
-
-function handleRSS1(el, doc, content_type, show_title) {
-  const items = doc.querySelectorAll('item');
-  
+function handleRSS1(el, doc, content_type, show_title, limit) {
+  const items = Array.from(doc.querySelectorAll('item')).slice(0, limit);
   const feedTitle = doc.querySelector('channel > title')?.textContent || '匿名';
 
-  items.forEach((item, i) => {
+  const htmlBuffer = items.map((item, i) => {
     const title = item.querySelector('title')?.textContent || '无题';
     const link = item.querySelector('link')?.textContent || '#';
-    
     const pubDate = (item.querySelector('pubDate') || item.getElementsByTagName('dc:date')[0])?.textContent;
-    const content = item.querySelector('content\\:encoded')?.textContent || '';
+    const content = item.getElementsByTagName('content:encoded')[0]?.textContent || '';
     const description = (item.querySelector('description') || item.querySelector('summary'))?.textContent || '';
     const authorName = (item.querySelector('author') || item.getElementsByTagName('dc:creator')[0])?.textContent || feedTitle;
 
-    let cell = '<div class="timenode" index="' + i + '">';
-    
-    cell += '<div class="header">';
-    cell += '<span class="user-info"><strong>' + authorName + '</strong></span>';
+    let cell = `<div class="timenode" index="${i}">`;
+    cell += `<div class="header">`;
+    cell += `<span class="user-info"><strong>${authorName}</strong></span>`;
     if (pubDate) {
-      let date = new Date(pubDate);
-      cell += '<span>' + (isNaN(date) ? pubDate : date.toLocaleString()) + '</span>';
+      const date = new Date(pubDate);
+      cell += `<span>${isNaN(date) ? pubDate : date.toLocaleString()}</span>`;
     }
-    cell += '</div>';
-
-    cell += '<div class="body">';
+    cell += `</div>`;
+    cell += `<div class="body">`;
     if (show_title) {
-    cell += '<p class="title">';
-    cell += '<a href="' + link + '" target="_blank" rel="external nofollow noopener noreferrer">';
-    cell += title;
-    cell += '</a>';
-    cell += '</p>';
+      cell += `<p class="title"><a href="${link}" target="_blank" rel="external nofollow noopener noreferrer">${title}</a></p>`;
     }
-    cell += '<div class="content">' + (content_type === 'summary' ? description : content) + '</div>';
-    cell += '</div>';
-    cell += '</div>';
+    cell += `<div class="content">${content_type === 'summary' ? description : content}</div>`;
+    cell += `</div></div>`;
+    return cell;
+  }).join('');
 
-    $(el).append(cell); 
-  });
+  $(el).append(htmlBuffer);
 }
-function handleJsonFeed(el, data, content_type, show_title) {
-  const items = data.items || [];
+function handleJsonFeed(el, data, content_type, show_title, limit) {
+  const items = (data.items || []).slice(0, limit);
   const feedAuthorName = data.authors?.[0]?.name || data.title || '匿名';
 
-  items.forEach((item, i) => {
+  const htmlBuffer = items.map((item, i) => {
     const id = item.id || i;
     const title = item.title || '无题';
     const link = item.url || '#';
     const pubDate = item.date_published;
-    
     const content = item.content_html || '';
     const summary = item.summary || '';
     
-    let authorName = '';
-    for (i in item.authors || []) {
-      const author = item.authors[i];
-      if (author.name) {
-        authorName += author.name + ' ';
-      }
-    }
-    if (authorName.length === 0) {
-      authorName = feedAuthorName;
-    }
+    let authorName = (item.authors || []).map(a => a.name).filter(Boolean).join(' ') || feedAuthorName;
 
-    let cell = '<div class="timenode" index="' + id + '">';
-    
-    cell += '<div class="header">';
-    cell += '<span class="user-info"><strong>' + authorName + '</strong></span>';
+    let cell = `<div class="timenode" index="${id}">`;
+    cell += `<div class="header">`;
+    cell += `<span class="user-info"><strong>${authorName}</strong></span>`;
     if (pubDate) {
-      let date = new Date(pubDate);
-      cell += '<span>' + (isNaN(date.getTime()) ? pubDate : date.toLocaleString()) + '</span>';
+      const date = new Date(pubDate);
+      cell += `<span>${isNaN(date.getTime()) ? pubDate : date.toLocaleString()}</span>`;
     }
-    cell += '</div>';
-
-    cell += '<div class="body">';
+    cell += `</div>`;
+    cell += `<div class="body">`;
     if (show_title) {
-    cell += '<p class="title">';
-    cell += '<a href="' + link + '" target="_blank" rel="external nofollow noopener noreferrer">';
-    cell += title;
-    cell += '</a>';
-    cell += '</p>';
+      cell += `<p class="title"><a href="${link}" target="_blank" rel="external nofollow noopener noreferrer">${title}</a></p>`;
     }
-    cell += '<div class="content">' + (content_type === 'summary' ? summary : content) + '</div>';
-    cell += '</div>';
-    cell += '</div>';
+    cell += `<div class="content">${content_type === 'summary' ? summary : content}</div>`;
+    cell += `</div></div>`;
+    return cell;
+  }).join('');
 
-    $(el).append(cell); 
-  });
+  $(el).append(htmlBuffer);
 }
