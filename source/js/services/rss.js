@@ -11,8 +11,8 @@ utils.jq(() => {
         const text = await resp.text();
 
         const head = text.slice(0, 1024).trim();
-        const content_type = el.getAttribute('content_type');
-        const show_title = el.getAttribute('show_title') === 'true';
+        const content_type = el.getAttribute('content_type') || 'content';
+        const show_title = el.getAttribute('show_title') !== 'false';
         const limit = parseInt(el.getAttribute('limit')) || 10;
         // JSON Feed
         if (head.startsWith('{') && head.includes('jsonfeed.org/version')) {
