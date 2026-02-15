@@ -29,7 +29,7 @@ hexo.extend.tag.register('chat', require('./lib/chat')(hexo), {ends: true})
 hexo.extend.tag.register('coding', require('./lib/coding')(hexo))
 hexo.extend.tag.register('office', require('./lib/office')(hexo))
 hexo.extend.tag.register('biliinfo', require('./lib/biliinfo')(hexo))
-
+hexo.extend.tag.register('localmd', require('./lib/localmd')(hexo),{async: true})
 
 // express
 hexo.extend.tag.register('checkbox', require('./lib/checkbox')(hexo, 'checkbox'))
@@ -39,6 +39,7 @@ hexo.extend.tag.register('emoji', require('./lib/emoji')(hexo))
 hexo.extend.tag.register('icon', require('./lib/icon')(hexo))
 hexo.extend.tag.register('frame', require('./lib/frame')(hexo))
 hexo.extend.tag.register('image', require('./lib/image')(hexo))
+hexo.extend.tag.register('livephoto', require('./lib/livephoto')(hexo))
 hexo.extend.tag.register('link', require('./lib/link')(hexo))
 hexo.extend.tag.register('button', require('./lib/button')(hexo))
 hexo.extend.tag.register('mark', require('./lib/mark')(hexo))

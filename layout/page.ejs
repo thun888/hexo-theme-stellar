@@ -44,6 +44,41 @@ function layoutDiv() {
     el += partial('_partial/main/navbar/article_banner')
   }
   el += `<article class="${articleClass()}">`
+  
+  // 派生
+  if (page.part_of?.length == 1) {
+    el += `
+      <div class="tag-plugin colorful note" color="blue">
+        <div class="title"><strong>嗨</strong></div>
+        <div class="body">
+          <span>本文是该文章的一部分：</span>
+          ${markdown(page.part_of[0]).replace('<p>', '').replace('</p>', '')}
+        </div>
+      </div>
+    `
+  } else if (page.part_of?.length > 0) {
+    function partList() {
+      var el = '';
+      for (let ref of page.part_of) {
+        el += `
+        <li class="post-title">
+          ${markdown(ref)}
+        </li>
+        `
+      }
+      return el;
+    }
+    el += `
+      <div class="tag-plugin colorful note" color="blue">
+        <div class="title"><strong>嗨</strong></div>
+        <div class="body">
+          <p>本文是以下文章的一部分：</p>
+          <ul>${partList()}</ul>
+        </div>
+      </div>
+    `
+  }
+  
   //过期提醒容器
   el +=`<div id="expiration-reminder"></div>`
   if (page.content && page.content.length > 0) {
