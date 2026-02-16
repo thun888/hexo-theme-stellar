@@ -16,10 +16,12 @@ const yfm = require('hexo-front-matter')
 module.exports = ctx => async function(args) {
   args = ctx.args.map(args, [''], ['src'])
   if (!args.src) {
+    console.warn('[localmd] No source file specified.')
     return ''
   }
   const filepath = path.join(ctx.source_dir, args.src)
   if (!fs.existsSync(filepath)) {
+    console.warn(`[localmd] File not found: ${filepath}`)
     return ''
   }
   const rawContent = fs.readFileSync(filepath, { encoding: 'utf-8' })
