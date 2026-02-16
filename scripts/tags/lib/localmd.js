@@ -19,7 +19,15 @@ module.exports = ctx => async function(args) {
     console.warn('[localmd] No source file specified.')
     return ''
   }
-  const filepath = path.join(ctx.source_dir, args.src)
+  // 统一将反斜杠替换为正斜杠，避免跨平台路径拼接问题
+  if (args.src) {
+    args.src = args.src.replace(/\\/g, '/')
+    // 移除开头的斜杠，防止 path.resolve 将其识别为根路径
+    if (args.src.startsWith('/')) {
+      args.src = args.src.substring(1)
+    }
+  }
+  const filepath = path.resolve(ctx.source_dir, args.src)
   if (!fs.existsSync(filepath)) {
     console.warn(`[localmd] File not found: ${filepath}`)
     return ''
