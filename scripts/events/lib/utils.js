@@ -112,8 +112,9 @@ module.exports = hexo => {
             })
           }
           // 返回 use 引用，允许传递额外属性
-          const argsStr = args?.length > 0 ? ` ${args}` : ''
-          return `<svg${attrsStr}${argsStr}><use href="#${iconId}"/></svg>`
+          // 应只对img标签有效，svg标签不应该传递额外属性
+          // const argsStr = args?.length > 0 ? ` ${args}` : ''
+          return `<svg${attrsStr}><use href="#${iconId}"/></svg>`
         }
         
         // 默认行为：直接返回完整 SVG
@@ -127,13 +128,13 @@ module.exports = hexo => {
         return ''
       }
       
-      let html = '<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n'
+      let html = '<div class="svg-sprites"><svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n'
       hexo.utils.svgSprites.forEach((data, id) => {
         html += `  <symbol id="${id}">\n`
         html += `    ${data.content}\n`
         html += `  </symbol>\n`
       })
-      html += '</svg>'
+      html += '</svg></div>'
       return html
     }
   };

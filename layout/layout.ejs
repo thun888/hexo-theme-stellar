@@ -47,10 +47,6 @@ if (theme.style.prefers_theme === 'auto') {
   html += partial('_partial/head')
   html += `<body>`
     html += site_background
-    // SVG Sprites 定义区域
-    if (theme.svg_sprites && theme.svg_sprites.enable) {
-      html += svg_sprites()
-    }
     html += `<div id="l_cover">${partial('_partial/cover/index')}</div>`
     html += `<div class="l_body ${page_type}" id="start" layout="${page.layout}" type="${article_type}" ${indent ? 'text-indent' : ''}>`
       html += `<aside class="l_left">`
@@ -72,7 +68,15 @@ if (theme.style.prefers_theme === 'auto') {
     html += `</div>`
     html += `<div class="scripts">`
       html += partial('_partial/scripts')
+      //  注入 js
+      if (page.inject_js) {
+        html += markdown(page.inject_js)
+      }
     html += `</div>`
+    // SVG Sprites 定义区域
+    if (theme.svg_sprites && theme.svg_sprites.enable) {
+      html += svg_sprites()
+    }
   html += `</body>`
 html += `</html>`
 %>
