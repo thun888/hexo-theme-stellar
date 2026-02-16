@@ -51,7 +51,7 @@ if (theme.style.prefers_theme === 'auto') {
     if (theme.svg_sprites && theme.svg_sprites.enable) {
       html += svg_sprites()
     }
-    html += partial('_partial/cover/index')
+    html += `<div id="l_cover">${partial('_partial/cover/index')}</div>`
     html += `<div class="l_body ${page_type}" id="start" layout="${page.layout}" type="${article_type}" ${indent ? 'text-indent' : ''}>`
       html += `<aside class="l_left">`
         html += `<div class="sidebg"><canvas id="cloud-canvas"></canvas></div>`

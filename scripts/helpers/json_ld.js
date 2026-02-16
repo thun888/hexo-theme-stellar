@@ -18,14 +18,14 @@
       authorImage = config.url.endsWith("/") ? config.url + authorImage.slice(1) : config.url + authorImage
     }
 
-    const author = {
-      '@type': 'Person',
-      name: config.author,
-      sameAs: structured_data.links || []
-    };
-    // Google does not accept `Person` as item type for the publisher property
-    const publisher = Object.assign({}, author, {'@type': 'Organization'});
-    let schema = {};
+  const author = {
+    '@type': 'Person',
+    name: config.author,
+    sameAs: structured_data.links || []
+  };
+  // Google does not accept `Person` as item type for the publisher property
+  const publisher = Object.assign({}, author, {'@type': 'Organization'});
+  let schema = {};
 
     if (authorImage) {
       author.image = authorImage;
@@ -70,21 +70,21 @@
         images = images.unshift(page.banner);
       }
 
-      schema.thumbnailUrl = page.cover || page.banner;
-      schema.image = images;
-    
-    } else if (isPage || this.is_home()) {
-      
-      const url = this.is_home() ? config.url : this.pretty_url(page.permalink);
-      schema = {
-        '@context': 'https://schema.org',
-        '@type': 'Website',
-        '@id': url,
-        author: author,
-        name: page.title || config.title,
-        description: config.description,
-        url: url
-      };
+    schema.thumbnailUrl = page.cover || page.banner;
+    schema.image = images;
+
+  } else if (isPage || this.is_home()) {
+
+    const url = this.is_home() ? config.url : this.pretty_url(page.permalink);
+    schema = {
+      '@context': 'https://schema.org',
+      '@type': 'Website',
+      '@id': url,
+      author: author,
+      name: page.title || config.title,
+      description: config.description,
+      url: url
+    };
 
       if (config.keywords && config.keywords.length) {
         if (Array.isArray(args)) {
@@ -101,22 +101,22 @@
           schema.description = util.truncate(this.strip_html(page.content), {length: 200});
         }
 
-      }
-      
-    } else {
-      
-      // default to WebPage for other layouts
-      schema = {
-        '@context': 'https://schema.org',
-        '@type': 'Website',
-        '@id': config.url,
-        author: author,
-        name: config.title,
-        description: config.description,
-        url: config.url
-      };
-      
     }
+
+  } else {
+
+    // default to WebPage for other layouts
+    schema = {
+      '@context': 'https://schema.org',
+      '@type': 'Website',
+      '@id': config.url,
+      author: author,
+      name: config.title,
+      description: config.description,
+      url: config.url
+    };
+
+  }
 
     return `<script type="application/ld+json">${JSON.stringify(schema)}</script>`;
   });
