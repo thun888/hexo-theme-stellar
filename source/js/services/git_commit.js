@@ -44,7 +44,7 @@ utils.jq(() => {
 
 
 function getMeaning(message) {
-  if (message.toUpperCase() != message && message.length != 2) {
+  if (message.toUpperCase() != message || message.length != 2) {
     if (message  == "fix") {
       return "修复";
     }
