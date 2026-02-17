@@ -3,7 +3,7 @@
     const nprogress_js='https://gcore.jsdelivr.net/npm/nprogress@0.2/nprogress.min.js';
 %>
 
-<% if (conf.nprogress !==false) { %>
+<% if (conf.nprogress !==false && conf.self_inject == false) { %>
     <link rel="stylesheet" href="<%= nprogress_css %>">
     <script src="<%= nprogress_js %>"></script>
     <script>

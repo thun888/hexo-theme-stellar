@@ -6,4 +6,6 @@
     hoverDelay: 25
   };
 </script>
-<script defer src="<%- conf.flying_pages %>"></script>
+<% if (conf.self_inject == false) { %>
+      <script defer src="<%- conf.flying_pages %>"></script>
+<% } %>

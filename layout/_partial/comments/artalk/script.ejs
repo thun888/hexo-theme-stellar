@@ -44,7 +44,12 @@
         });
       }
       
-      util.viewportLazyload(el, load_artalk, lazyload);
+      try {
+        util.viewportLazyload(el, load_artalk, lazyload);
+      } catch (error) {
+        // 问题不大
+        console.info('Failed to load Artalk comments:', error);
+      }
     }
     
     // Store in global stellar namespace for PJAX reinitialization
