@@ -29,13 +29,13 @@ function layoutDiv() {
     if (!author) {
       el += `${__("meta.created") + __("symbol.colon")}`
     }
-    el += `<time datetime="${date_xml(page.date)}">${date(page.date, config.date_format)}</time>`
+    el += `<time id="created-time" datetime="${date_xml(page.date)}">${date(page.date, config.date_format)}</time>`
     el += `</span>`
     // 更新日期
     el += `<span class="sep updated"></span>`
     el += `<span class="text updated">`
     el += `${__("meta.updated") + __("symbol.colon")}`
-    el += `<time datetime="${date_xml(page.updated)}">${date(page.updated, config.date_format)}</time>`
+    el += `<time id="updated-time" datetime="${date_xml(page.updated)}">${date(page.updated, config.date_format)}</time>`
     el += `</span>`
   }
   el += `</div>`
