@@ -3,6 +3,7 @@ utils.jq(() => {
       const els = document.getElementsByClassName('ds-fclite');
       for (var i = 0; i < els.length; i++) {
         const el = els[i];
+        const limit = parseInt(el.getAttribute('limit')) || 10;
         const api = el.dataset.api
         if (api == null) {
           continue;
@@ -10,22 +11,21 @@ utils.jq(() => {
         utils.request(el, api, async resp => {
           var data = await resp.json();
           data = data.article_data || [];
-          data.forEach((item, i) => {
-          // console.log(content)
-          var cell = '<div class="timenode" index="' + i + '">';
-          cell += '<div class="header">';
-          cell += '<div class="user-info">';
-          // cell += '<img src="' + (item.avatar || default_avatar) + '" onerror="javascript:this.src=\'' + default_avatar + '\';">';
-          cell += '<span>' + item.author + '</span>';
-          cell += '</div>';
-          cell += '<span>' + item.created + '</span>';
-          cell += '</div>';
-          cell += '<a class="body" href="' + item.link + '" target="_blank" rel="external nofollow noopener noreferrer">';
-          cell += item.title;
-          cell += '</a>';
-          cell += '</div>';
-          $(el).append(cell);
-          });
+        let htmlBuffer = '';
+        data.slice(0, limit).forEach((item, i) => {
+          htmlBuffer += `
+            <div class="timenode" index="${i}">
+              <div class="header">
+                <div class="user-info"><span>${item.author}</span></div>
+                <span>${item.created}</span>
+              </div>
+              <a class="body" href="${item.link}" target="_blank" rel="external nofollow noopener noreferrer">
+                ${item.title}
+              </a>
+            </div>`;
+        });
+
+        $(el).append(htmlBuffer);
         });
       }
     });
