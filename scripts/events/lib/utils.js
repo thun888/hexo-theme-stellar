@@ -82,9 +82,15 @@ module.exports = hexo => {
       } else {
         result = key
       }
+      // console.log(`Processing icon: ${key} => ${result}`)
       if (result.startsWith('/') || result.startsWith('https://') || result.startsWith('http://')) {
         return `<img ${args?.length > 0 ? args : ''} src="${result}" />`
       } else {
+        // 特例跳过
+        const skipList = ['rating:star']
+        if (skipList.includes(key)) {
+          return result
+        }
         // 检查是否使用 SVG Sprites
         const useSvgSprites = hexo.theme.config.svg_sprites?.enable === true
         
