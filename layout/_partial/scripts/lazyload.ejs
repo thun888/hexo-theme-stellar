@@ -25,9 +25,9 @@
     window.lazyLoadInstance?.update();
   });
 
-  // document.addEventListener('pjax:complete', function () {
-  //   window.lazyLoadInstance?.update();
-  // });
+  document.addEventListener('pjax:complete', function () {
+    window.lazyLoadInstance?.update();
+  });
 
   window.wrapLazyloadImages = (container) => {
     if (typeof container === 'string') {
