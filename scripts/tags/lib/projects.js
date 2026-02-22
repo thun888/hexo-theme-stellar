@@ -49,7 +49,7 @@ module.exports = ctx => function(args) {
         }
         var Tag = element.color ? `<span class="cap breadcrumb project-tag" style="color:${element.color};border-color:${element.color}; ">${icon}${element.name}${content}</span>` : `<span class="cap breadcrumb">${icon}${element.name}${content}</span>`;
         if (element.url){
-          Tag = `<a class="cap breadcrumb project-a" href="${element.url}">${Tag}</a>`
+          Tag = `<a class="" href="${element.url}">${Tag}</a>`
         }
         tagsHtml += Tag
       });
