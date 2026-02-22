@@ -459,6 +459,7 @@ dependencies:
     js: https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js
     transition: fade # blur, fade
     fix_ratio: true # true / false
+    # blurhash: false # true / false，开启后在 hexo s 时自动计算并写入 {% image %} 标签（需安装 sharp + blurhash 依赖）
 
 # 内置服务，按需加载（页面内用到了就会加载，没有用到就不会加载）
 data_services:

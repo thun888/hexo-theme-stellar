@@ -7,8 +7,33 @@
 
 'use strict'
 
+// const fs = require('fs');
+// const path = require('path');
+
+// // 懒加载 blurhash 缓存（只读一次）
+// let _blurhashCache = null;
+// function getBlurhashCache() {
+//   if (_blurhashCache !== null) return _blurhashCache;
+//   const cachePath = path.join(__dirname, '../../../../../image-blurhashes.json');
+//   _blurhashCache = fs.existsSync(cachePath)
+//     ? JSON.parse(fs.readFileSync(cachePath, 'utf8'))
+//     : {};
+//   return _blurhashCache;
+// }
+
 module.exports = ctx => function(args) {
   args = ctx.args.map(args, ['width', 'height', 'bg', 'download', 'padding', 'fancybox', 'ratio'], ['src', 'alt'])
+  // // 从缓存动态查找 blurhash
+  // const sourceKey = this.source ? path.relative(process.cwd(), path.join('source', this.source)).replace(/\\/g, '/').replace(/^\.\//,'') : null;
+  // const blurhashCache = getBlurhashCache();
+  // // 尝试匹配缓存 key（windows/unix 路径兼容）
+  // let blurhash = null;
+  // if (sourceKey && args.src) {
+  //   const fileCache = blurhashCache[sourceKey]
+  //     || blurhashCache[sourceKey.replace(/\//g, '\\')]
+  //     || blurhashCache['source/' + sourceKey.replace(/^source[\\/]/, '')];
+  //   if (fileCache) blurhash = fileCache[args.src] || null;
+  // }
   var style = ''
   if (args.width) {
     style += 'width:' + args.width + ';'
@@ -41,6 +66,9 @@ module.exports = ctx => function(args) {
     let a = '<a data-fancybox'
     let img = ''
     img += `<img class="lazy" src="${src}" data-src="${src}"`
+    // if (blurhash) {
+    //   img += ` data-blurhash="${blurhash}"`
+    // }
     if (alt) {
       img += ` alt="${alt}"`
       a += ` data-caption="${alt}"`
@@ -53,8 +81,12 @@ module.exports = ctx => function(args) {
     }
     img += `onerror="this.src=&quot;${ctx.theme.config.default.image_onerror}&quot;"`
     img += '/>'
-    // loading
-    img += `<div class="lazy-icon" style="background-image:url(${ctx.theme.config.default.loading});"></div>`
+    // // blurhash canvas 占位 / loading
+    // if (blurhash) {
+    //   img += `<canvas class="blurhash-preview" data-blurhash="${blurhash}" aria-hidden="true"></canvas>`
+    // } else {
+    //   img += `<div class="lazy-icon" style="background-image:url(${ctx.theme.config.default.loading});"></div>`
+    // }
     if (fancyboxHref) {
       a += ` href="${fancyboxHref}">${img}</a>`
       return a

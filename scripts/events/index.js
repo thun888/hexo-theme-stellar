@@ -57,12 +57,19 @@ hexo.extend.filter.register('before_generate', async () => {
 
   const generateImageRatios = require('./lib/get_image_ratios');
   const fixMarkdownImages = require('./lib/fix_image_tags');
+  // const generateImageBlurhashes = require('./lib/get_image_blurhash');
 
   if (enabled) {
     // 构建前：生成缓存 + 写回 Markdown
     await generateImageRatios(hexo);
     fixMarkdownImages(hexo); // 不用 await，因为是同步的
   }
+
+  // const blurhashEnabled = hexo.theme.config.dependencies.lazyload?.blurhash === true;
+  // if (blurhashEnabled) {
+  //   // 只生成 JSON 缓存，不写回 Markdown，渲染时动态注入
+  //   await generateImageBlurhashes(hexo);
+  // }
 });
 
 
