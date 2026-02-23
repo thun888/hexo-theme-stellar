@@ -25,14 +25,6 @@ module.exports = (ctx) => {
     args.withcss = args.withcss || 'true'
 
     // 构造最终的 HTML 元素字符串
-    let el = ''
-    el += `<div class="tag-plugin ds-coding" `
-    el += ctx.args.joinTags(args, ['url', 'withcss']).join(' ')
-    // 懒加载
-    el += ' lazyload'
-    el += '>'
-    el += '</div>'
-
-    return el
+    return `<div class="tag-plugin ds-coding" ${ctx.args.joinTags(args, ['url', 'withcss']).join(' ')}  lazyload></div>`
   }
 }

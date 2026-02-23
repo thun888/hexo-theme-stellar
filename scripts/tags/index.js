@@ -63,5 +63,5 @@ hexo.extend.tag.register('printhide', require('./lib/print-hide')(hexo), {ends: 
 // read 阅读类
 hexo.extend.tag.register('reel', require('./lib/read/reel')(hexo), true)
 hexo.extend.tag.register('paper', require('./lib/read/paper')(hexo), true)
-
+hexo.extend.tag.register('divider', require('./lib/divider')(hexo))
 // others
