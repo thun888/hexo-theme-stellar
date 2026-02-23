@@ -14,7 +14,8 @@ utils.jq(() => {
           console.warn('[Biliinfo] API error:', data);
           return;
         }
-        let pic = data.data.pic;
+        // 替换 http:// 为 https://
+        let pic = data.data.pic.replace(/^http:\/\//i, 'https://');
         let title = data.data.title;
         let desc = data.data.desc == '-' ? '*无描述' : data.data.desc;
         let url = 'https://www.bilibili.com/video/' + data.data.bvid;
