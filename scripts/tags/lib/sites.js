@@ -32,7 +32,7 @@ module.exports = ctx => function(args) {
         el += `<div class="grid-cell site-card">`
         el += `<a class="card-link" target="_blank" rel="external nofollow noopener noreferrer" href="${item.url}">`
         el += `<div class="lazy-box snapshot">`
-        el += `<img class="lazy" data-src="${item.cover || item.snapshot || item.screenshot || ('https://screenshot.hzchu.top/simple/' + item.url)}" onerror="javascript:this.removeAttribute(&quot;data-src&quot;);this.src=&quot;${ctx.theme.config.default.cover}&quot;;"/>`
+        el += `<img class="lazy" data-src="${item.cover || item.snapshot || item.screenshot || ('https://screenshot.api.hzchu.top/api/screenshot/?url=' + item.url)}" onerror="javascript:this.removeAttribute(&quot;data-src&quot;);this.src=&quot;${ctx.theme.config.default.cover}&quot;;"/>`
         el += `<div class="lazy-icon" style="background-image:url(&quot;${ctx.theme.config.default.loading}&quot;);"></div>`
         el += `</div>`
         el += `<div class="info">`

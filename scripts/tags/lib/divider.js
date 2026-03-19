@@ -15,9 +15,9 @@ module.exports = ctx => function(args) {
   }
   let el = `
     <div class="divider-container">
-      ${ args.direction === 'right' ? `<div class="divider-line"></div>` : '' }
+      ${ (args.direction === 'right' || args.direction === 'center') ? `<div class="divider-line"></div>` : '' }
       <span class="divider-text">${args.content}</span>
-      ${ args.direction === 'left' ? `<div class="divider-line"></div>` : '' }
+      ${ (args.direction === 'left' || args.direction === 'center') ? `<div class="divider-line"></div>` : '' }
     </div>
   `
 
