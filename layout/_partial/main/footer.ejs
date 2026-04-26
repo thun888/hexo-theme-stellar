@@ -1,5 +1,12 @@
 <%
-const content = theme.footer.content?.replace('{author.name}', (config.author || 'Anonymity'))?.replace('{theme.name}', stellar_info('name'))?.replace('{theme.version}', stellar_info('version'))?.replace('{theme.tree}', stellar_info('tree'))
+const content = theme.footer.content
+  ?.replace('{author.name}', (config.author || 'Anonymity'))
+  ?.replace('{theme.name}', stellar_info('name'))
+  ?.replace('{theme.version}', stellar_info('version'))
+  ?.replace('{theme.tree}', stellar_info('tree'))
+  ?.replace('{site.posts.length}', site.posts.length)
+  ?.replace('{site.posts.words}', totalcount(site))
+  ?.replace('{extra.info.buildtime}', new Date().toLocaleDateString("zh-CN"));
 function layoutDiv() {
   var el = ''
   el += `<footer class="page-footer${scrollreveal(' ')} footnote">`
@@ -38,7 +45,7 @@ function layoutDiv() {
   if (content) {
     el += markdown(content)
   }
-  el += '<script> var allpostscount = "' + site.posts.length + '" ;var allpostswords = "' + totalcount(site) + '";</script>'
+  // el += '<script> var allpostscount = "' + site.posts.length + '" ;var allpostswords = "' + totalcount(site) + '";</script>'
   el += '</div></footer>'
   return el
 }
