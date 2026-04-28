@@ -51,7 +51,7 @@ module.exports = ctx => function (args) {
         var video = document.getElementById('video_hls_${id}');
         var src = "${args.src}";
         if (Hls.isSupported()) {
-          var hls = new Hls({maxBufferLength:${args.cachetime || 30},maxBufferSize:6000000000,lowLatencyMode:${lowLatencyMode}});
+          var hls = new Hls({maxBufferLength:${args.cachetime || 30}, maxBufferSize:6000000000, lowLatencyMode:${lowLatencyMode}, startPosition: 0});
           hls.loadSource(src);
           hls.attachMedia(video);
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
