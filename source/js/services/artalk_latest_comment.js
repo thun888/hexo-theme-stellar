@@ -14,6 +14,14 @@ utils.jq(() => {
         data = data.data || [];
         // 过滤掉page_key为"/friends/"的评论
         data = data.filter(item => item.page_key !== "/friends/");
+        // // 去重，只保留每个昵称的最新一条
+        // const seen = new Set();
+        // data = data.filter(item => {
+        //   if (seen.has(item.nick)) return false;
+        //   seen.add(item.nick);
+        //   return true;
+        // });
+
         data.forEach((item, i) => {
           // 去掉hidename
           if (item.nick == hidename) {
