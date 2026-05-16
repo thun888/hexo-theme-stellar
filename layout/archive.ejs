@@ -39,16 +39,23 @@ function layoutArchiveList() {
       return post.year == year
     }).each(function(post) {
       el += `<div class="archive-list">`
-      el +=`<a class='post fs14' href="${pretty_url(post.link || post.path)}">`
-      el += `<time>${date(post.date, 'MM-DD')}</time>`
-      el += `<span>`
-      if (post.title) {
-        el += post.title
-      } else if (post.date) {
-        el += date(post.date, config.date_format)
+      if (post.lock == true) {
+        el += `<span class='post fs14'>`
+        el += `<time>${date(post.date, 'MM-DD')}</time>`
+        el += `<span>${post.title || date(post.date, config.date_format)}</span>`
+        el += `</span>`
+      } else {
+        el +=`<a class='post fs14' href="${pretty_url(post.link || post.path)}">`
+        el += `<time>${date(post.date, 'MM-DD')}</time>`
+        el += `<span>`
+        if (post.title) {
+          el += post.title
+        } else if (post.date) {
+          el += date(post.date, config.date_format)
+        }
+        el += `</span>`
+        el += `</a>`
       }
-      el += `</span>`
-      el += `</a>`
       el += `</div>`
     })
   	el += `</article>`

@@ -51,6 +51,10 @@ page:
     what: 很抱歉，您访问的页面不存在
     why: 可能是输入地址有误或该地址已被删除
     action: 返回主页
+  lock:
+    what: 很抱歉，该文章已被锁定
+    why: 该文章已被作者锁定，暂时无法查看
+    action: 返回主页
 
 search:
   search: 搜搜看

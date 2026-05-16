@@ -24,7 +24,7 @@ function layout_post_list(partial) {
   var el = '';
   el += `<div class="post-list post">`;
   page.posts.each(function(post){
-    if (post.indexing != false) {
+    if (post.indexing != false && post.lock != true) {
       el += layout_post_card('post', post, partial(post));
     }
   })

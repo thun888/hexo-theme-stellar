@@ -37,6 +37,25 @@ function articleClass() {
 
 function layoutDiv() {
   var el = ''
+  // 锁定文章：渲染锁定页面，跳过正文
+  if (page.lock == true && layout === 'post') {
+    page.comment_title = '';
+    page.header = false;
+    page.robots = 'none';
+    page.rightbar = [];
+    el += `<article class='md-text error-page'>`
+    el += `<h1><img id='error' src='${theme.style.lock_page || theme.style.error_page}' alt='locked'></h1>`
+    el += `<p class='what'><strong>${__('page.lock.what')}</strong></p>`
+    if (page.lock_reason) {
+      el += `<p class='why'>${page.lock_reason}</p>`
+    } else {
+      el += `<p class='why'>${__('page.lock.why')}</p>`
+    }
+    el += `<br><br>`
+    el += `<a class='button' id='back' href='${config.root}'>${__('page.lock.action')}</a>`
+    el += `</article>`
+    return el
+  }
   if (page.nav_tabs) {
     el += partial('_partial/main/navbar/nav_tabs_blog')
   }

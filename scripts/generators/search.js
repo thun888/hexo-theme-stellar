@@ -79,6 +79,7 @@ hexo.extend.generator.register('search_json_generator', function (locals) {
       if (!layout_list.includes(post.layout)) return
       if (cfg.skip_search && matchAndExit(post.path, cfg.skip_search)) return
       if (post.indexing == false) return
+      if (post.lock == true) return
       let temp_post = generateJson(post)
       res.push(temp_post)
     }) 
@@ -89,6 +90,7 @@ hexo.extend.generator.register('search_json_generator', function (locals) {
       if (!layout_list.includes(page.layout)) return
       if (cfg.skip_search && matchAndExit(page.path, cfg.skip_search)) return
       if (page.indexing == false) return
+      if (page.lock == true) return
       let temp_post = generateJson(page)
       res.push(temp_post)
     })
