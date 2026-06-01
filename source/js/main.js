@@ -44,6 +44,28 @@ const util = {
     }
   },
 
+  toggleImageMore: (btn) => {
+    const bg = btn.closest('.image-bg');
+    const img = bg?.querySelector('img');
+    if (!img) return;
+    const originalSrc = img.getAttribute('data-original-src');
+    const moreSrc = img.getAttribute('data-more-src');
+    if (!originalSrc || !moreSrc) return;
+    const isMore = img.getAttribute('data-is-more') === 'true';
+    const targetSrc = isMore ? originalSrc : moreSrc;
+    img.setAttribute('data-is-more', isMore ? 'false' : 'true');
+    img.setAttribute('data-src', targetSrc);
+    img.src = targetSrc;
+    // 同步 fancybox
+    const wrapper = img.closest('a[data-fancybox]');
+    if (wrapper) wrapper.setAttribute('href', targetSrc);
+    // 同步下载按钮
+    const downloadBtn = bg.querySelector('.image-download');
+    if (downloadBtn) downloadBtn.setAttribute('href', targetSrc);
+    // 同步按钮样式
+    btn.classList.toggle('active');
+  },
+
   toggle: (id) => {
     const el = document.getElementById(id);
     if (el) {

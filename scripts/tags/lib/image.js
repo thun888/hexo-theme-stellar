@@ -2,7 +2,7 @@
  * image.js v1 | https://github.com/xaoxuu/hexo-theme-stellar/
  * 格式与官方标签插件一致使用空格分隔，中括号内的是可选参数（中括号不需要写出来）
  *
- * {% image src [alt] [width:400px] [bg:#eee] [download:true/false/url] [fancybox:true/false/url] [ratio] %}
+ * {% image src [alt] [width:400px] [bg:#eee] [download:true/false/url] [fancybox:true/false/url] [ratio] [more:url] %}
  */
 
 'use strict'
@@ -22,7 +22,7 @@
 // }
 
 module.exports = ctx => function(args) {
-  args = ctx.args.map(args, ['width', 'height', 'bg', 'download', 'padding', 'fancybox', 'ratio'], ['src', 'alt'])
+  args = ctx.args.map(args, ['width', 'height', 'bg', 'download', 'padding', 'fancybox', 'ratio', 'more'], ['src', 'alt'])
   // // 从缓存动态查找 blurhash
   // const sourceKey = this.source ? path.relative(process.cwd(), path.join('source', this.source)).replace(/\\/g, '/').replace(/^\.\//,'') : null;
   // const blurhashCache = getBlurhashCache();
@@ -65,7 +65,7 @@ module.exports = ctx => function(args) {
   function img(src, alt, style) {
     let a = '<a data-fancybox'
     let img = ''
-    img += `<img class="lazy" src="${src}" data-src="${src}"`
+    img += `<img class="lazy" src="${src}" data-src="${src}" data-original-src="${src}"`
     // if (blurhash) {
     //   img += ` data-blurhash="${blurhash}"`
     // }
@@ -78,6 +78,9 @@ module.exports = ctx => function(args) {
     }
     if (style.length > 0 && !args.ratio) {
       img += ' style="' + style + '"'
+    }
+    if (args.more) {
+      img += ` data-more-src="${args.more}"`
     }
     img += `onerror="this.src=&quot;${ctx.theme.config.default.image_onerror}&quot;"`
     img += '/>'
@@ -130,6 +133,11 @@ module.exports = ctx => function(args) {
       download = ' download="' + args.alt + '"'
     }
     el += '<a class="image-download blur" style="opacity:0" target="_blank"' + download + ' href="' + href + '"><svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3734"><path d="M561.00682908 685.55838913a111.03077546 111.03077546 0 0 1-106.8895062 0L256.23182837 487.72885783a55.96309219 55.96309219 0 0 1 79.13181253-79.18777574L450.70357448 523.88101491V181.55477937a55.96309219 55.96309219 0 0 1 111.92618438 0v344.06109173l117.07478902-117.07478901a55.96309219 55.96309219 0 0 1 79.13181252 79.18777574zM282.81429711 797.1487951h447.70473912a55.96309219 55.96309219 0 0 1 0 111.92618438H282.81429711a55.96309219 55.96309219 0 0 1 0-111.92618438z" p-id="3735"></path></svg></a>'
+  }
+  if (args.more) {
+    el += `<a class="image-more-btn blur" style="opacity:0" href="javascript:void(0)" onclick="util.toggleImageMore(this)">`
+    el += '<svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M847.9 592H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h605.2L612.9 851c-4.1 5.2-.4 13 6.3 13h72.5c4.9 0 9.5-2.2 12.6-6.1l168.8-214.1c16.5-21 1.6-51.8-25.2-51.8M872 356H266.8l144.3-183c4.1-5.2.4-13-6.3-13h-72.5c-4.9 0-9.5 2.2-12.6 6.1L150.9 380.2c-16.5 21-1.6 51.8 25.1 51.8h696c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8"/></svg>'
+    el += '</a>'
   }
   el += '</div>'
 

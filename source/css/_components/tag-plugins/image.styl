@@ -19,6 +19,8 @@
     &:hover
       .image-download
         opacity: 1 !important
+      .image-more-btn
+        opacity: 1 !important
     img
       display: block
       object-fit: cover
@@ -34,6 +36,23 @@
       border-radius: 40px
       trans3: color opacity background
       color: var(--text-p1)
+      &:hover
+        background: var(--card) !important
+        color: var(--theme)
+    .image-more-btn
+      z-index: 2
+      position: absolute
+      bottom: 8px
+      right: 52px
+      font-size: 1.125rem
+      padding: 6px
+      line-height: 0
+      border-radius: 40px
+      trans3: color opacity background
+      color: var(--text-p1)
+      cursor: pointer
+      &.active
+        color: var(--theme)
       &:hover
         background: var(--card) !important
         color: var(--theme)
