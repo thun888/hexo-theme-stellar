@@ -38,7 +38,8 @@ function articleClass() {
 function layoutDiv() {
   var el = ''
   // 锁定文章：渲染锁定页面，跳过正文
-  if (page.lock == true && layout === 'post') {
+  // if (page.lock == true && layout === 'post') {
+  if (page.lock == true) {
     page.comment_title = '';
     page.header = false;
     page.robots = 'none';
