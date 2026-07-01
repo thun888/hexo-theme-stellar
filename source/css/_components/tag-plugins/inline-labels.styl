@@ -19,6 +19,22 @@
     padding: 2px 4px 1px 4px
     font-family: $ff-code
     font-weight: 700
+    // 循环按下回弹动画
+    &[loopspeed]:not([loopspeed="0"])
+      animation-name: kbd-press
+      animation-iteration-count: infinite
+      animation-timing-function: ease-in-out
+
+  @keyframes kbd-press
+    0%, 100%
+      filter: brightness(1)
+      border-bottom-width: 2px
+    20%
+      filter: brightness(0.8)
+      border-bottom-width: 0
+    40%
+      filter: brightness(1)
+      border-bottom-width: 2px
   psw, tg-spoiler
     color: transparent
     background: #a1a1a1
