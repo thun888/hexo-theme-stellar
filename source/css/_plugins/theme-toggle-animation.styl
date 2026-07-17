@@ -1,0 +1,29 @@
+// ============================================
+// View Transitions API - 主题切换动画
+// 通过 clip-path 实现自上而下 / 自下而上的揭示效果
+// view-transition-name 由 JS 动态设置
+// ============================================
+
+html
+  view-transition-name: theme-toggle-animation
+  // 默认从左到右
+  --reveal-from: inset(0 100% 0 0)
+
+::view-transition-new(theme-toggle-animation)
+  animation: reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1)
+  clip-path: inset(0 0 0 0)
+  z-index: 99
+
+::view-transition-old(theme-toggle-animation)
+  animation: none
+  z-index: -1
+
+@keyframes reveal
+  0%
+    clip-path: var(--reveal-from)
+  // 不写100%也行，上面已经有了
+
+@media (max-width: $device-mobile-max)
+  html
+    // 手机端从上到下
+    --reveal-from: inset(0 0 100% 0)

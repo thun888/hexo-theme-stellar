@@ -41,18 +41,27 @@
       default:
         newTheme = 'light'
     }
-    applyTheme(newTheme)
-    window.localStorage.setItem('Stellar.theme', newTheme)
-    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
-    utils.dark.method.toggle.start();
 
-    const messages = {
-      light: `<%- __('message.theme_switched.light') %>`,
-      dark: `<%- __('message.theme_switched.dark') %>`,
-      auto: `<%- __('message.theme_switched.auto') %>`,
+    const doSwitch = () => {
+      applyTheme(newTheme)
+      window.localStorage.setItem('Stellar.theme', newTheme)
+      utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+      utils.dark.method.toggle.start();
+
+      const messages = {
+        light: `<%- __('message.theme_switched.light') %>`,
+        dark: `<%- __('message.theme_switched.dark') %>`,
+        auto: `<%- __('message.theme_switched.auto') %>`,
+      }
+      hud?.toast?.(messages[newTheme])
+      targetPageRerender()
+    };
+
+    if (document.startViewTransition) {
+      const themeTransition = document.startViewTransition(() => doSwitch());
+    } else {
+      doSwitch();
     }
-    hud?.toast?.(messages[newTheme])
-    targetPageRerender()
   }
 
   (() => {
