@@ -54,7 +54,7 @@
         auto: `<%- __('message.theme_switched.auto') %>`,
       }
       hud?.toast?.(messages[newTheme])
-      targetPageRerender()
+      targetBackgroundRerender()
     };
 
     if (document.startViewTransition) {
