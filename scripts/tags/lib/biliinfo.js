@@ -17,7 +17,7 @@ module.exports = ctx => function(args) {
     console.warn('[Biliinfo] API endpoint not configured.')
     return ''
   }
-  args.url = api + '/api/v1/get_video_info?bvid=' + args.bv
+  args.url = api + '/api/biliinfo/get_video_info?bvid=' + args.bv
 
   var el = `<div class="tag-plugin ds-biliinfo" data-api="${args.url}""></div>`
 
