@@ -1,7 +1,6 @@
 // 前端处理的
-utils.jq(() => {
-  $(function () {
-    const els = document.getElementsByClassName('ds-coding');
+(function () {
+  const els = document.getElementsByClassName('ds-coding');
     let cssLoaded = false;
 
     for (let i = 0; i < els.length; i++) {
@@ -19,12 +18,11 @@ utils.jq(() => {
 
         utils.request(el, src, async (resp) => {
           const data = await resp.json();
-          $(el).append(data.result);
+          utils.dom(el).append(data.result);
         });
       };
 
       const lazyload = el.hasAttribute('lazyload');
       util.viewportLazyload(el, loadContent, lazyload);
     }
-  });
-});
+})();

@@ -1,6 +1,5 @@
-utils.jq(() => {
-    $(function () {
-      const els = document.getElementsByClassName('ds-git_commit');
+(function () {
+  const els = document.getElementsByClassName('ds-git_commit');
       for (var i = 0; i < els.length; i++) {
         const el = els[i];
         const api = el.dataset.api
@@ -35,12 +34,11 @@ utils.jq(() => {
             cell += '</div>';
             cell += '</div>';
             cell += '</div>';
-            $(el).append(cell);
+            utils.dom(el).append(cell);
           });
         });
       }
-    });
-  });
+})();
 
 
 function getMeaning(message) {

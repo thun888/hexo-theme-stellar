@@ -1,6 +1,5 @@
-utils.jq(() => {
-    $(function () {
-      const els = document.getElementsByClassName('ds-fclite');
+(function () {
+  const els = document.getElementsByClassName('ds-fclite');
       for (var i = 0; i < els.length; i++) {
         const el = els[i];
         const limit = parseInt(el.getAttribute('limit')) || 10;
@@ -25,8 +24,7 @@ utils.jq(() => {
             </div>`;
         });
 
-        $(el).append(htmlBuffer);
+        utils.dom(el).append(htmlBuffer);
         });
       }
-    });
-  });
+})();
