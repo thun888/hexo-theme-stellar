@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
 .cache
+docs/knowledge/tools/verify-report.json
 .reasonix/
 reasonix.toml

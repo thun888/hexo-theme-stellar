@@ -38,6 +38,13 @@ meta:
   license: License
   share: Share
   contributors: Page Contributors
+  word_count: '%s words'
+  reading_time: '%s min read'
+  ai_label:
+    manual: Written entirely by a human
+    reviewed: AI-reviewed
+    polished: AI-polished
+    generated: AI-generated
   date_suffix:
     just: Just
     min: minutes ago
@@ -69,3 +76,41 @@ symbol:
   colon: ": "
   brackets_l: "("
   brackets_r: ")"
+  page: "Page %s"
+
+tag_plugins:
+  mbti:
+    title: 'My MBTI Type: %s (%s)'
+    types:
+      INTJ: Architect
+      INTP: Logician
+      ENTJ: Commander
+      ENTP: Debater
+      INFJ: Advocate
+      INFP: Mediator
+      ENFJ: Protagonist
+      ENFP: Campaigner
+      ISTJ: Logistician
+      ISFJ: Defender
+      ESTJ: Executive
+      ESFJ: Consul
+      ISTP: Virtuoso
+      ISFP: Adventurer
+      ESTP: Entrepreneur
+      ESFP: Entertainer
+    traits:
+      energy:
+        left: Extraverted
+        right: Introverted
+      mind:
+        left: Intuitive
+        right: Observant
+      nature:
+        left: Thinking
+        right: Feeling
+      tactics:
+        left: Judging
+        right: Prospecting
+      identity:
+        left: Assertive
+        right: Turbulent

@@ -55,13 +55,13 @@
     
 // 固定位置
 .l_right .widgets .widget-wrapper.toc
-  margin-top: 0
+  margin-top: 1rem
   position: sticky
   position: -webkit-sticky
-  top: calc(var(--gap-margin) * 1)
-  padding: 16px 0
+  top: 0
+  padding: 1rem 0
   &:first-child
-    top: calc(var(--gap-margin) * 2)
+    top: var(--gap-margin)
     padding-top: 1rem
   .widget-body .toc
     max-height: 70vh
@@ -134,15 +134,15 @@
     trans1 all
     overflow hidden
 .l_right .widgets .widget-wrapper.toc .widget-header .cap-action:hover
-  background: var(--block-border)
+  sidebar-light(var(--bg-a50))
 .l_right .widgets .widget-wrapper.toc.collapse
   .widget-header .cap-action
-    background: var(--block-border)
+    sidebar-light(var(--bg-a50))
   .widget-body
     grid-template-rows: 0fr
 
-// 编辑本文按钮
-.widget-wrapper.toc .widget-body+.widget-footer:before 
+// 操作按钮（回到顶部 / 参与讨论）
+.widget-wrapper.toc .widget-footer:before
   content: ''
   position absolute
   background: var(--block-border)
@@ -181,6 +181,9 @@
       .widget-wrapper.toc
         position: static
         background: none
+        padding: 0
+        &:first-child
+          padding-top: 0
   .widget-wrapper.toc .toc
     a
       color: var(--text-p2)

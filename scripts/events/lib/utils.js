@@ -127,13 +127,17 @@ module.exports = hexo => {
         return result
       }
     },
-    
+    iconData: (key) => {
+      const { icons } = hexo.theme.config
+      return icons && icons[key] ? icons[key] : ''
+    },
+
     // 生成 SVG Sprites 定义
     getSvgSpritesHtml: () => {
       if (hexo.utils.svgSprites.size === 0) {
         return ''
       }
-      
+
       let html = '<div class="svg-sprites"><svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n'
       hexo.utils.svgSprites.forEach((data, id) => {
         html += `  <symbol id="${id}">\n`

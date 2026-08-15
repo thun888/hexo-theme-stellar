@@ -3,6 +3,8 @@
 'use strict';
 
 hexo.on('generateBefore', () => {
+  // 页面路径归一化：xxx.html → xxx/，必须先于所有读取 page.path 的逻辑
+  require('./lib/path_normalize')(hexo);
   // Merge config.
   require('./lib/config')(hexo);
   require('./lib/links')(hexo);
@@ -71,5 +73,4 @@ hexo.extend.filter.register('before_generate', async () => {
   //   await generateImageBlurhashes(hexo);
   // }
 });
-
 

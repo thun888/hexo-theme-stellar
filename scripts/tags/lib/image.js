@@ -41,37 +41,33 @@ module.exports = ctx => function(args) {
   if (args.height) {
     style += 'height:' + args.height + ';'
   }
-  // fancybox
-  var fancybox = false
+  // fancybox 默认开启（不再支持全局关闭），单图可用 fancybox:false 关闭
+  var fancybox = true
   var fancyboxHref = null
-  if (ctx.theme.config.plugins.fancybox && ctx.theme.config.plugins.fancybox.enable) {
-    // 主题配置
-    if (ctx.theme.config.tag_plugins.image && ctx.theme.config.tag_plugins.image.fancybox) {
-      fancybox = ctx.theme.config.tag_plugins.image.fancybox
-    }
-    // 覆盖配置
-    if (args.fancybox && args.fancybox.length > 0) {
-      if (args.fancybox == 'false') {
-        fancybox = false
-      } else if (args.fancybox === 'true') {
-        fancybox = args.fancybox
-      } else {
-        fancybox = true
-        fancyboxHref = args.fancybox
-      }
+  if (args.fancybox && args.fancybox.length > 0) {
+    if (args.fancybox == 'false') {
+      fancybox = false
+    } else if (args.fancybox === 'true') {
+      fancybox = true
+    } else {
+      fancybox = true
+      fancyboxHref = args.fancybox
     }
   }
 
+  var safeAlt = require('hexo-util').escapeHTML(args.alt || '')
+  // 懒加载占位图（1x1 透明 PNG），真实地址放在 data-src
+  const loadingImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII='
   function img(src, alt, style) {
     let a = '<a data-fancybox'
     let img = ''
-    img += `<img class="lazy" src="${src}" data-src="${src}" data-original-src="${src}"`
+    img += `<img class="lazy" src="${loadingImg}" data-src="${src}" data-original-src="${src}"`
     // if (blurhash) {
     //   img += ` data-blurhash="${blurhash}"`
     // }
-    if (alt) {
-      img += ` alt="${alt}"`
-      a += ` data-caption="${alt}"`
+    if (safeAlt) {
+      img += ` alt="${safeAlt}"`
+      a += ` data-caption="${safeAlt}"`
     }
     if (fancybox && !fancyboxHref) {
       img += ` data-fancybox="${fancybox}"`
@@ -82,13 +78,13 @@ module.exports = ctx => function(args) {
     if (args.more) {
       img += ` data-more-src="${args.more}"`
     }
-    img += `onerror="this.src=&quot;${ctx.theme.config.default.image_onerror}&quot;"`
+    img += `onerror="this.src=&quot;${ctx.theme.config.default.image_onerror || ctx.utils.iconData('image:onerror')}&quot;"`
     img += '/>'
     // // blurhash canvas 占位 / loading
     // if (blurhash) {
     //   img += `<canvas class="blurhash-preview" data-blurhash="${blurhash}" aria-hidden="true"></canvas>`
     // } else {
-    //   img += `<div class="lazy-icon" style="background-image:url(${ctx.theme.config.default.loading});"></div>`
+    //   img += `<div class="lazy-icon" style="background-image:url(${ctx.theme.config.default.loading || ctx.utils.iconData('default:loading-placeholder')});"></div>`
     // }
     if (fancyboxHref) {
       a += ` href="${fancyboxHref}">${img}</a>`
@@ -132,7 +128,7 @@ module.exports = ctx => function(args) {
     if (args.alt) {
       download = ' download="' + args.alt + '"'
     }
-    el += '<a class="image-download blur" style="opacity:0" target="_blank"' + download + ' href="' + href + '"><svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3734"><path d="M561.00682908 685.55838913a111.03077546 111.03077546 0 0 1-106.8895062 0L256.23182837 487.72885783a55.96309219 55.96309219 0 0 1 79.13181253-79.18777574L450.70357448 523.88101491V181.55477937a55.96309219 55.96309219 0 0 1 111.92618438 0v344.06109173l117.07478902-117.07478901a55.96309219 55.96309219 0 0 1 79.13181252 79.18777574zM282.81429711 797.1487951h447.70473912a55.96309219 55.96309219 0 0 1 0 111.92618438H282.81429711a55.96309219 55.96309219 0 0 1 0-111.92618438z" p-id="3735"></path></svg></a>'
+    el += '<a class="image-download blur" style="opacity:0" target="_blank"' + download + ' href="' + href + '">' + ctx.utils.icon('image:download') + '</a>'
   }
   if (args.more) {
     el += `<a class="image-more-btn blur" style="opacity:0" href="javascript:void(0)" onclick="util.toggleImageMore(this)">`
@@ -141,9 +137,9 @@ module.exports = ctx => function(args) {
   }
   el += '</div>'
 
-  if (args.alt && args.alt.length > 0) {
+  if (safeAlt) {
     el += '<div class="image-meta">'
-    el += '<span class="image-caption center">' + args.alt + '</span>'
+    el += '<span class="image-caption center">' + safeAlt + '</span>'
     el += '</div>'
   }
 

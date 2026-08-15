@@ -1,13 +1,28 @@
 <%
+function strip_wiki_title(title, wiki) {
+  if (!wiki) { return title; }
+  var t = String(title || '');
+  if (t.toLowerCase() === String(wiki).toLowerCase()) { return ''; }
+  // wiki 名中的空格/连字符在标题中可能写为另一种形态（如 cloud shell / cloud-shell）
+  var flex = String(wiki).replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/[\s-]+/g, '[\\s-]*');
+  var m = t.match(new RegExp('^' + flex + '[\\s-]*[：:\\-](.*)$', 'i'));
+  if (m && m[1]) {
+    return m[1].trim();
+  }
+  return t;
+}
+
 function generate_title() {
   if (page.wiki) {
     const proj = theme.wiki.tree[page.wiki]
     const wiki = proj?.name || page.wiki
     if (page.title) {
-      return wiki + __('symbol.colon') + page.title + ' - ' + config.title;
-    } else {
-      return wiki + ' - ' + config.title;
+      var stripped = strip_wiki_title(page.title, wiki)
+      if (stripped) {
+        return wiki + __('symbol.colon') + stripped + ' - ' + config.title;
+      }
     }
+    return wiki + ' - ' + config.title;
   } else {
     if (page.title) {
       return page.title + ' - ' + config.title;
@@ -17,11 +32,17 @@ function generate_title() {
       return __('btn.tag') + __('symbol.colon') + page.tag + ' - ' + config.title;
     }
   }
+  if (is_home() && page.current && page.current > 1) {
+    return config.title + ' - ' + __('symbol.page', page.current);
+  }
   return config.title;
 }
 function generate_description() {
   if (theme.open_graph && theme.open_graph.enable) {
     return '';
+  }
+  if (page.description) {
+    return '<meta name="description" content="' + truncate(strip_html(page.description), {length: 150}) + '">';
   }
   if (page.wiki) {
     const proj = theme.wiki.tree[page.wiki]
@@ -29,8 +50,8 @@ function generate_description() {
       return '<meta name="description" content="' + proj.description + '">'
     }
   }
-  if (page.description || page.excerpt || page.content) {
-    return '<meta name="description" content="' + truncate(strip_html(page.description || page.excerpt || page.content), {length: 150}) + '">';
+  if (page.excerpt || page.content) {
+    return '<meta name="description" content="' + truncate(strip_html(page.excerpt || page.content), {length: 150}) + '">';
   }
   return '<meta name="description" content="' + config.description + '">';
 }
@@ -66,8 +87,51 @@ function og_args() {
   if (page.layout == 'post' && page.cover) {
     args.twitter_card = 'summary_large_image';
   }
-  args.image = config.avatar || (config.email ? gravatar(config.email) : null);
+  if (page.wiki && !page.description) {
+    const proj = theme.wiki.tree[page.wiki];
+    if (proj && proj.description) {
+      args.description = proj.description;
+    }
+  }
+  args.image = page.cover || page.banner || first_content_image(page.content) || config.avatar || (config.email ? gravatar(config.email) : null);
   return Object.assign(args, page.open_graph);
+}
+
+function escape_meta_content(content) {
+  return String(content || '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function generate_og_title() {
+  return escape_meta_content(strip_html(page.title || config.title));
+}
+
+function generate_og_site_name() {
+  return escape_meta_content(strip_html(config.title));
+}
+
+function render_open_graph() {
+  if (!(theme.open_graph && theme.open_graph.enable)) {
+    return '';
+  }
+  let meta = open_graph(og_args());
+  meta = meta.replace(/<meta property="og:title" content="[^"]*">/, `<meta property="og:title" content="${generate_og_title()}">`);
+  if (meta.match(/<meta property="og:site_name" content="[^"]*">/)) {
+    meta = meta.replace(/<meta property="og:site_name" content="[^"]*">/, `<meta property="og:site_name" content="${generate_og_site_name()}">`);
+  } else {
+    meta += `<meta property="og:site_name" content="${generate_og_site_name()}">`;
+  }
+  if (page.title) {
+    if (meta.match(/<meta name="twitter:title" content="[^"]*">/)) {
+      meta = meta.replace(/<meta name="twitter:title" content="[^"]*">/, `<meta name="twitter:title" content="${generate_og_title()}">`);
+    } else {
+      meta += `<meta name="twitter:title" content="${generate_og_title()}">`;
+    }
+  }
+  return meta;
 }
 
 function preconnect() {
@@ -99,9 +163,6 @@ function generate_canonical() {
     if (path.startsWith('/404') || path.startsWith('404')) {
       return '';
     }
-    if (path.endsWith('.html') && path.length > 5) {
-      path = path.split('.html')[0];
-    }
     return `<link rel="canonical" href="https://${originalHost}${path}">`;
   }
   return '';
@@ -128,9 +189,7 @@ function generate_canonical() {
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   <title><%- generate_title() %></title>
 
-  <% if (theme.open_graph && theme.open_graph.enable) { %>
-    <%- open_graph(og_args()) %>
-  <% } %>
+  <%- render_open_graph() %>
   <%- generate_description() %>
   
   <%- generate_keywords() %>
@@ -150,6 +209,7 @@ function generate_canonical() {
     <% }) %>
   <% } %>
 
+  <link rel="preload" href="<%- url_for(`${theme.stellar.main_css}?v=${stellar_info('version')}`) %>" as="style">
   <link rel="stylesheet" href="<%- url_for(`${theme.stellar.main_css}?v=${stellar_info('version')}`) %>">
 
 
@@ -163,4 +223,25 @@ function generate_canonical() {
 
   <%- json_ld() %>
   <%- custom_inject() %>
+
+  <!-- icons.yml 驱动的 CSS 装饰图标 -->
+  <%
+    const iconCssVars = (() => {
+      const map = {
+        '--icon-h3-left': 'default:arrow-left',
+        '--icon-h3-right': 'default:arrow-right',
+        '--icon-quote-left': 'quot:quote-left',
+        '--icon-quote-right': 'quot:quote-right'
+      };
+      let vars = [];
+      for (const [name, key] of Object.entries(map)) {
+        const raw = theme.icons && theme.icons[key];
+        if (raw) vars.push(`  ${name}: url("data:image/svg+xml,${encodeURIComponent(raw)}");`);
+      }
+      return vars.length > 0 ? `:root {\n${vars.join('\n')}\n}` : '';
+    })();
+  %>
+  <% if (iconCssVars) { %>
+  <style><%- iconCssVars %></style>
+  <% } %>
 </head>

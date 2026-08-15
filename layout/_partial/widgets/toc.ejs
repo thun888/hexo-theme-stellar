@@ -37,15 +37,25 @@ function layoutToc(fallback) {
 
 function layoutDiv(fallback) {
   const tocBody = layoutTocBody()
-  if (tocBody.trim().length == 0) {
+  const hasToc = tocBody.trim().length > 0
+  // 远程 md 内容由客户端渲染，构建期正文无标题：
+  // 预留空 TOC 容器，渲染完成后由 mdrender.js 填充
+  const hasRemoteMd = has_remote_md(page)
+  // 页面是否实际渲染评论区，由 _partial/comments/layout.ejs 标记
+  const hasComments = page.cmt_rendered === true
+  if (!hasToc && !hasRemoteMd && !hasComments) {
     return ''
   }
   var el = ''
   el += `<widget class="widget-wrapper${scrollreveal(' ')} toc" id="data-toc" collapse="${item.collapse}">`
-  if (tocBody.length > 0) {
+  if (hasToc) {
     el += layoutTocHeader()
     el += `<div class="widget-body">`
     el += tocBody
+    el += `</div>`
+  } else if (hasRemoteMd) {
+    el += layoutTocHeader()
+    el += `<div class="widget-body">`
     el += `</div>`
   }
   el += `<div class="widget-footer">`
@@ -53,13 +63,11 @@ function layoutDiv(fallback) {
   el += icon('line-md:upload-outline')
   el += `<span>${__('btn.top')}</span>`
   el += `</a>`
-  if (theme.comments.service && theme.comments.service.length > 0) {
-    if (page.comments == undefined || page.comments != false) {
-      el += `<a class="buttom" onclick="util.scrollComment()">`
-      el += icon('line-md:chat')
-      el += `<span>${__('btn.comments')}</span>`
-      el += `</a>`
-    }
+  if (hasComments) {
+    el += `<a class="buttom" onclick="util.scrollComment()">`
+    el += icon('line-md:chat')
+    el += `<span>${__('btn.comments')}</span>`
+    el += `</a>`
   }
   var relativePath = page.source;
   <!-- 编辑本页 -->

@@ -37,6 +37,13 @@ meta:
   license: 授權條款
   share: 分享文章
   contributors: 本文貢獻者
+  word_count: '%s 字'
+  reading_time: '預計閱讀 %s 分鐘'
+  ai_label:
+    manual: 本文完全由人類完成
+    reviewed: 已 AI 審核
+    polished: 已 AI 潤飾
+    generated: 由 AI 生成
   date_suffix:
     just: 剛剛
     min: 分鐘前
@@ -68,3 +75,41 @@ symbol:
   colon: "："
   brackets_l: "（"
   brackets_r: "）"
+  page: "第 %s 頁"
+
+tag_plugins:
+  mbti:
+    title: 我的 MBTI 人格：%s（%s）
+    types:
+      INTJ: 架構師
+      INTP: 邏輯學家
+      ENTJ: 指揮官
+      ENTP: 辯論家
+      INFJ: 提倡者
+      INFP: 調停者
+      ENFJ: 主人公
+      ENFP: 活動家
+      ISTJ: 物流師
+      ISFJ: 守衛者
+      ESTJ: 管理者
+      ESFJ: 執政官
+      ISTP: 鑑賞家
+      ISFP: 冒險家
+      ESTP: 企業家
+      ESFP: 表演者
+    traits:
+      energy:
+        left: 外向
+        right: 內向
+      mind:
+        left: 天馬行空
+        right: 求真務實
+      nature:
+        left: 理性思考
+        right: 情感細膩
+      tactics:
+        left: 運籌帷幄
+        right: 隨機應變
+      identity:
+        left: 自信果斷
+        right: 情緒易波動

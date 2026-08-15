@@ -4,6 +4,27 @@
   .post-title:first-child
     margin-top: .5rem
 
+// 白底文章卡片（含置顶轮播卡片）hover 时：标题底部主题色下划线高度从 0 生长到 12px 并淡入，层级在文字下层
+.post-list .post-card .post-title
+  position: relative
+  width: fit-content
+  &::after
+    content: ''
+    position: absolute
+    left: 0
+    bottom: -2px
+    border-radius: 2px
+    z-index: -1
+    width: 100%
+    height: 0
+    opacity: 0
+    background: var(--theme)
+    transition: height .25s ease, opacity .25s ease
+
+.post-list .post-card:hover .post-title::after
+  height: 12px
+  opacity: 0.5
+
 .l_main .post-list
   .post-title
     font-weight: 500
@@ -20,12 +41,16 @@
     margin-top: 0.5rem
 
 // card
-.post-list .post-card
+.post-list .post-card-wrap
   display: block
   margin: 1rem 0
   border-radius: $border-card-l
+  box-shadow: $boxshadow-card
+
+.post-list .post-card
+  display: block
+  border-radius: $border-card-l
   background: var(--card)
-  hoverable-card()
   overflow: hidden
   z-index: 0
   position: relative
@@ -40,9 +65,16 @@
     // --blur-px: 0
     // --blur-height: 0
     --blur-sat: 200%
+    // 图片卡片 hover 封面放大：卡片本身不动，放大后的图片由圆角静态裁剪裁出圆角
+    .post-cover img, .cover img, .cover:before
+      transform: scale(1.05)
   img
     filter: brightness(var(--img-br)) saturate(var(--img-sat))
-    trans1 all
+    // 封面放大用 1.5s 缓动，其余属性（亮度/饱和度）保持主题默认 0.2s
+    transition: all .2s ease-out, transform 1.5s ease-out
+    -moz-transition: all .2s ease-out, transform 1.5s ease-out
+    -webkit-transition: all .2s ease-out, transform 1.5s ease-out
+    -o-transition: all .2s ease-out, transform 1.5s ease-out
   .excerpt
     margin: 1rem 0
     @media screen and (max-width: $device-mobile)
@@ -73,6 +105,11 @@
         object-fit: contain
       svg
         color: $c-red
+  .card-tags
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: 0 .5rem
 
 
 // common article
@@ -123,22 +160,28 @@
       content: ''
       z-index 1
       position: absolute
-      left: 0
-      right: 0
-      height: var(--blur-height)
-      backdrop-filter: saturate(var(--blur-sat)) blur(var(--blur-px))
-      -webkit-backdrop-filter: saturate(var(--blur-sat)) blur(var(--blur-px))
-      trans1 all
-    &[position=top]:before
       top: 0
-      mask: linear-gradient(black, rgba(black, 0.75), transparent)
-      -webkit-mask: linear-gradient(black, rgba(black, 0.75), transparent)
+      left: 0
+      width: 100%
+      height: 100%
+      // Chromium: corner-shape + overflow:hidden 的合成层裁剪与 backdrop-filter 不兼容，
+      // 渐变模糊改用同图模糊层（filter + mask）实现，观感与 backdrop-filter 等价
+      background-image: var(--cover-url)
+      background-size: cover
+      background-position: center
+      filter: brightness(var(--img-br)) saturate(var(--img-sat)) blur(var(--blur-px)) saturate(var(--blur-sat))
+      // 与封面 img 同步：缩放 0.5s 缓动，亮度/饱和度仍按 0.2s
+      transition: all .2s ease-out, transform .5s ease-out
+      -moz-transition: all .2s ease-out, transform .5s ease-out
+      -webkit-transition: all .2s ease-out, transform .5s ease-out
+      -o-transition: all .2s ease-out, transform .5s ease-out
+      mask: linear-gradient(black, rgba(black, 0.75) calc(var(--blur-height) * 0.5), transparent var(--blur-height))
+      -webkit-mask: linear-gradient(black, rgba(black, 0.75) calc(var(--blur-height) * 0.5), transparent var(--blur-height))
     &[position=bottom]:before
-      bottom: 0
-      mask: linear-gradient(transparent, rgba(black, 0.75), black)
-      -webkit-mask: linear-gradient(transparent, rgba(black, 0.75), black)
+      mask: linear-gradient(to top, black, rgba(black, 0.75) calc(var(--blur-height) * 0.5), transparent var(--blur-height))
+      -webkit-mask: linear-gradient(to top, black, rgba(black, 0.75) calc(var(--blur-height) * 0.5), transparent var(--blur-height))
     .cover-info
-      padding: 1.5rem 1rem
+      padding: 1rem
       position: absolute
       line-height: 1.2
       width: 'calc(100% - %s * 2)' % 1rem
@@ -165,9 +208,6 @@
       .caption
         font-size: $fs-14
       @media screen and (max-width: $device-mobile)
-        padding: 1rem
-        div+div
-          margin-top: 2px
         .headline
           font-size: $fsh4
         .caption
@@ -210,7 +250,7 @@
     --theme-block: var(--block)
     background: var(--theme-block)
     padding: 2px 4px
-    border-radius: 2px
+    border-radius: 4px
   p:last-child
     margin-bottom: 0
   .cap+.cap

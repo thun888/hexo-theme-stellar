@@ -1,6 +1,6 @@
 ######## Stellar info ########
 stellar:
-  version: '1.33.1'
+  version: '1.40.0'
   homepage: 'https://xaoxuu.com/wiki/stellar/'
   repo: 'https://github.com/xaoxuu/hexo-theme-stellar'
   main_css: /css/main.css
@@ -9,15 +9,14 @@ stellar:
 
 ######## head tags ########
 preconnect:
-  # - https://gcore.jsdelivr.net
-  # - https://gcore.jsdelivr.net
-  # - https://unpkg.com
+  - https://gcore.jsdelivr.net
+  - https://unpkg.com
+  - https://cdn.jsdelivr.net
+  - https://cdnjs.cloudflare.com
 
 # 一旦设置源站地址，非源站地址将不会被SEO收录，并且访问时弹出提示
 # 如果访问地址不在备用站主机列表，则警告信息为非法克隆
 canonical:
-  closeEnable: true # 是否显示关闭提示按钮
-  closeText: 关闭提示 # 关闭提示按钮的文字描述
   originalHost: # 主站点域名主机，例如 xaoxuu.com
   officialHosts: # 官方主机列表，每行一个，例如 xaoxuu.vercel.app
     - localhost
@@ -39,7 +38,6 @@ logo:
 
 # 侧边栏主功能导航菜单
 menubar:
-  columns: 4 # 一行多少个
   items: # 可按照自己需求增加，符合以下格式即可
     # id: 页面中高亮的 menu_id 
     # theme: 高亮时的颜色，仅 svg 中 fill="currentColor" 时有效
@@ -48,22 +46,22 @@ menubar:
     # url: 点击跳转到哪，支持相对路径和绝对路径
     # - id: post
     #   theme: '#1BCDFC'
-    #   icon: solar:documents-bold-duotone
+    #   icon: default:documents
     #   title: 博客
     #   url: /
     # - id: wiki
     #   theme: '#3DC550'
-    #   icon: solar:notebook-bookmark-bold-duotone
+    #   icon: example:notebook
     #   title: 文档
     #   url: /wiki/
     # - id: explore
     #   theme: '#FA6400'
-    #   icon: solar:planet-bold-duotone
+    #   icon: example:planet
     #   title: 探索
     #   url: /explore/
     # - id: social
     #   theme: '#F44336'
-    #   icon: solar:chat-square-like-bold-duotone
+    #   icon: example:chat
     #   title: 社交
     #   url: /friends/
 
@@ -76,6 +74,10 @@ site_tree:
   home:
     leftbar: welcome, recent
     rightbar: 
+    # 首页评论区，默认不显示。可设为 true 使用全局评论服务，
+    # 或参考页面 front-matter 覆盖评论参数：
+    # service、comment_title、comment_id 及 beaudar/utterances/giscus/twikoo/waline/artalk 各服务参数。
+    comments:
   # 博客列表页配置
   index_blog:
     base_dir: blog # 只影响自动生成的页面路径
@@ -137,14 +139,14 @@ site_tree:
   author: 
     base_dir: author # 只影响自动生成的页面路径
     menu_id: post
-    leftbar: recent, timeline
-    rightbar: timeline
+    leftbar: recent
+    rightbar: 
   # 错误页配置
   error_page:
     menu_id: post
     '404': '/404.html'
-    leftbar: recent, timeline
-    rightbar: timeline
+    leftbar: recent
+    rightbar: 
   # 其它自定义页面配置 layout: page
   page:
     leftbar: recent
@@ -157,7 +159,7 @@ notebook:
   auto_excerpt: 128
   # 可以为某个 tag 设定图标（显示在标签树中）。
   tagcons:
-    '': solar:hashtag-square-bold
+    '': quot:hashtag
   # 每页显示多少篇笔记。0 表示不分页，null 则 fallback 到 hexo 的配置。
   # 可以在笔记本 yaml 的 per_page 字段中覆盖此参数。
   per_page: null
@@ -178,6 +180,8 @@ notebook:
 
 ######## Article ########
 article:
+  # 置顶文章样式：carousel = 轮播（默认）， flat = 平铺（不渲染轮播，置顶文章在首页文章列表靠前展示，排序规则与轮播一致）
+  pin_style: carousel
   # 文章类型，决定布局风格，可以在 front-matter/topic/wiki 中覆盖此参数
   type: tech # tech: 默认技术类文章, story: 图文类文章，文字和段落间增距大
   # 缩进两个文字宽度，适合文字类博客，可以在 front-matter/topic/wiki 中覆盖此参数
@@ -193,6 +197,23 @@ article:
   # 分类颜色
   category_color:
     '探索号': '#f44336'
+  # 文章 AI 成分标签：front-matter 用 ai_label: manual / reviewed / polished / generated 标记，
+  # 未设置时取 default（为空则不显示）；文案由多语言系统提供（languages/*.yml 的 meta.ai_label.*），
+  # 此处配置各档文字颜色与可选 icon；文章页显示在顶部面包屑行最右（阅读时长右侧）
+  ai_label:
+    default:
+    manual:
+      color: '#03a9f4'
+      icon: default:shield-user
+    reviewed:
+      color: '#4caf50'
+      icon: default:shield-check
+    polished:
+      color: '#4caf50'
+      icon: default:shield-up
+    generated:
+      color: '#ff9800'
+      icon: default:shield-warning
   # 文章许可协议
   license: '本文采用 [署名-非商业性使用-相同方式共享 4.0 国际](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可协议，转载请注明出处。'
   # 分享
@@ -202,6 +223,12 @@ article:
   related_posts:
     enable: false
     max_count: 5
+  # 文章页是否显示字数和预计阅读时长（#302）
+  reading_time: false
+  # 文章卡片是否显示标签（最多 5 个，#580）
+  card_tags: false
+  # 文章末尾是否显示本文标签（位于 article-footer 之前）
+  tags: true
 
 search:
   service: local_search # local_search, algolia_search, todo...
@@ -221,7 +248,6 @@ search:
 comments:
   service: # beaudar, utterances, giscus, twikoo, waline, artalk
   comment_title: 快来参与讨论吧~
-  lazyload: false # true / false
   custom_css: # artalk,twikoo,... 可以为没有全局启用的评论加载自定义样式
   # beaudar
   # https://beaudar.lipk.org/
@@ -318,7 +344,6 @@ comments:
     server: # 后端服务地址
     site: '' # 站点名称
     darkMode: auto # 其它模式都有问题，慎用，否则后果自负
-    fancybox: true # 是否为评论区启用 fancybox
     # artalk 有三类图片：1.上传至服务端 2.上传至服务端后利用upgit上传至图床 3.前端上传至图床（本配置为此类）
     # 配置此项时将覆盖服务端上传能力
     imageUploader:
@@ -386,12 +411,12 @@ tag_plugins:
   # {% quot %}
   quot:
     default: # 可以自行配置多种图标方案，支持icons.yml中配置的图片key，也支持直接设置svg/png等文件链接
-      prefix: bxs:quote-left
-      suffix: bxs:quote-right
+      prefix: quot:quote-left
+      suffix: quot:quote-right
     hashtag:
-      prefix: solar:hashtag-square-bold
+      prefix: quot:hashtag
     question:
-      prefix: ph:seal-question-fill
+      prefix: quot:question
   # {% emoji %}
   emoji:
     default: https://static.hzchu.top/cdn-x/emoji/qq/{name}.gif
@@ -408,7 +433,7 @@ tag_plugins:
     default_color: theme # theme, accent, red, orange, yellow, green, cyan, blue, purple
   # {% image %}
   image:
-    fancybox: false # true, false
+    parse_markdown: false # true / false（自动将 markdown 图片转为 {% image %} 标签）
   # {% copy xxx %}
   copy:
     toast: 复制成功
@@ -453,8 +478,8 @@ tag_plugins:
 
 # 基础依赖
 dependencies:
-  jquery: https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js
   marked: https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js
+  # 懒加载强制开启（无 enable 开关），图片默认懒加载，no-lazy 是唯一例外
   lazyload:
     js: https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js
     transition: fade # blur, fade
@@ -526,6 +551,23 @@ data_services:
   rss:
     js: /js/services/rss.js
 
+# 动态数据缓存
+# 将动态数据缓存到浏览器本地：TTL 未过期直接显示缓存，过期后先显示缓存再后台刷新
+data_cache:
+  enable: true # 总开关
+  default_ttl: 3600 # 默认缓存时长（秒）
+  ttl: # 按服务覆盖缓存时长（秒），未列出的服务使用 default_ttl；设为 0 表示该服务不缓存
+    giscus: 600
+    waline: 600
+    artalk: 600
+    memos: 600
+    memos-user: 86400
+    sites: 86400
+    friends: 86400
+    friends_and_posts: 86400
+    siteinfo: 86400
+  max_entries: 200 # 本地缓存条目上限，超出后按写入时间淘汰最旧的
+
 # 扩展插件接入方法：(插件名下面用 #plugin# 代替)
 # 1. 在这里增加 #plugin# 配置，至少应含有 enable 字段，默认为空（不启用）
 # 2. 新建文件 layout/_plugins/#plugin#.ejs 文件中设置编写加载代码。
@@ -542,20 +584,12 @@ plugins:
     flying_pages: https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js
     self_inject: false # 是否启用自定义注入方式，开启后不自引入
 
-  # pjax - 无刷新加载
-  # 启用后点击链接将使用 AJAX 加载内容，无需整页刷新
-  pjax:
-    enable: false # 还在测试中，可能存在兼容问题
-    selectors: ['title', '#l_cover', '.l_body'] # 需要替换的元素选择器
-    timeout: 10000 # 请求超时时间（毫秒）
-    cacheBust: false # 是否添加时间戳防止缓存
-    nprogress: true # 是否显示加载进度条
-    self_inject: false # 是否启用自定义注入方式，开启后不自引入nprogress
-
   # https://fancyapps.com/docs/ui/fancybox/
   # available for {% image xxx %}
+  # mode: auto=按需（页面有可弹窗图片才加载）/ global=全局（所有页面加载）
   fancybox:
-    enable: true
+    enable: true # 插件注册必需字段，恒为 true（不再支持关闭）
+    mode: auto # auto / global
     js: https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js
     css: https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css
     # 让 md 语法图片支持放大可以这样写: .md-text img:not([class]), .md-text .image img
@@ -572,7 +606,7 @@ plugins:
 
   # https://scrollrevealjs.org/api/reveal.html
   scrollreveal:
-    enable: #true # 慎用，有些时候打开页面空白
+    enable: true
     js: https://gcore.jsdelivr.net/npm/scrollreveal@4.0/dist/scrollreveal.min.js
     distance: 8px
     duration: 1000 # ms
@@ -628,8 +662,8 @@ plugins:
   mermaid:
     enable: # true # 可以在特定文章的 front-matter 中设置 mermaid: true 来开启，也可以在这里设置全局开启
     style_optimization: false # use custom style in stellar
-    # js: https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js
-    js: https://static.hzchu.top/mermaid@v9/dist/mermaid.min.js
+    # js: https://unpkg.com/mermaid@11/dist/mermaid.min.js
+    js: https://static.hzchu.top/mermaid@11/dist/mermaid.min.js
     # Available themes: default | dark | forest | neutral
     theme: neutral
   
@@ -651,7 +685,6 @@ plugins:
 
 style:
   prefers_theme: auto # auto / light / dark
-  smooth_scroll: true # true / false 开启时如果目录过长可能无法准确定位
   font-size:
     root: 16px # 改这个会影响全局所有文字的字号
     body: 17px # 影响正文区域的字号，如果改成 px 则不受 root 影响
@@ -668,10 +701,11 @@ style:
     card-l: 24px # 侧边栏、文章横幅位置的圆角
     card: 16px # 文章内大部分卡片的圆角
     card-s: 12px # 文章内小型卡片的圆角
-    bar: 8px # 横条类元素的圆角
+    bar: 12px # 横条类元素的圆角
     image-l: 24px # 非技术类文章插图圆角
     image: 16px # 技术类文章插图圆角
     image-s: 8px # 评论区图片圆角（部分评论支持）
+  corner-shape: superellipse(1.25) # 连续曲率圆角（仅 Chromium 139+ 支持，其余浏览器自动回退普通圆角）：superellipse(1.x) 开启，round 关闭
   color:
     # 主题色配置（不会根据明暗动态调整，请设置为通用的颜色）
     theme: 'hsl(192 98% 55%)' # 主题色
@@ -679,7 +713,6 @@ style:
     link: 'hsl(207 90% 54%)' # 超链接颜色
   animated_avatar:
     animate: auto # auto, always
-    background: https://static.hzchu.top/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp
   codeblock:
     scrollbar: 4px
     highlightjs_theme: https://static.hzchu.top/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css
@@ -688,7 +721,11 @@ style:
     error: 加载失败，请稍后重试。
   gradient: # https://webgradients.com/
     start: 'linear-gradient(to right, hsl(215, 95%, 64%), hsl(195, 95%, 60%), hsl(165, 95%, 56%), hsl(165, 95%, 56%), hsl(195 95% 60%), hsl(215, 95%, 64%))'
+    searchbar: 'linear-gradient(to right, #04f3ff, #08ffc6, #ddf730, #ffbd19, #ff1fe0, #c418ff, #3b5bff, #04f3ff)' # 搜索条激活时底部横条的渐变色（彩虹，收尾经蓝色平滑过渡）
+    avatar: 'conic-gradient(from 0deg, #04f3ff, #08ffc6, #ddf730, #ffbd19, #ff1fe0, #c418ff, #3b5bff, #04f3ff)' # 头像 hover 时旋转光环的渐变色（彩虹，首尾同色保证旋转无缝）
+    angle: 210deg # 主题色渐变的角度（0=向上，顺时针；225deg = 右上角 → 左下角）
   leftbar:
+    ui-style: card # glass（背景图+磨砂玻璃效果）/ card（纯色卡片：var(--card) 实色背景 + 中间阴影）
     # 可以设置：纯色/渐变色/图片作为背景
     # 设置为纯色时，可以分别设置浅色和深色模式背景色
     background-color-light: var(--card) # var(--block) #'rgb(#C3C3C3)'
@@ -697,9 +734,6 @@ style:
     blur-px: 100px
     blur-bg: var(--bg-a60)
     background-opacity: 0.8
-  paginator:
-    prev: https://static.hzchu.top/cdn-x/placeholder@1.0.12/arrow/f049bbd4e88ec.svg
-    next: https://static.hzchu.top/cdn-x/placeholder@1.0.12/arrow/064b95430caf4.svg
   error_page: https://static.hzchu.top/cdn-x/placeholder@1.0.12/404/1c830bfcd517d.svg
   lock_page: https://static.hzchu.top/cdn-x/placeholder@1.0.12/404/1c830bfcd517d.svg
   site: # 使用 background-image 后，blur 设置才有效
@@ -723,8 +757,10 @@ default:
   project: https://static.hzchu.top/cdn-x/placeholder@1.0.12/image/2779789.png
   banner: https://static.hzchu.top/cdn-x/placeholder@1.0.12/banner/books.jpg
   topic: https://static.hzchu.top/cdn-x/placeholder@1.0.12/image/10433048.png
+  # loading 兼容回退：新值位于 _data/icons.yml（default:loading-placeholder）
   loading: https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd
   # loading: https://github.githubassets.com/images/mona-loading-dark.gif
+  # image_onerror 兼容回退：新值位于 _data/icons.yml（image:onerror）
   image_onerror: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E"
 
 api_host:

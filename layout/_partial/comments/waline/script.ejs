@@ -1,13 +1,13 @@
 <script type="module">
   import { init } from '<%- theme.comments.waline.js %>';
 
-  const lazyload = <%= theme.comments.lazyload ?? false %>;
   
   function initWaline() {
     const el = document.getElementById('waline_container');
     if (!el) return;
 
     function load_waline() {
+      utils.css('<%- url_for('/css/comments/waline.css') %>?v=<%- stellar_info('version') %>');
       utils.css('<%- theme.comments.waline.css %>');
       utils.css('<%- theme.comments.waline.meta_css %>');
 
@@ -35,13 +35,8 @@
       }));
     }
     
-    util.viewportLazyload(el, load_waline, lazyload);
+    util.viewportLazyload(el, load_waline);
   }
-  
-  // Store in global stellar namespace for PJAX reinitialization
-  window.stellar = window.stellar || {};
-  window.stellar.initComments = window.stellar.initComments || {};
-  window.stellar.initComments.waline = initWaline;
   
   // Initialize on page load
   initWaline();

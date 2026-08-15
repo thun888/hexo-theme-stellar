@@ -1,6 +1,6 @@
 .widget-wrapper.markdown
   .widget-body
-    border-radius: $border-card-s
+    border-radius: $border-card
     padding: .25rem 1rem
     background: var(--bg-a50)
     >*:first-child
@@ -12,6 +12,9 @@
     background: var(--bg-a50)
   .link:hover
     background: var(--bg-a100)
+
+.l_left .widget-wrapper.markdown .linklist .link:hover
+  sidebar-light()
 
 .l_right .widget-wrapper.markdown .linklist
   .link

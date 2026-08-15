@@ -1,12 +1,12 @@
-<script>
+<script type="module">
   (function() {
-    const lazyload = <%= theme.comments.lazyload ?? false %>;
     
     function initUtterances() {
       const el = document.querySelector("#comments #utterances");
       if (!el) return;
       
       function load_utterances() {
+        utils.css('<%- url_for('/css/comments/utterances.css') %>?v=<%- stellar_info('version') %>');
         try {
           el.innerHTML = '';
         } catch (error) {
@@ -24,13 +24,8 @@
         el.appendChild(script);
       }
       
-      util.viewportLazyload(el, load_utterances, lazyload);
+      util.viewportLazyload(el, load_utterances);
     }
-    
-    // Store in global stellar namespace for PJAX reinitialization
-    window.stellar = window.stellar || {};
-    window.stellar.initComments = window.stellar.initComments || {};
-    window.stellar.initComments.utterances = initUtterances;
     
     // Initialize on page load
     initUtterances();

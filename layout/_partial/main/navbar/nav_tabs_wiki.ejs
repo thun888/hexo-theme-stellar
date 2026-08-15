@@ -1,6 +1,7 @@
 <%
 function layoutDiv() {
   var el = '';
+  el += partial('_partial/main/pin_slider', {type: 'wiki'});
   el += '<div class="navbar top">';
   el += '<div class="navbar-blur">';
     el += '<div class="navbar-container">';
@@ -22,7 +23,7 @@ function layoutDiv() {
       if (tag.name && tag.name.length > 0 && page.tagName === tag.name) {
         el += ' class="active"';
       }
-      el += ' href="' + pretty_url(tag.path) + '">' + tag.name + '</a>';
+      el += ' href="' + escape_html(pretty_url(tag.path)) + '">' + escape_html(tag.name) + '</a>';
       el += '</a>';
     }
   }

@@ -26,15 +26,15 @@
         display: block
       >span
         text-align: left
-        opacity 0.6
+        opacity 0.3
       &:empty
         display: none
       .cap-action
         line-height: 0
         color: inherit
-        opacity 0.6
-        trans2: opacity background
-        border-radius: 4px
+        opacity 0.3
+        trans1 opacity
+        border-radius: 8px
         padding: 6px
         margin-right: -6px
         svg
@@ -44,7 +44,7 @@
           fill: var(--text-p2)
         &:hover
           color: var(--accent)
-          background: var(--bg-a100)
+          sidebar-light(var(--bg-a50))
           opacity 1
           svg
             fill: var(--accent)
@@ -59,11 +59,16 @@
 
 .widget-wrapper
   display: block
-  padding-bottom: 32px
+  margin-top: 32px
 
+.l_left .widgets
+  padding-bottom: 64px
 .l_right .widgets
+  padding: 16px 0
   &:empty 
     display: none
+  .widget-wrapper:first-child
+    margin-top: 0
   .widget-wrapper
     .widget-header
       padding-left: var(--gap-padding)
@@ -77,7 +82,3 @@
   @media screen and (min-width: $device-laptop)
     .widget-wrapper.markdown .widget-body
       background: var(--block)
-
-.leftbar-container
-  .header+.widgets
-    margin-top: 1rem

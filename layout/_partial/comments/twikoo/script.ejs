@@ -1,12 +1,12 @@
-<script>
+<script type="module">
   (function() {
-    const lazyload = <%= theme.comments.lazyload ?? false %>;
     
     function initTwikoo() {
       const el = document.getElementById('twikoo_container');
       if (!el) return;
       
       function load_twikoo() {
+        utils.css('<%- url_for('/css/comments/twikoo.css') %>?v=<%- stellar_info('version') %>');
         utils.js('<%- theme.comments.twikoo.js %>', {defer: true}).then(function () {
           const path = el.getAttribute('comment_id') ?? decodeURI(window.location.pathname);
           twikoo.init(Object.assign(<%- JSON.stringify(theme.comments.twikoo) %>, {
@@ -16,13 +16,8 @@
         });
       }
       
-      util.viewportLazyload(el, load_twikoo, lazyload);
+      util.viewportLazyload(el, load_twikoo);
     }
-    
-    // Store in global stellar namespace for PJAX reinitialization
-    window.stellar = window.stellar || {};
-    window.stellar.initComments = window.stellar.initComments || {};
-    window.stellar.initComments.twikoo = initTwikoo;
     
     // Initialize on page load
     initTwikoo();

@@ -18,7 +18,7 @@ function layoutNodeTitle(ctx, content) {
   var el = ''
   el += '<div class="header">'
   if (content && content.length > 0) {
-    el += `<span>${content}</span>`
+    el += `<span>${ctx.render.renderSync({text: content, engine: 'markdown'}).split('\n').join('').replace(/<\/?p>/g, '')}</span>`
   }
   el += '</div>'
   return el
@@ -62,7 +62,7 @@ module.exports = ctx => function(rawArgs, content = '') {
         args[key] !== ''
     )
 
-    classBuffer += ` data-service ds-${type}"`
+    classBuffer += ` data-service ds-${type}`
 
     if (attrKeys.length) {
       attrBuffer += ' ' + ctx.args.joinTags(args, attrKeys).join(' ')

@@ -1,6 +1,5 @@
-<script>
+<script type="module">
   (function() {
-    const lazyload = <%= theme.comments.lazyload ?? false %>;
     
     function initGiscus() {
       const el = document.querySelector('#comments #giscus');
@@ -23,13 +22,8 @@
         el.appendChild(script);
       }
       
-      util.viewportLazyload(el, load_giscus, lazyload);
+      util.viewportLazyload(el, load_giscus);
     }
-    
-    // Store in global stellar namespace for PJAX reinitialization
-    window.stellar = window.stellar || {};
-    window.stellar.initComments = window.stellar.initComments || {};
-    window.stellar.initComments.giscus = initGiscus;
     
     // Initialize on page load
     initGiscus();
