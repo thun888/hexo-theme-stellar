@@ -4,7 +4,12 @@
   flex-wrap: wrap
   justify-content: center
   align-items: center
-  margin: 2rem -0.5rem 0
+  // 间距由容器 column-gap 管理，替代 tag-chip 的横向边距，不使用负边距：
+  // 该行位于 md-text 溢出裁剪容器之外，负边距会把文档宽度撑大 8px，在移动端产生整页横向滚动。
+  margin: 2rem 0 0
+  column-gap: 1rem
   line-height: 1.6
   a.tag
     tag-chip()
+    margin-left: 0
+    margin-right: 0
