@@ -74,7 +74,7 @@ module.exports = hexo => {
     // SVG Sprites 存储
     svgSprites: new Map(),
     
-    icon: (key, args) => {
+    icon: (key, args, inline) => {
       const { icons } = hexo.theme.config
       var result = ''
       if (icons[key]) {
@@ -85,6 +85,8 @@ module.exports = hexo => {
       // console.log(`Processing icon: ${key} => ${result}`)
       if (result.startsWith('/') || result.startsWith('https://') || result.startsWith('http://')) {
         return `<img ${args?.length > 0 ? args : ''} src="${result}" />`
+      } else if (inline === true) {
+        return result
       } else {
         // 特例跳过
         const skipList = ['rating:star']
@@ -121,6 +123,11 @@ module.exports = hexo => {
           // 应只对img标签有效，svg标签不应该传递额外属性
           // const argsStr = args?.length > 0 ? ` ${args}` : ''
           return `<svg${attrsStr}><use href="#${iconId}"/></svg>`
+        }
+        
+        // 非首屏图标：输出占位符，由 /js/icons.js 异步拉取 js/icons/{ns}.json 后原位替换
+        if (result.startsWith('<svg')) {
+          return `<svg class="icon" data-icon="${key}" aria-hidden="true"></svg>`
         }
         
         // 默认行为：直接返回完整 SVG

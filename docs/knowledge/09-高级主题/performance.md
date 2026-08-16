@@ -66,7 +66,7 @@ flowchart TD
 
   F --> F1["GitHub API / CDN substitution"]
 
-  G --> G1["localStorage search_cache_v1"]
+  G --> G1["search_cache_v2 + cache_ttl"]
 ```
 
 **参考源码**：[_config.yml](../../../_config.yml)
@@ -211,7 +211,11 @@ flowchart LR
 
 ## 搜索数据缓存
 
-本地搜索系统在构建期把全部站点内容序列化为 `/search.json`。首次加载时客户端获取该文件并缓存在 `localStorage`（键 `search_cache_v1`）。后续访问使用缓存副本，避免重复网络请求。
+本地搜索系统在构建期把全部站点内容序列化为 `/search.json`。客户端缓存带 TTL（`search.local_search.cache_ttl`，默认 `86400` 秒 = 1 天），以 `search_cache_v2` 键写入 `localStorage`（结构 `{ ts, ttl, data }`）：TTL 未过期直接使用缓存、不发请求；过期后先用旧缓存出结果并后台刷新；`cache_ttl: 0` 表示不缓存。
+
+`search.local_search.lazy_load`（默认 `true`）控制加载时机：开启时页面加载不请求搜索数据，首次聚焦搜索框才加载（缓存优先 + 后台刷新）；关闭时页面加载预取，但缓存新鲜时同样不重复请求。
+
+内容较多的站点建议关闭懒加载（`lazy_load: false`），避免首次搜索卡顿；`cache_ttl` 建议按内容更新频率自行调整（默认 1 天，`0` 表示不缓存）。
 
 搜索数据生成与客户端 `searchFunc` 逻辑详见[搜索功能](../07-外部集成/search.md)。
 
@@ -259,9 +263,34 @@ preconnect:
 
 - **核心样式 `main.css`** 只保留基础与防闪烁规则（`.lazy` 显隐、`.slide-up` 显隐、aplayer、copycode 等）；swiper/fancybox/mermaid 与五种评论系统样式移入 `source/css/plugins/`、`source/css/comments/` 独立编译，前端在 DOM 检测命中时经 `utils.css()` 按需注入。
 - **重复脚本外置**：`utils`（同步加载，保证解析期插件注册可用）、`theme`/`services`/`tagtree`（defer）不再内联进每个 HTML；图标白名单由构建期生成器 `scripts/generators/stellar-icons.js` 输出为 `/js/stellar-icons.js`，约 6KB 的 SVG 数据不再随每个页面重复传输。
+- **图标异步加载**：除首屏关键图标（搜索、菜单、leftbar/rightbar、goback，由模板调用处 `inline=true` 内联）外，`icon()` 输出的其余 SVG 改为 `<svg data-icon>` 占位符；构建期生成器按命名空间输出 `js/icons/{ns}.json`，客户端 `/js/icons.js`（defer）按页拉取实际用到的命名空间后原位替换为内联 SVG。页面 HTML 不再重复携带全量图标（全站由约 3MB 内联 SVG 降至仅首屏关键图标），图标数据跨页与回访命中缓存。
 - **按页裁剪**：`tagtree.js` 仅在与 tagtree 小部件渲染相同的条件下输出；评论脚本本就按页输出。
 
 收益：每页内联脚本由约 31~34KB 降至约 10~13KB；无插件/评论页面不再下载对应 CSS；外置文件跨页与回访命中缓存。
+
+---
+
+## 构建期性能（generate 阶段）
+
+以主工程 xaoxuu.com（120 篇 md / 8121 行，2026-08-15）实测：`hexo generate` 约 3.0s，按包归因如下。
+
+| 包 / 模块 | 占比 | 说明 |
+|-----------|------|------|
+| core/node | ~24% | 模块加载、YAML 等一次性开销 |
+| hexo-autonofollow | ~19% | 每页 cheerio 整页解析 + 序列化（站点依赖，非主题） |
+| stylus | ~18% | 主题 CSS 编译（一次性） |
+| themes/stellar | ~9% | 模板渲染 + 构建期脚本 |
+| hexo 内核 | ~8% | EJS partial / 渲染框架 |
+| highlight.js / marked | ~6.5% | 内容代码高亮与 Markdown 分词 |
+
+主题构建期脚本已做以下优化（见 `docs/designs/2026-08-15-build-performance/`），全部保持输出逐字节一致：
+
+- **wiki 文档树**（`scripts/lib/doc_tree.js`）：页面按 `wiki` / `path_key` 单遍 `Map` 分组，替代旧实现的 O(W·P) `filter`/`some` 与 O(S·K·P) sections 组装；`all_tags`/`relatedItems` 用 `Set`/`Map` 去重，输出语义不变。
+- **笔记本系统**（`scripts/lib/notebooks.js`）：单遍 `groupPagesByNotebook` 分组，替代每个笔记本全量 `filter` 全部页面。
+- **内容过滤器短路**：`md_table` 在内容不含 `<table` 时跳过 cheerio 解析；`img_lazyload` / `img_onerror` 在无 `<img` 页面直接返回。
+- **搜索生成**：`skip_search` 通配正则循环外编译一次；`related_posts` helper 移除未使用的全量 `posts.filter` 死代码。
+
+本站当前规模下 generate 耗时收益约 0.05–0.2s（主题脚本占比约 9%），主要价值是内容规模增大时复杂度由 O(N·M) 降为 O(N+M) 并减少 GC；更大单项收益（hexo-autonofollow ~0.5s、stylus ~0.55s、`gulp minify` ~5.5s）属站点构建配置或依赖层面，未纳入本次主题改动，作为后续可选方向。
 
 ---
 
@@ -273,10 +302,11 @@ preconnect:
 | 懒加载过渡 | `dependencies.lazyload.transition` | `fade` | `lazyload.styl` |
 | 链接预加载 | `plugins.preload.enable` | `true`（flying_pages） | CDN 脚本 |
 | 图片比例缓存 | Hexo 事件 | 自动 | `get_image_ratios.js`、`fix_image_tags.js` |
-| 搜索缓存 | `search.local_search` | `localStorage` | `local-search.js`（客户端） |
+| 搜索缓存 | `search.local_search.lazy_load` / `cache_ttl` | `localStorage`（TTL 默认 1 天） | `local-search.js`（客户端） |
 | API 主机覆盖 | `api_host` | GitHub 默认 | 数据服务脚本 |
 | DNS preconnect | `preconnect` | 空 | `head.ejs` |
 | 按需样式 | 插件/评论 CSS 独立文件 | 运行时注入 | `plugins/*.css`、`comments/*.css` |
 | 脚本外置 | 构建期生成 icons + 外部 JS | 每页内联减少约 20KB | `utils.js`、`stellar-icons.js` |
+| 图标异步加载 | 按命名空间生成 `js/icons/*.json`，defer 占位符替换 | 非首屏图标不再进入 HTML | `stellar-icons.js`、`icons.js` |
 
 **参考源码**：[_config.yml](../../../_config.yml)
