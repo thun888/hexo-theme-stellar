@@ -35,7 +35,7 @@
 | 新增自定义标签 | `scripts/tags/lib/` + `scripts/tags/index.js` 注册 + `source/css/_components/tag-plugins/` 样式 |
 | 页面结构 / 模板 | `layout/`（`layout.ejs` 编排、`_partial/` 组件） |
 | 前端交互 | `source/js/plugins/`（源码 ES2015+，Babel 转译输出） |
-| 数据服务 / 小部件 | `source/js/services/`、`layout/_partial/sidebar/` |
+| 数据服务 / 小部件 | `source/js/services/`、`layout/_partial/widgets/` |
 | 评论系统 | `layout/_partial/comments/` |
 | 构建期逻辑 | `scripts/`（helpers / filters / generators / events / commands） |
 | 文案 | `languages/` |
@@ -48,7 +48,6 @@
 
 - `00-总览与安装配置/` ~ `09-高级主题/`：按主题域组织，入口为 `docs/knowledge/README.md` 及各领域 `index.md`
 - `VERIFICATION.md`：核查与修正记录；`tools/verify.py`：硬事实核查脚本
-- `知识库全量.md`：合并版（RAG / 一次性上下文导入）
 
 使用约定：
 
@@ -137,6 +136,7 @@ module.exports = function(hexo) {
 **文档同步门禁**：
 
 - 涉及主题代码、配置或行为变化时，必须同步更新 `docs/knowledge/` 并在 `VERIFICATION.md` 登记；涉及逻辑变更（API、配置项、行为变化）时同步更新仓库 Wiki
+- 发版前 `npm run check` 内含提交登记完整性检查：自上一 tag 起涉及主题代码、配置或行为变化的非合并提交须在 `docs/knowledge/VERIFICATION.md`「提交登记（发版前核对）」表登记短 SHA（纯文档 / CI / 工具改动无需登记），缺失即失败（`ci/check-release-docs.js`）
 
 **新增功能 Checklist**（必须覆盖全部相关维度）：
 
@@ -175,6 +175,7 @@ module.exports = function(hexo) {
 > 完整白名单以 `ci/check-commit-msg.js` 为准（CI 强制执行）。
 
 - 一次提交对应一个需求点；逻辑相似的需求可以合并为一次提交
+- 合并代码时，把合并提交 / PR 标题改为 Conventional Commits 格式（`<type>(<scope>): <description>`，类型见上表），不保留默认的 `Merge branch ...` / `Merge pull request ...` 标题
 - 与 issue 相关的提交，在提交标题末尾带上 issue 号（用户已提供 issue 号或链接时），如 `fix(scope): 修复 xxx (#123)`
 - 每个需求完成后不自动提交，改动保留在工作区供用户审查（见 §5 提交门禁）
 - 只有用户明确要求时才 push；发版前须与用户确认版本号
@@ -191,6 +192,7 @@ npm run release → push main + npm → CI 自动触发 → npm publish + git ta
 
 - **版本号推导**（自上一个 tag 起分析 commit）：仅含 fix / perf / style → `x.y.(z+1)`；含 feat / refactor / breaking change → `x.(y+1).0`；大型重构、用户可感知的设计调整 → `(x+1).0.0`；测试版本 → `x.y.z-rc.N`
 - **CHANGELOG**：AI/人工先写入 `## <version>` 非空章节（H2 版本号 + H3 分类，格式见 `docs/guides/release-process.md`）
+- **提交登记**：自上一 tag 起涉及主题代码、配置或行为变化的非合并提交须在 `docs/knowledge/VERIFICATION.md`「提交登记（发版前核对）」表登记短 SHA（纯文档 / CI / 工具改动除外）；`npm run check` 内含完整性检查，缺失即中止发版
 - **确认**：向用户列出版本号和变更摘要，等待确认
 - **执行**：`npm run release:dry -- <version>` 预演通过后，`npm run release -- <version>`（非交互环境加 `--yes`）
 

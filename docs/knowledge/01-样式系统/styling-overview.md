@@ -224,6 +224,8 @@ $border-bar = convert(hexo-config('style.border-radius.bar'))            // 横�
 
 **参考源码**：[source/css/_custom.styl](../../../source/css/_custom.styl)
 
+全局 `* { corner-shape: $corner-shape }`（默认 `superellipse(1.25)`）只作用于元素自身背景/边框绘制；Chromium 不把 corner-shape 传递给子内容的 `overflow` 裁剪，`clip-path` 也会把角落硬裁为普通圆角。因此封面/轮播/横幅的背景图同时由容器自身背景承载（`--cover-url` / `--bg-url` / `--pin-cover-url`），并在 `.post-card` / `.article.banner` 上用 `@supports not (corner-shape: superellipse(1))` 守卫 clip-path（Chromium 移除、Safari/Firefox 保留圆角兜底），使图片角落与其它元素一致地跟随配置曲率（详见 `docs/designs/2026-08-16-corner-shape-image-containers/`）。
+
 ### 阴影系统
 
 盒阴影定义为可复用令牌，提供一致的层级感：
@@ -257,9 +259,8 @@ graph TB
     end
     
     subgraph "Spacing Properties"
-        MARGIN["--gap-margin<br/>Container margins: 16px"]
-        PADDING["--gap-padding<br/>Content padding: 16px"]
-        MAX["--gap-max<br/>Combined: calc(--gap-margin + --gap-padding)"]
+        BASE["--gap-base<br/>Internal spacing: 16px (fixed)"]
+        PAGE["--gap-page<br/>Page-level spacing: 16px → 32px (laptop+)"]
         PGAP["--gap-p<br/>Paragraph spacing<br/>calc($fs-body + 4px)"]
     end
     
@@ -272,9 +273,8 @@ graph TB
     
     ROOT --> MAIN
     ROOT --> SIDE
-    ROOT --> MARGIN
-    ROOT --> PADDING
-    ROOT --> MAX
+    ROOT --> BASE
+    ROOT --> PAGE
     ROOT --> PGAP
     ROOT --> FSP
     ROOT --> FSH2
@@ -300,6 +300,19 @@ graph TB
 ```
 
 这样所有使用 `var(--width-main)` 的组件都会自动适配，无需各自的媒体查询。
+
+间距令牌同样按断点分档：
+
+```stylus
+:root
+  --gap-base: 16px
+  --gap-page: 16px
+  // 笔记本及以上放宽页面级留白
+  @media screen and (min-width: $device-laptop)
+    --gap-page: 32px
+```
+
+页面级规则引用 `--gap-page`，组件内部间距引用 `--gap-base`。
 
 **参考源码**：[source/css/_custom.styl](../../../source/css/_custom.styl)
 
@@ -694,9 +707,9 @@ CSS 自定义属性随视口变化：
 @media screen and (min-width: $device-2k)
   .l_left
     margin-left: auto
-    margin-right: calc(2 * var(--gap-max))
+    margin-right: calc(2 * var(--gap-page))
   .l_right
-    margin-left: var(--gap-max)
+    margin-left: var(--gap-page)
     margin-right: auto
 ```
 

@@ -60,12 +60,12 @@ function layoutDiv(fallback) {
   }
   el += `<div class="widget-footer">`
   el += `<a class="top" onclick="util.scrollTop()">`
-  el += icon('line-md:upload-outline')
+  el += icon('line-md:upload-outline', '', true)
   el += `<span>${__('btn.top')}</span>`
   el += `</a>`
   if (hasComments) {
     el += `<a class="buttom" onclick="util.scrollComment()">`
-    el += icon('line-md:chat')
+    el += icon('line-md:chat', '', true)
     el += `<span>${__('btn.comments')}</span>`
     el += `</a>`
   }

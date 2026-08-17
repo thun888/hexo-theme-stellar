@@ -1,12 +1,12 @@
 {
   "name": "hexo-theme-stellar",
-  "version": "1.41.0",
+  "version": "1.42.1",
   "description": "Elegant and powerful theme for Hexo.",
   "main": "package.json",
   "scripts": {
     "lint": "eslint .",
-    "test": "node ci/check-require-decls.js && node --test",
-    "check": "npm run lint && npm test && python3 docs/knowledge/tools/verify.py",
+    "test": "node ci/check-require-decls.js && node --test && node ci/check-spec-refs.js",
+    "check": "npm run lint && npm test && python3 docs/knowledge/tools/verify.py && node ci/check-release-docs.js",
     "release": "node release.js",
     "release:dry": "node release.js --dry-run"
   },
