@@ -476,7 +476,10 @@ tag_plugins:
     ratio: square # origin / square
   chat:
     api: https://siteinfo.listentothewind.cn/api/v1
-
+  coding:
+    api: https://hightlight-code-api.hzchu.top
+  biliinfo:
+    api: https://box.api.hzchu.top/api/bili_info/get_video_info
 
 # 基础依赖
 dependencies:
