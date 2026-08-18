@@ -65,6 +65,12 @@ menubar:
     #   title: 社交
     #   url: /friends/
 
+# 多语言入口。items 为空时根据站点 language 自动生成语言首页链接。
+# 内容页声明相同 translation_key 后，切换器会优先跳转到对应翻译页面。
+language_switcher:
+  enable: true
+  items: []
+
 
 ######## Main ########
 # 站点主结构树
