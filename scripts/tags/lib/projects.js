@@ -56,7 +56,7 @@ module.exports = ctx => function(args) {
         
         el += `<div class="post-card wiki" onclick="cardClick(event, '${item.url}')">`
         el += `<article class="md-text">`
-        el += item.logo ? `<div class="preview"><img src="${item.logo}"></div>` : '<div class="preview"><img src="https://onep.hzchu.top/mount/pic/myself/2025/07/no_media.png?fmt=webp"></div>'
+        el += item.logo ? `<div class="preview"><img src="${item.logo}"></div>` : '<div class="preview"><img src="https://gate.assets.hzchu.top/fs/old/files/mount/pic/myself/2025/07/no_media.png?fmt=webp"></div>'
         el += `<div class="excerpt">`
         el += `<span class="post-title">${item.name}</span>`
         el += `<p>${item.description}</p>`
