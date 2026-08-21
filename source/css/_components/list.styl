@@ -105,8 +105,8 @@
     margin: 0
     column-gap: 1.5rem
     line-height: 2
-    --fsp: $fsp1
-    font-size: var(--fsp)
+    --fs-content: $fs-content-1
+    font-size: var(--fs-content)
     svg
       height: 1em
       width: auto
@@ -223,46 +223,6 @@
     font-size: $fsh4
 
 
-// wiki
-.post-list .post-card.wiki article
-  display: flex
-  flex-wrap: wrap
-  trans1 box-shadow
-  justify-content: center
-  padding: 1rem .5rem
-
-
-.post-list .post-card.wiki article .preview
-  display: flex
-  margin: 1rem 3rem
-  align-items: center
-  img
-    width: 96px
-    max-height: 96px
-    object-fit: contain
-    trans1: all 0.75s
-.post-list .post-card.wiki article .excerpt
-  margin: 1rem .5rem
-  @media screen and (min-width: 950px)
-    margin-right: 2rem
-  min-width: 280px
-  flex: 1
-  overflow: hidden
-  word-wrap: break-word
-  .caps
-    line-height: 1
-    margin-bottom: 0.75rem
-  .cap
-    --theme-block: var(--block)
-    background: var(--theme-block)
-    padding: 2px 4px
-    border-radius: 4px
-  p:last-child
-    margin-bottom: 0
-  .cap+.cap
-    margin-left: 4px
-
-
 // topic 专栏列表：平铺容器 + 上下布局（h2 专栏标题 → 最新文章卡片 → 文章链接列表）
 .post-list.topic
   .post-card-wrap
@@ -293,7 +253,7 @@
       color: var(--text-p2)
       font-size: $fs-14
       line-height: 1.5
-      // 左右内边距与文章列表（.post-panel padding: 0 1rem）一致
+      // 左右内边距与下方归档式文章列表一致
       padding: 0 1rem
       margin: 0 0 1rem
     .cover
@@ -314,13 +274,51 @@
       img
         width: 100%
         height: 100%
-    .post-panel
+    .topic-posts
       flex: none
       width: 100%
+      margin: 0
       // 左右内边距与文章封面文字区（.cover-info padding: 1rem）一致
       padding: 0 1rem
-      .posts
-        margin: 0
+    .topic-posts-more[open]
+      display: flex
+      flex-direction: column
+      .topic-posts-extra
+        order: 1
+      .topic-posts-toggle
+        order: 2
+    .topic-posts-toggle
+      display: flex
+      align-items: center
+      justify-content: center
+      gap: .35em
+      width: 100%
+      margin-top: .5rem
+      padding: .75rem 0
+      list-style: none
+      cursor: pointer
+      color: var(--text-p3)
+      font-size: $fs-13
+      font-weight: 500
+      trans1 color
+      &::-webkit-details-marker
+        display: none
+      .when-open
+        display: none
+      svg
+        width: 1em
+        height: 1em
+        transform: rotate(90deg)
+        trans1 transform
+      &:hover
+        color: var(--accent)
+    .topic-posts-more[open] .topic-posts-toggle
+      .when-closed
+        display: none
+      .when-open
+        display: inline
+      svg
+        transform: rotate(-90deg)
   // hover 放大覆盖（与 photo 卡片一致，见 .post-card.post.photo:hover 注释）
   .post-card.topic:hover
     .cover:before

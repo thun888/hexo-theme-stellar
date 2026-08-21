@@ -84,7 +84,7 @@ module.exports = ctx => function(args) {
     // if (blurhash) {
     //   img += `<canvas class="blurhash-preview" data-blurhash="${blurhash}" aria-hidden="true"></canvas>`
     // } else {
-    //   img += `<div class="lazy-icon" style="background-image:url(${ctx.theme.config.default.loading || ctx.utils.iconData('default:loading-placeholder')});"></div>`
+    //   img += `<div class="lazy-icon"></div>`
     // }
     if (fancyboxHref) {
       a += ` href="${fancyboxHref}">${img}</a>`

@@ -103,6 +103,22 @@ graph TB
 
 **参考源码**：[_config.yml](../../../_config.yml)
 
+### 卡片 Hover 插件
+
+`plugins.card_hover` 提供可复用的鼠标跟随光斑与 3D 倾斜，默认关闭：
+
+```yaml
+plugins:
+  card_hover:
+    enable: false
+    spotlight_color: 'rgba(255, 255, 255, 0.25)'
+    max_tilt: 3
+```
+
+`spotlight_color` 控制光斑颜色；单个组件可用 CSS 变量 `--card-hover-spotlight-color` 覆盖。`max_tilt` 单位为度，无效值回退为 `3`，运行时限制在 `0`～`8` 的安全范围。插件采用 `.card-hover` 基础类与 `.card-hover--spotlight`、`.card-hover--tilt` 修饰类组合，关闭时这些类不会改变静态样式。完整的运行时接口与接入范围见[插件系统](../07-外部集成/plugin-system.md#card-hover卡片光效与倾斜)。
+
+**参考源码**：[_config.yml](../../../_config.yml)、[layout/_plugins/card_hover.ejs](../../../layout/_plugins/card_hover.ejs)
+
 ## 层级覆盖系统
 
 配置值的解析遵循「越具体的范围覆盖越宽泛的范围」：
@@ -367,6 +383,60 @@ notebook:
 
 **参考源码**：[_config.yml](../../../_config.yml)
 
+### 页脚配置
+
+`footer` 包含左栏底部的 social 按钮、主内容区页脚站点地图和 Markdown 文本：
+
+| 字段 | 类型 | 用途 |
+|------|------|------|
+| `social` | Object | 左栏底部的 social 按钮；按 YAML 字段顺序显示 |
+| `social.*.icon` | String | 普通按钮或 dropdown 主按钮图标 |
+| `social.*.title` | String | 普通按钮 tooltip 或 dropdown 无障碍标签 |
+| `social.*.url` | String | 普通按钮链接 |
+| `social.*.onclick` | String | 普通按钮点击脚本，与 `url` 二选一 |
+| `social.spacer` | Object / null | 弹性占位项；将其后的 social 按钮推至同一行右侧 |
+| `social.*.type` | `dropdown` | 将条目渲染为通用下拉菜单 |
+| `social.*.items` | Array | dropdown 子项列表；`title`、`url` 必填，`icon` 可选 |
+| `sitemap` | Array | 主内容区页脚的分组链接 |
+| `content` | String | 主内容区页脚的 Markdown 文本 |
+
+dropdown 示例：
+
+``@@BT@yaml
+footer:
+  social:
+    links:
+      type: dropdown
+      icon: default:documents
+      title: 更多链接
+      items:
+        - icon: default:documents
+          title: 文档
+          url: /wiki/
+        - title: GitHub
+          url: https://github.com/
+``@@BT@
+
+未设置 `type` 的 `social` 条目保持普通链接行为。若要在一组按钮中撑开中间空间，可在需要的位置加入 `spacer:`；其值会被忽略，只按配置位置输出弹性空白：
+
+``@@BT@yaml
+footer:
+  social:
+    github:
+      icon: default:github
+      url: https://github.com/
+    spacer:
+    links:
+      type: dropdown
+      icon: default:documents
+      title: 更多链接
+      items: []
+``@@BT@
+
+dropdown 子项图标可省略。菜单不关联语言或其它业务场景，也不支持嵌套；打开后挂载到 `body` 下的全局浮层，并根据触发按钮周围的可用空间自动调整上下和左右位置。菜单自身声明 glass surface，条目复用通用 collection list 的结构与交互样式。
+
+**参考源码**：[_config.yml](../../../_config.yml)、[layout/_partial/sidebar/index_leftbar.ejs](../../../layout/_partial/sidebar/index_leftbar.ejs)、[layout/_partial/dropdown.ejs](../../../layout/_partial/dropdown.ejs)、[layout/_partial/main/footer.ejs](../../../layout/_partial/main/footer.ejs)
+
 ### 样式配置
 
 `style` 小节定义设计令牌，由 `source/css/_custom.styl` 消费：
@@ -387,7 +457,7 @@ graph TB
     
     subgraph "CSS Variable Generation"
         CUSTOMSTYL["_custom.styl<br/>Design token layer"]
-        CSSROOT[":root CSS variables<br/>--fsp, --gap-*, --width-*"]
+        CSSROOT[":root CSS variables<br/>--fs-root, --fs-content-base, --fs-content, --gap-*, --width-*"]
     end
     
     subgraph "Component Consumption"
@@ -410,7 +480,7 @@ graph TB
 
 关键样式配置：
 
-1. **字号**：`font-size.root` 设置基准字号（影响所有 `rem` 单位）；`font-size.body` 可用 `px` 或 `rem`
+1. **字号**：`font-size.root` 设置桌面端根字号（影响所有 `rem` 单位）；移动端自动增加 2px。页面基准使用 `--fs-content-base`，组件字号使用 `--fs-content`。旧字段 `style.font-size.body` 已移除，不再生效。
 2. **圆角**：`border-radius` 从 `card-l`（24px，大卡片）到 `card-s`（12px，小卡片）渐进
 3. **颜色**：`color.theme` / `color.accent` / `color.link` 使用 HSL 值，便于精确调色
 4. **左栏外观**：支持纯色、渐变或带模糊效果的背景图
@@ -574,7 +644,7 @@ flowchart TD
 | `avatar` | 用户头像 | 默认头像 |
 | `cover` | 文章封面 | 缺失封面的占位 |
 | `banner` | 文章横幅 | 默认头图 |
-| `loading` | 加载指示 | 加载动画 SVG（兼容回退，新值位于 `_data/icons.yml` 的 `default:loading-placeholder`） |
+| `loading` | 加载指示 | 由 `_data/icons.yml` 的 `default:loading`（内联 SVG，`currentColor`）经 `head.ejs` 生成 `--icon-loading`，`.lazy-icon` 以蒙版 + `background-color: var(--theme)` 显示主题色；无配置覆盖项 |
 | `image_onerror` | 图片加载失败兜底 | 图片加载失败时显示的图标（兼容回退，新值位于 `_data/icons.yml` 的 `image:onerror`） |
 
 这些默认值避免出现破图，保证资源缺失时的一致性体验。
