@@ -9,15 +9,17 @@
 
 module.exports = ctx => function(args, content = '') {
   args = ctx.args.map(args, ['text'], [])
-  const escapeHTML = require('hexo-util').escapeHTML
-  const text = escapeHTML(args.text || '')
-  const inner = ctx.render.renderSync({text: content, engine: 'markdown'})
-    .split('\n').join('')
-    .replace(/<\/?p>/g, '')
-  var el = ''
-  el += `<span class="tag-plugin tip" tabindex="0">`
-  el += `<span class="tip-text">${inner}</span>`
-  el += `<span class="tip-bubble" role="tooltip">${text}</span>`
-  el += '</span>'
+  // const escapeHTML = require('hexo-util').escapeHTML
+  // const text = escapeHTML(args.text || '')
+  // const inner = ctx.render.renderSync({text: content, engine: 'markdown'})
+  //   .split('\n').join('')
+  //   .replace(/<\/?p>/g, '')
+  // var el = ''
+  // el += `<span class="tag-plugin tip" tabindex="0">`
+  // el += `<span class="tip-text">${inner}</span>`
+  // el += `<span class="tip-bubble" role="tooltip">${text}</span>`
+  // el += '</span>'
+  let el = `<span class="annotated" data-tippy-content="${args.text}">${content}</span>`
+
   return el
 }
