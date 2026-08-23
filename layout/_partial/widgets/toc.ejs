@@ -18,11 +18,11 @@ function layoutTocAction() {
 function layoutFooter(hasComments) {
   var footer = '<div class="widget-footer">'
   footer += '<a class="top" onclick="util.scrollTop()">'
-  footer += icon('default:upup', '', true)
+  footer += icon('line-md:upload-outline', '', true)
   footer += '<span>' + __('btn.top') + '</span></a>'
   if (hasComments) {
     footer += '<a class="buttom" onclick="util.scrollComment()">'
-    footer += icon('default:tocomment', '', true)
+    footer += icon('line-md:chat', '', true)
     footer += '<span>' + __('btn.comments') + '</span></a>'
   }
   var relativePath = page.source
