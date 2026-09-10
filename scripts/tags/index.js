@@ -67,4 +67,5 @@ hexo.extend.tag.register('printhide', require('./lib/print-hide')(hexo), {ends: 
 hexo.extend.tag.register('reel', require('./lib/read/reel')(hexo), true)
 hexo.extend.tag.register('paper', require('./lib/read/paper')(hexo), true)
 hexo.extend.tag.register('divider', require('./lib/divider')(hexo))
+hexo.extend.tag.register('or', require('./lib/or')(hexo))
 // others
