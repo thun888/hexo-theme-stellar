@@ -5,6 +5,7 @@ const content = theme.footer.content
   ?.replace('{theme.version}', stellar_info('version'))
   ?.replace('{theme.tree}', stellar_info('tree'))
   ?.replace('{site.posts.length}', site.posts.length)
+  ?.replace('{site.totalpages}', totalpages(site))
   ?.replace('{site.posts.words}', totalcount(site))
   ?.replace('{extra.info.buildtime}', new Date().toLocaleDateString("zh-CN"));
 function layoutDiv() {
