@@ -27,7 +27,18 @@
         }
       }
       mermaid.initialize(mermaid_config);
-      mermaid.run();
+      // 渲染会替换 innerHTML，先留一份源码给查看器的“复制”按钮
+      els.forEach((el) => {
+        el.dataset.mermaidSrc = el.textContent.trim();
+      });
+      // 查看器脚本与渲染并行加载，渲染结束后再初始化
+      const keynav = utils.js('<%- url_for("/js/plugins/mermaid-keynav.js") %>');
+      mermaid.run()
+        .catch((err) => console.warn('[mermaid] 渲染失败：', err))
+        .then(() => keynav)
+        .then(() => {
+          if (typeof setupMermaidKeyNav === 'function') setupMermaidKeyNav();
+        });
     }
   }, 'mermaid');
 </script>
