@@ -12,8 +12,12 @@ module.exports = (ctx) => {
     // 映射并提取参数
     args = ctx.args.map(args, ['lang', 'withcss'], ['url'])
 
-    // 获取 API 地址并去除末尾斜杠
-    const api = (ctx.theme.config.tags?.coding?.api || 'https://hightlight-code-api.hzchu.top').replace(/\/$/, '')
+    // 获取 API 地址并去除末尾斜杠；未配置时跳过渲染，由主题配置 tags.coding.api 提供
+    const api = (ctx.theme.config.tags?.coding?.api || '').replace(/\/$/, '')
+    if (!api) {
+      console.warn('[Coding] API endpoint not configured.')
+      return ''
+    }
 
     // 拼接完整的请求 URL
     args.url = api + '/api/v1/generate?usejson=true&showsupporter=false' + '&url=' + args.url

@@ -11,6 +11,12 @@ const { resolveServiceProvider } = require("../../lib/service-provider");
 
 module.exports = ctx => function(args) {
   args = ctx.args.map(args, ['repo', 'api'], ['group'])
+  // 封面兜底：条目自带封面 > 配置的截图服务（{href} 为占位符）> 主题占位图
+  const screenshotApi = ctx.theme.config.tags?.sites?.screenshot_api || ''
+  const siteSnapshot = item => item.cover || item.snapshot || item.screenshot
+    || (screenshotApi
+      ? screenshotApi.replace('{href}', encodeURIComponent(item.url))
+      : ctx.stellar.config.fallbacks.cover)
   const rawUrl = ctx.stellar.config.services.github.rawUrl.replace(/\/+$/, '')
   const siteinfoApi = resolveServiceProvider(ctx.stellar.config.services.siteInfo)?.endpoint;
   var api
@@ -38,7 +44,7 @@ module.exports = ctx => function(args) {
         el += `<div class="grid-cell site-card">`
         el += `<a class="card-link"${itemSiteinfoApi ? ` data-siteinfo-api="${itemSiteinfoApi}"` : ''} target="_blank" rel="external nofollow noopener noreferrer" href="${item.url}">`
         el += `<div class="lazy-box snapshot">`
-        el += `<img class="lazy" data-src="${item.cover || item.snapshot || item.screenshot || ('https://screenshot.api.hzchu.top/api/screenshot/?url=' + item.url)}" onerror="javascript:this.removeAttribute(&quot;data-src&quot;);this.src=&quot;${ctx.stellar.config.fallbacks.cover}&quot;;"/>`
+        el += `<img class="lazy" data-src="${siteSnapshot(item)}" onerror="javascript:this.removeAttribute(&quot;data-src&quot;);this.src=&quot;${ctx.stellar.config.fallbacks.cover}&quot;;"/>`
         el += `<div class="lazy-icon"></div>`
         el += `</div>`
         el += `<div class="info">`

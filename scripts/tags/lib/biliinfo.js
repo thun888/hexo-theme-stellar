@@ -12,7 +12,7 @@ module.exports = ctx => function(args) {
   if (!args.bv) {
     return ''
   }
-  const api = (ctx.theme.config.tags?.biliinfo?.api || 'https://box.api.hzchu.top/api/bili_info/get_video_info').replace(/\/$/, '')
+  const api = (ctx.theme.config.tags?.biliinfo?.api || '').replace(/\/$/, '')
   if (!api) {
     console.warn('[Biliinfo] API endpoint not configured.')
     return ''
