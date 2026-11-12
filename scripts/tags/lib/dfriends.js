@@ -9,7 +9,7 @@
 
 module.exports = ctx => function(args) {
   args = ctx.args.map(args, ['repo', 'api', 'posts'], ['group'])
-  const host = ctx.theme.config.api_host.ghraw
+  const host = ctx.theme.config.api_host?.ghraw || 'raw.githubusercontent.com'
   var api
   if (args.api) {
     api = args.api

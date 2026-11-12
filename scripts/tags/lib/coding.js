@@ -13,7 +13,7 @@ module.exports = (ctx) => {
     args = ctx.args.map(args, ['lang', 'withcss'], ['url'])
 
     // 获取 API 地址并去除末尾斜杠
-    const api = ctx.theme.config.tag_plugins.coding?.api.replace(/\/$/, '')
+    const api = (ctx.theme.config.tags?.coding?.api || 'https://hightlight-code-api.hzchu.top').replace(/\/$/, '')
 
     // 拼接完整的请求 URL
     args.url = api + '/api/v1/generate?usejson=true&showsupporter=false' + '&url=' + args.url

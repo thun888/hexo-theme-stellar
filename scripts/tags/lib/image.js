@@ -78,7 +78,7 @@ module.exports = ctx => function(args) {
     if (args.more) {
       img += ` data-more-src="${args.more}"`
     }
-    img += `onerror="this.src=&quot;${ctx.theme.config.default.image_onerror || ctx.utils.iconData('image:onerror')}&quot;"`
+    img += `onerror="this.src=&quot;${ctx.utils.iconData('image:onerror')}&quot;"`
     img += '/>'
     // // blurhash canvas 占位 / loading
     // if (blurhash) {

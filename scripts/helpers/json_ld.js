@@ -23,7 +23,7 @@ hexo.extend.helper.register('json_ld', function(args) {
   const config = this.config;
   const structuredData = this.stellar_config("structuredData");
   const authorEmail = config.email;
-  let authorImage = structured_data.logo || config.avatar || (authorEmail ? this.gravatar(authorEmail) : null);
+  let authorImage = structuredData?.logo || config.avatar || (authorEmail ? this.gravatar(authorEmail) : null);
   const isPage = page.layout == 'page';
   if (authorImage && authorImage.startsWith("/")) {
     authorImage = config.url.endsWith("/") ? config.url + authorImage.slice(1) : config.url + authorImage

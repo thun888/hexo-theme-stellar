@@ -18,7 +18,7 @@ module.exports = ctx => function(args, content) {
   }
   const { title } = args
   if (args.color == null) {
-    args.color = ctx.theme.config.tag_plugins.note.default_color
+    args.color = ctx.theme.config.tags?.note?.default_color || ''
   }
   var el = ''
   // header

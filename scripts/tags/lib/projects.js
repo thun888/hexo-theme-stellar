@@ -39,7 +39,7 @@ module.exports = ctx => function(args) {
         // console.log(tagsList);          
         tagsList.forEach(element => {
         var icon = '';
-        var iconsList = ctx.theme.config.icons;
+        var iconsList = ctx.theme.config.icons || {};
         if (element.icon){
           if (element.icon.startsWith('http')){
             icon = `<span class="link-image" style="background-image: url(${element.icon}); border-radius: 25%;"></span>`;
