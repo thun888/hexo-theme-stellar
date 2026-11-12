@@ -11,25 +11,33 @@ var pageAttributes = ` data-page-type="${escape_html(shellPage.pageType || 'cont
 pageAttributes += ` data-page-layout="${escape_html(shellPage.layout || '')}"`
 if (shellPage.articleStyle) pageAttributes += ` data-article-style="${escape_html(shellPage.articleStyle)}"`
 if (shellPage.indent) pageAttributes += ' data-text-indent'
+
+var bodyHtml = ''
+bodyHtml += bodyBegin || ''
+bodyHtml += siteBackground || ''
+bodyHtml += cover || ''
+bodyHtml += `<div class="site-shell" id="start" data-regions="${presentRegions.join(' ')}">`
+bodyHtml += shellRegions.topbar || ''
+bodyHtml += '<div class="site-workspace">'
+bodyHtml += shellRegions.leftbar || ''
+bodyHtml += `<main data-stellar-runtime-region class="site-main" id="main">${main || ''}</main>`
+bodyHtml += shellRegions.rightbar || ''
+bodyHtml += '</div>'
+bodyHtml += '<button type="button" class="site-scrim" data-shell-action="dismiss-drawer" aria-label="Close navigation" tabindex="-1"></button>'
+bodyHtml += controls || ''
+bodyHtml += typeof overlays === 'string' ? overlays : ''
+bodyHtml += '</div>'
+bodyHtml += `<div class="site-scripts">${scripts || ''}</div>`
+
+// SVG Sprites 定义：必须在 body 全部内容拼接完成后取，才能按本页实际用到的图标裁剪
+var spriteSheet = typeof svg_sprites === 'function' ? svg_sprites(bodyHtml) : ''
+
 var html = '<!DOCTYPE html>'
 html += `<html lang="${language}"${htmlAttributes}>`
 html += head
 html += `<body${pageAttributes}>`
-html += bodyBegin || ''
-html += siteBackground || ''
-html += cover || ''
-html += `<div class="site-shell" id="start" data-regions="${presentRegions.join(' ')}">`
-html += shellRegions.topbar || ''
-html += '<div class="site-workspace">'
-html += shellRegions.leftbar || ''
-html += `<main data-stellar-runtime-region class="site-main" id="main">${main || ''}</main>`
-html += shellRegions.rightbar || ''
-html += '</div>'
-html += '<button type="button" class="site-scrim" data-shell-action="dismiss-drawer" aria-label="Close navigation" tabindex="-1"></button>'
-html += controls || ''
-html += typeof overlays === 'string' ? overlays : ''
-html += '</div>'
-html += `<div class="site-scripts">${scripts || ''}</div>`
+html += spriteSheet
+html += bodyHtml
 html += '</body></html>'
 %>
 <%- html %>
