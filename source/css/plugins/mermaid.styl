@@ -131,6 +131,16 @@ pre.mermaid.mm-viewer,
   width: 16px;
   height: 16px;
 
+// 四个方向复用同一个向上的 chevron，用旋转区分
+.mm-pad button[data-act="down"] svg
+  transform: rotate(180deg);
+
+.mm-pad button[data-act="left"] svg
+  transform: rotate(-90deg);
+
+.mm-pad button[data-act="right"] svg
+  transform: rotate(90deg);
+
 .mm-pad span
   display: block;
 

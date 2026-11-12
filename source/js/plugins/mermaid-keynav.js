@@ -30,24 +30,22 @@
   };
 
   // 3×3 方向盘：中间复位，右侧上下缩放
+  // 四个方向共用一个 “向上” 的 chevron，靠 CSS rotate 转向
   const PAD = [
     { act: 'blank' },
-    { act: 'up', icon: 'up', title: '上移' },
+    { act: 'up', icon: 'chevron', title: '上移' },
     { act: 'zoom-in', icon: 'zoom-in', title: '放大' },
-    { act: 'left', icon: 'left', title: '左移' },
+    { act: 'left', icon: 'chevron', title: '左移' },
     { act: 'reset', icon: 'reset', title: '复位' },
-    { act: 'right', icon: 'right', title: '右移' },
+    { act: 'right', icon: 'chevron', title: '右移' },
     { act: 'blank' },
-    { act: 'down', icon: 'down', title: '下移' },
+    { act: 'down', icon: 'chevron', title: '下移' },
     { act: 'zoom-out', icon: 'zoom-out', title: '缩小' },
   ];
 
   // 统一用内联 SVG，避免 ▼◀⟳ 之类符号在部分字体下缺字
   const ICONS = {
-    up: '<path d="M4 10l4-4 4 4"/>',
-    down: '<path d="M4 6l4 4 4-4"/>',
-    left: '<path d="M10 4L6 8l4 4"/>',
-    right: '<path d="M6 4l4 4-4 4"/>',
+    chevron: '<path d="M4 10l4-4 4 4"/>', // 默认朝上，其余方向用 CSS 旋转
     // 放大镜样式，和 GitHub 的 zoom-in / zoom-out 图标一致
     'zoom-in':
       '<circle cx="7" cy="7" r="4.3"/><path d="M10.2 10.2L14 14"/><path d="M7 5.1v3.8M5.1 7h3.8"/>',
