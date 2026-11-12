@@ -1,0 +1,11 @@
+.or-item
+  border-bottom 1px dashed #ccc
+  &:hover
+    color: var(--link)
+    border-radius: 4px
+    background: linear-gradient(0deg,var(--link-a20),var(--link-a20)) no-repeat left 100%/100% 100%
+.or-sep
+  color #cc4100
+  border-bottom 1px solid #cc4100 // 边框会占额外高度，此处保持以与 or-item 对齐
+  box-shadow 0 0.8px 0 0 #cc4100    // 额外往下扩 0.8px ，引人注目:)
+

@@ -1,0 +1,311 @@
+@import '../_defines/const'
+@import '../_custom'
+
+pre.mermaid
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // safe：内容超出容器时退化为靠左对齐，否则居中的超宽部分无法滚动到（左侧被裁掉）
+  align-items: safe center;
+  justify-content: safe center;
+  position: relative;
+  overflow: auto;
+  border-radius: 8px;
+  font-family: $ff-body
+
+// 不压缩 SVG，保持原始尺寸（缩放与平移交给 mermaid-keynav.js）
+pre.mermaid>svg
+  flex: 0 0 auto;
+  max-width: none;
+
+// 键盘聚焦时的可见焦点环
+pre.mermaid:focus-visible
+  outline: 2px solid var(--theme);
+  outline-offset: 2px;
+
+/* ---------- 交互查看器（mermaid-keynav.js 生成的结构） ---------- */
+
+// 视口：高度由脚本按“适应宽度”算出，放大后裁切而非撑高页面
+pre.mermaid.mm-viewer,
+.mm-modal-viewer
+  display: block;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+
+// 放大状态下接管手势，未放大时保持页面正常滚动
+.mm-viewer.mm-zoomed
+  touch-action: none;
+  cursor: grab;
+
+.mm-viewer.mm-dragging
+  cursor: grabbing;
+
+.mm-stage
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; // 明确层级，避免合成层盖住上面的控件
+  transform-origin: 0 0;
+
+.mm-stage>svg
+  display: block;
+  max-width: none;
+  margin: 0;
+
+// 工具条（右上）与方向盘（右侧）：常驻半透明，悬停/聚焦时凸显（触摸设备无 hover 也能点到）
+.mm-bar,
+.mm-pad
+  position: absolute;
+  z-index: 3;
+  opacity: 1;
+
+.mm-bar
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+
+// 位置对齐 GitHub：右下角，3×3 栅格
+.mm-pad
+  right: 12px;
+  bottom: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 32px);
+  grid-auto-rows: 32px;
+  gap: 3px;
+
+.mm-bar button,
+.mm-pad button,
+.mm-modal-close
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 7px;
+  background: var(--background, #fff);
+  color: var(--text-p1, #333);
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(4px);
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+
+  &:hover
+    color: var(--theme);
+    border-color: var(--theme);
+
+  &.mm-ok
+    color: var(--theme);
+    border-color: var(--theme);
+
+  // 该方向已经到边 / 无法再缩放时置为不可用，避免“点了没反应”
+  // 不可用时只是变淡，别淡到看不见（否则像按钮丢了）
+  &:disabled
+    opacity: 0.45;
+    cursor: default;
+    color: var(--text-p3, #aaa);
+
+// 方向盘：每个按钮独立成块（不合并成一整块面板）
+.mm-pad button
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+
+  &:hover
+    opacity: 1;
+    background: var(--background, #fff);
+
+  &:disabled
+    opacity: 0.3;
+    box-shadow: none;
+
+.mm-pad button svg
+  width: 16px;
+  height: 16px;
+
+// 四个方向复用同一个向上的 chevron，用旋转区分
+.mm-pad button[data-act="down"] svg
+  transform: rotate(180deg);
+
+.mm-pad button[data-act="left"] svg
+  transform: rotate(-90deg);
+
+.mm-pad button[data-act="right"] svg
+  transform: rotate(90deg);
+
+.mm-pad span
+  display: block;
+
+/* ---------- 放大预览弹窗 ---------- */
+
+body.mm-modal-open
+  overflow: hidden;
+
+.mm-modal
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+
+.mm-modal-card
+  position: relative;
+  width: 94vw;
+  max-width: 1400px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--background, #fff);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+
+.mm-modal-close
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+
+.mm-modal-viewer
+  border-radius: 8px;
+  background: var(--background, #fff);
+
+
+
+.mermaid span,
+.mermaid text
+  font-family: $ff-body
+
+.mermaid .edgeLabel
+  padding: 4px
+  background-color: var(--background) !important
+  color: var(--text-p1) !important
+
+.mermaid .edgeLabel text,
+.mermaid .label text,
+.mermaid .nodeLabel,
+.mermaid .cluster-label text,
+.mermaid .cluster-label span
+  fill: var(--text-p1) !important
+  color: var(--text-p1) !important
+
+.mermaid rect.basic.label-container
+  stroke: var(--block-border) !important
+  fill: var(--block) !important
+
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon,
+.mermaid .node path,
+.mermaid .cluster rect
+  stroke: var(--block-border) !important
+  fill: var(--block) !important
+
+_dark_mermaid()
+  .mermaid
+    fill: #ccc !important
+
+
+  .mermaid .error-icon
+    fill: #a44141 !important
+
+
+  .mermaid .error-text
+    fill: #ddd !important
+    stroke: #ddd !important
+
+
+  .mermaid .marker
+    fill: lightgrey !important
+    stroke: lightgrey !important
+
+
+  .mermaid .marker.cross
+    stroke: lightgrey !important
+
+
+  .mermaid .label
+    color: var(--text-p1) !important
+
+
+  .mermaid .cluster-label text
+    fill: var(--text-p1) !important
+
+
+  .mermaid .cluster-label span
+    color: var(--text-p1) !important
+
+
+  .mermaid .label text,
+  .mermaid span
+    fill: var(--text-p1) !important
+    color: var(--text-p1) !important
+
+
+  .mermaid .node rect,
+  .mermaid .node circle,
+  .mermaid .node ellipse,
+  .mermaid .node polygon,
+  .mermaid .node path
+    fill: var(--block) !important
+    stroke: var(--block-border) !important
+
+
+  .mermaid .arrowheadPath
+    fill: lightgrey !important
+
+
+  .mermaid .edgePath .path
+    stroke: lightgrey !important
+
+
+  .mermaid .flowchart-link
+    stroke: lightgrey !important
+
+
+  .mermaid .edgeLabel
+    background-color: hsl(0, 0%, 34.4117647059%) !important
+
+
+  .mermaid .edgeLabel rect
+    background-color: hsl(0, 0%, 34.4117647059%) !important
+    fill: hsl(0, 0%, 34.4117647059%) !important
+
+
+  .mermaid .cluster rect
+    fill: var(--block) !important
+    stroke: var(--block-border) !important
+
+
+  .mermaid .cluster text
+    fill: var(--text-p1) !important
+
+
+  .mermaid .cluster span
+    color: var(--text-p1) !important
+
+
+  .mermaid div.mermaidTooltip
+    background: hsl(20, 1.5873015873%, 12.3529411765%) !important
+    border: 1px solid rgba(255, 255, 255, 0.25) !important
+
+
+  .mermaid .flowchartTitleText
+    fill: #ccc
+
+
+:root[data-theme="dark"]
+  _dark_mermaid()
+:root:not([data-theme])
+  @media (prefers-color-scheme: dark)
+    _dark_mermaid()

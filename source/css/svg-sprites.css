@@ -1,0 +1,20 @@
+/**
+ * SVG Sprites 样式支持
+ */
+
+/* 通过 use 引用的 SVG 图标样式 */
+svg use {
+  pointer-events: none;
+}
+
+/* 确保 SVG 图标继承颜色 */
+svg[class*="icon"] {
+  fill: currentColor;
+  vertical-align: middle;
+}
+
+/* 保持图标尺寸 */
+svg[class*="icon"]:not([width]) {
+  width: 1em;
+  height: 1em;
+}
