@@ -5,7 +5,8 @@ document.currentScript.stellarMount = function (root, context) {
       for (var i = 0; i < els.length; i++) {
         const el = els[i];
         const limit = parseInt(el.getAttribute('limit')) || 10;
-  
+        const hidename = el.getAttribute('hide');
+
         const api = el.dataset.api + '&limit=' + limit;
         if (api == null) {
           continue;
@@ -13,10 +14,20 @@ document.currentScript.stellarMount = function (root, context) {
         utils.request(el, api, async resp => {
           var data = await resp.json();
           data = data.data || [];
+          // 过滤掉page_key为"/friends/"的评论
+          data = data.filter(item => item.page_key !== "/friends/");
           data.forEach((item, i) => {
+            // 去掉hidename
+            if (item.nick == hidename) {
+              return;
+            }
             // content_marked 是完整 HTML：保留表情图（atk-emoticon），
             // 其余标签转纯文本并截断，避免大尺寸表情图与段落撑爆侧栏卡片
             var html = item.content_marked || '';
+            // 去掉<a>标签及其内部内容，用「链接」占位
+            html = html.replace(/<a\b[^>]*>.*?<\/a>/gi, '「链接」');
+            // 去掉<pre>标签及其内部内容，用「代码框」占位
+            html = html.replace(/<pre[\s\S]*?<\/pre>/gi, '「代码框」');
             var emojiRe = /<img\b[^>]*\batk-emoticon\b[^>]*>/gi;
             var emojiTags = html.match(emojiRe) || [];
             var textParts = html.split(emojiRe).map(function (part) {

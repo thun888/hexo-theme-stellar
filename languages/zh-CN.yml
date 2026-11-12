@@ -21,6 +21,8 @@ btn:
   edit: 编辑本文
   top: 回到顶部
   comments: 参与讨论
+  delmode: 删除模式
+  report: 内容举报
   expand_posts: 展开其余 %s 篇
   collapse_posts: 收起
   search: 搜索
@@ -45,10 +47,11 @@ meta:
   older: 较早文章
   newer: 较新文章
   references: 参考资料
-  related_posts: 您可能感兴趣的文章
+  related_posts: 这些怎么样（￣︶￣）↗　
   back_to_top: 回到顶部
   more: 更多
   created_author: 本文由 %s 发布于
+  idea: 构思于
   created: 发布于
   updated: 更新于
   license: 许可协议
@@ -78,9 +81,14 @@ page:
     what: 很抱歉，您访问的页面不存在
     why: 可能是输入地址有误或该地址已被删除
     action: 返回主页
+  lock:
+    what: 很抱歉，该文章已被锁定
+    why: 该文章已被作者锁定，暂时无法查看
+    action: 返回主页
 
 search:
-  search: 站内搜索
+  search: 搜搜看
+  search_in: 在 %s 中搜索
   scope_all: 全站
   scope_blog: 博客
   no_results: 没有找到内容！

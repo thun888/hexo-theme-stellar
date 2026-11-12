@@ -38,7 +38,7 @@ module.exports = ctx => function(args) {
         el += `<div class="grid-cell site-card">`
         el += `<a class="card-link"${itemSiteinfoApi ? ` data-siteinfo-api="${itemSiteinfoApi}"` : ''} target="_blank" rel="external nofollow noopener noreferrer" href="${item.url}">`
         el += `<div class="lazy-box snapshot">`
-        el += `<img class="lazy" data-src="${item.cover || item.snapshot || item.screenshot || ('https://image.thum.io/get/width/1280/crop/720/' + item.url)}" onerror="javascript:this.removeAttribute(&quot;data-src&quot;);this.src=&quot;${ctx.stellar.config.fallbacks.cover}&quot;;"/>`
+        el += `<img class="lazy" data-src="${item.cover || item.snapshot || item.screenshot || ('https://screenshot.api.hzchu.top/api/screenshot/?url=' + item.url)}" onerror="javascript:this.removeAttribute(&quot;data-src&quot;);this.src=&quot;${ctx.stellar.config.fallbacks.cover}&quot;;"/>`
         el += `<div class="lazy-icon"></div>`
         el += `</div>`
         el += `<div class="info">`

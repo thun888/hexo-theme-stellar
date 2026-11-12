@@ -58,3 +58,35 @@ hexo.extend.filter.register('after_generate', async () => {
   if (hexo.stellar?.config?.features?.imageOptimization?.enabled !== true) return;
   await require('../lib/image-metadata').prepareBuildImages(hexo);
 });
+
+// 防止重复注册
+let hasRun = false;
+
+hexo.extend.filter.register('before_generate', async () => {
+  const isDev = ['s', 'server', 'serve'].some(arg => process.argv.includes(arg));
+  if (!isDev) {
+    return;
+  }
+
+  if (hasRun) return;
+  hasRun = true;
+
+  // 读取主题配置开关
+  const enabled = hexo.theme.config.dependencies.lazyload?.fix_ratio === true;
+
+  const generateImageRatios = require('./lib/get_image_ratios');
+  const fixMarkdownImages = require('./lib/fix_image_tags');
+  // const generateImageBlurhashes = require('./lib/get_image_blurhash');
+
+  if (enabled) {
+    // 构建前：生成缓存 + 写回 Markdown
+    await generateImageRatios(hexo);
+    fixMarkdownImages(hexo); // 不用 await，因为是同步的
+  }
+
+  // const blurhashEnabled = hexo.theme.config.dependencies.lazyload?.blurhash === true;
+  // if (blurhashEnabled) {
+  //   // 只生成 JSON 缓存，不写入 Markdown，渲染时动态注入
+  //   await generateImageBlurhashes(hexo);
+  // }
+});

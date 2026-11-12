@@ -70,6 +70,7 @@ hexo.extend.generator.register("search_json_generator", function(locals) {
     posts.each(function(post) {
       var layouts = ["post"];
       if (!layouts.includes(post.layout)) return;
+      if (post.lock == true) return;
       const config = pageViewModelsFor(hexo).getPageConfig(post);
       if (!config || !isSearchable(post.viewModel?.item || config)) return;
       const item = generateJson(post, config);
@@ -80,6 +81,7 @@ hexo.extend.generator.register("search_json_generator", function(locals) {
     pages.each(function(page) {
       var layouts = ["page", "wiki"];
       if (!layouts.includes(page.layout)) return;
+      if (page.lock == true) return;
       const config = pageViewModelsFor(hexo).getPageConfig(page);
       if (!config || !isSearchable(page.viewModel?.item || config)) return;
       const item = generateJson(page, config);

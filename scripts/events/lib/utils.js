@@ -71,6 +71,9 @@ module.exports = hexo => {
     }
   };
   hexo.utils = {
+    // SVG Sprites 存储
+    svgSprites: new Map(),
+    
     icon: (key, args, inline) => {
       const { icons } = hexo.stellar.data;
       var result = ''
@@ -84,7 +87,31 @@ module.exports = hexo => {
       } else if (inline === true) {
         return result
       } else if (result.startsWith('<svg')) {
-        // 非首屏图标：输出占位符，由 deferred-icons Runtime Extension 异步替换
+        // 特例跳过：该图标本身带内部引用，不能拆成 sprite
+        const skipList = ['rating:star']
+        if (skipList.includes(key)) {
+          return result
+        }
+        // 本地优化：开启 svg_sprites 时，同一图标只保留一份 symbol，其余用 use 引用
+        const useSvgSprites = hexo.theme.config.svg_sprites?.enable === true
+        if (useSvgSprites && !result.includes('Loop')) {
+          const iconId = `icon-${key.replace(/[^a-zA-Z0-9]/g, '-')}`
+          const svgTagMatch = result.match(/<svg([^>]*)>([\s\S]*?)<\/svg>/)
+          if (svgTagMatch) {
+            const svgContent = svgTagMatch[2]
+            const attrsObj = {}
+            svgTagMatch[1].replace(/([a-zA-Z0-9\-:]+)="([^"]*)"/g, (m, k, v) => { attrsObj[k] = v })
+            let attrsStr = ''
+            Object.keys(attrsObj).forEach(k => {
+              if (k !== 'id') attrsStr += ` ${k}="${attrsObj[k]}"`
+            })
+            if (!hexo.utils.svgSprites.has(iconId)) {
+              hexo.utils.svgSprites.set(iconId, { attrs: attrsStr, content: svgContent })
+            }
+            return `<svg${attrsStr}><use href="#${iconId}"/></svg>`
+          }
+        }
+        // v2：非首屏图标输出占位符，由 deferred-icons Runtime Extension 异步替换
         return `<svg class="icon" viewBox="0 0 1 1" data-icon="${key}" aria-hidden="true"></svg>`
       } else {
         return result
@@ -93,6 +120,22 @@ module.exports = hexo => {
     iconData: (key) => {
       const { icons } = hexo.stellar.data;
       return icons && icons[key] ? icons[key] : ''
+    },
+
+    // 生成 SVG Sprites 定义
+    getSvgSpritesHtml: () => {
+      if (hexo.utils.svgSprites.size === 0) {
+        return ''
+      }
+
+      let html = '<div class="svg-sprites"><svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">\n'
+      hexo.utils.svgSprites.forEach((data, id) => {
+        html += `  <symbol id="${id}">\n`
+        html += `    ${data.content}\n`
+        html += `  </symbol>\n`
+      })
+      html += '</svg></div>'
+      return html
     }
   };
 };

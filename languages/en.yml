@@ -21,6 +21,8 @@ btn:
   edit: Edit This Page
   top: Scroll to Top
   comments: Join Discussion
+  delmode: Enter Delete Mode
+  report: Report Content
   expand_posts: Show %s more posts
   collapse_posts: Collapse
   search: Search
@@ -49,6 +51,7 @@ meta:
   back_to_top: Back to top
   more: More
   created_author: '%s posted on'
+  idea: 'Conceived on'
   created: 'Posted on'
   updated: 'Updated on'
   license: License

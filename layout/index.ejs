@@ -100,13 +100,13 @@ function layout_post_list(partial) {
       el += layout_post_card('post', item.post, partial(item.post));
     })
     page.posts.each(function(post){
-      if (postListing(post).listed && !pinnedPaths[post.path]) {
+      if (postListing(post).listed && post.lock != true && !pinnedPaths[post.path]) {
         el += layout_post_card('post', post, partial(post));
       }
     })
   } else {
     page.posts.each(function(post){
-      if (postListing(post).listed) {
+      if (postListing(post).listed && post.lock != true) {
         if (pinSliderActive) {
           var pinVal = pinValue(post)
           if (pinVal > 0) {
