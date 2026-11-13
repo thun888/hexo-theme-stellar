@@ -19,7 +19,15 @@ function custom_inject() {
 
 <%- partial('scripts/runtime', {viewModel: typeof viewModel !== 'undefined' ? viewModel : null}) %>
 
+<!-- AI 摘要（chuckle-post-ai） -->
+<%- partial('scripts/tianli_gpt') %>
+
 <!-- inject -->
 <%- custom_inject() %>
+
+<!-- 1.x 兼容：页面级 inject_js（front-matter） -->
+<% if (page.inject_js) { %>
+<%- markdown(page.inject_js) %>
+<% } %>
 
 <script data-stellar-script="core" defer src="<%- url_for('/js/navigation-init.js') %>?v=<%- stellar_info('version') %>"></script>

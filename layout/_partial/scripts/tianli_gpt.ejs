@@ -1,0 +1,39 @@
+<%
+// AI 摘要（chuckle-post-ai / tianli_gpt）
+// 读取 features.tianli_gpt（其余键原样透传给插件）
+var aiConf = stellar_config('features.tianliGpt')
+var aiEnabled = !!(aiConf && (aiConf.enabled === true || aiConf.enable === true) && aiConf.js)
+var aiUseai = page.useai === undefined ? true : page.useai
+var aiField = (aiConf && aiConf.field) || 'post'
+var aiProfile = content_config(page).collection?.profile || page.layout
+var aiMatched = aiField === 'all'
+  || aiField === aiProfile
+  || aiField === page.layout
+  || (aiField === 'wiki' && aiProfile === 'wiki')
+  || (aiField === 'topic' && aiProfile === 'topic')
+if (aiEnabled && aiUseai && aiMatched) {
+%>
+<script data-stellar-script="tianli-gpt" defer src="<%- aiConf.js %>"></script>
+<script data-stellar-script="tianli-gpt">
+  (function () {
+    function mountAI() {
+      if (typeof window.ChucklePostAI !== 'function') return;
+      if (document.getElementById('post-ai')) return;
+      var article = document.querySelector('article.content');
+      if (!article) return;
+      if (article.dataset.aiSummaryMounted === 'true') return;
+      article.dataset.aiSummaryMounted = 'true';
+      new window.ChucklePostAI(Object.assign({
+        el: 'article.content',
+        css: '/css/_plugins/tianli_gpt'
+      }, <%- script_json(aiConf) %>));
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mountAI, { once: true });
+    } else {
+      mountAI();
+    }
+    document.addEventListener('stellar:navigation-complete', mountAI);
+  })();
+</script>
+<% } %>
