@@ -44,9 +44,8 @@ module.exports = ctx => function (args) {
       lowLatencyMode = (args.lowLatencyMode == 'true');
     }
     let id = videoCounter++;
-    // hls.js 地址：优先 features.hls.js，其次兼容 1.x 的 plugins.hls.js
+    // hls.js 地址：features.hls.js 优先，未配置时使用 CDN 默认版本
     const hlsJs = ctx.theme.config.features?.hls?.js
-      || ctx.theme.config.plugins?.hls?.js
       || 'https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js';
     const videoSrc = JSON.stringify(String(args.src));
     const hlsUrl = JSON.stringify(String(hlsJs));

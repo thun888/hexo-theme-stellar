@@ -1062,15 +1062,6 @@ function parseStellarConfig(input = {}) {
   if (isPlainObject(katex) && katex.css != null && katex.css !== CONFIG_DEFAULTS.features.math.katex.css && !Object.hasOwn(katex, "css_integrity")) {
     katex.css_integrity = null;
   }
-  // 1.x 兼容：plugins.preload.self_inject 表示站点已自行注入预取脚本，主题不再重复引入
-  const legacyPreload = themeConfig?.plugins?.preload;
-  if (isPlainObject(legacyPreload) && legacyPreload.self_inject === true) {
-    themeConfig.features = isPlainObject(themeConfig.features) ? themeConfig.features : {};
-    themeConfig.features.link_prefetch = isPlainObject(themeConfig.features.link_prefetch) ? themeConfig.features.link_prefetch : {};
-    if (themeConfig.features.link_prefetch.enabled === undefined) {
-      themeConfig.features.link_prefetch.enabled = false;
-    }
-  }
   return parseConfigSchema(CONFIG_SCHEMA, themeConfig, {
     source,
     applyDefaults: true,
