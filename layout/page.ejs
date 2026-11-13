@@ -48,7 +48,7 @@ function postLayoutDiv() {
     page.header = false;
     page.robots = 'none';
     page.rightbar = [];
-    var lockImage = stellar_config('profiles.error')?.image
+    var lockImage = stellar_config('profiles.error')?.lockImage || stellar_config('profiles.error')?.image
     el += `<article class='md-text error-page'>`
     if (lockImage) {
       el += `<h1><img id='error' src='${lockImage}' alt='locked'></h1>`
@@ -71,34 +71,7 @@ function postLayoutDiv() {
     el += partial('_partial/main/navbar/nav_tabs_blog')
   }
   // 派生：文章所属系列提示
-  if (page.part_of?.length == 1) {
-    el += `
-      <div class="tag-plugin colorful note" color="blue">
-        <div class="title"><strong>嗨</strong></div>
-        <div class="body">
-          <span>本文是该文章的一部分：</span>
-          ${markdown(page.part_of[0]).replace('<p>', '').replace('</p>', '')}
-        </div>
-      </div>
-    `
-  } else if (page.part_of?.length > 0) {
-    function partList() {
-      var list = '';
-      for (let ref of page.part_of) {
-        list += `<li class="post-title">${markdown(ref)}</li>`
-      }
-      return list;
-    }
-    el += `
-      <div class="tag-plugin colorful note" color="blue">
-        <div class="title"><strong>嗨</strong></div>
-        <div class="body">
-          <p>本文是以下文章的一部分：</p>
-          <ul>${partList()}</ul>
-        </div>
-      </div>
-    `
-  }
+  el += partial('_partial/main/article/part_of', {part_of: page.part_of})
   // 过期提醒容器
   el += `<div id="expiration-reminder"></div>`
   el += `<article class="${postArticleClass(article)}">`
@@ -125,6 +98,7 @@ function wikiLayoutDiv() {
   }
   var cls = `md-text content${scrollreveal(' ')}`
   if (article.heti) cls += ' heti'
+  el += partial('_partial/main/article/part_of', {part_of: page.part_of})
   el += `<article class="${cls}">`
   el += item.content.trim().length > 0 ? item.content : article.readmeHtml
   el += '</article>'
@@ -147,6 +121,7 @@ function notebookLayoutDiv() {
   if (article.banner?.headline || item.title || item.content.length > 0) {
     el += partial('_partial/main/navbar/article_banner', {viewModel: notebookViewModel})
   }
+  el += partial('_partial/main/article/part_of', {part_of: page.part_of})
   el += `<article class="${postArticleClass(article)}">`
   el += item.content
   el += partial('_partial/main/notebook/note_tags', {tags: article.tags})

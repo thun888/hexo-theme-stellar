@@ -230,7 +230,9 @@ const FRONT_MATTER_TARGET_DEFINITIONS = [
   ["inject.head_begin", "string", literal("")],
   ["inject.head_end", "string", literal("")],
   ["inject.body_begin", "string", literal("")],
-  ["inject.body_end", "string", literal("")]
+  ["inject.body_end", "string", literal("")],
+  // 1.x 兼容：本文所属的系列/上级文章，渲染为正文前的提示块
+  ["part_of", "array", literal([]), { items: { type: ["string"] } }]
 ];
 
 const CONFIG_TARGET_FIELDS = deepFreeze([
