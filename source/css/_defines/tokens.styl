@@ -1,0 +1,38 @@
+// 全局设计令牌：只有主样式表输出，独立样式表（评论、插件）不应重复输出
+:root
+  --fs-root: $fs-root
+  --fs-content-base: var(--fs-root)
+  --fs-content: var(--fs-content-base)
+  --width-main-article: 720px
+  --width-main-wiki-list: 720px
+  --width-main: var(--width-main-article)
+  --fsh2: 'calc(%s + 11px)' % var(--fs-content)
+  --fsh3: 'calc(%s + 7px)' % var(--fs-content)
+  --fsh4: 'calc(%s + 4px)' % var(--fs-content)
+
+  // 侧边栏文字内容宽度
+  --side-content-width: 224px
+  // 组件内部基础间距（margin/padding 统一）
+  --gap-base: 16px
+  // 页面级留白（侧边栏/内容区/列间距）
+  --gap-page: 16px
+  // 右栏宽度增量（在 --width-sidebar 基础上加宽）
+  --rightbar-width-extra: calc(var(--gap-base) * 2)
+
+  --gap-p: 'calc(%s + 4px)' % var(--fs-content-base) // gap for paragraph
+  --gap-p-compact: 'calc(%s * 0.75)' % var(--fs-content-base)
+  // iPad 竖屏
+  @media screen and (max-width: $device-tablet)
+    --side-content-width: 188px
+  @media screen and (max-width: $device-mobile-max)
+    --fs-root: 'calc(%s + 1px)' % $fs-root
+    --side-content-width: 224px
+  @media screen and (min-width: $device-2k)
+    --width-main-article: 780px
+    --width-main-wiki-list: 780px
+  @media screen and (min-width: $device-4k)
+    --width-main-article: 860px
+    --width-main-wiki-list: 860px
+
+body[data-page-layout='index_wiki']
+  --width-main: var(--width-main-wiki-list)
