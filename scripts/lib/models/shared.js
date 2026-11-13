@@ -305,9 +305,9 @@ function buildPostArticleRender(input, item) {
       share: shareServices.length > 0 ? {
         services: shareServices,
         permalink: item.route.permalink,
-        // 1.x 兼容：front-matter shortlink 优先用于二维码与复制链接
-        shortlink: typeof input.page?.shortlink === "string" && input.page.shortlink
-          ? input.page.shortlink
+        // front-matter shortlink 优先用于二维码与复制链接
+        shortlink: typeof frontMatter.shortlink === "string" && frontMatter.shortlink
+          ? frontMatter.shortlink
           : item.route.permalink,
         title: `${item.title} - ${String(input.siteConfig.title || "")}`,
         image: item.cover || "",

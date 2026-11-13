@@ -232,7 +232,9 @@ const FRONT_MATTER_TARGET_DEFINITIONS = [
   ["inject.body_begin", "string", literal("")],
   ["inject.body_end", "string", literal("")],
   // 1.x 兼容：本文所属的系列/上级文章，渲染为正文前的提示块
-  ["part_of", "array", literal([]), { items: { type: ["string"] } }]
+  ["part_of", "array", literal([]), { items: { type: ["string"] } }],
+  // 短链：分享二维码与复制链接优先使用
+  ["shortlink", ["string", "null"], literal(null)]
 ];
 
 const CONFIG_TARGET_FIELDS = deepFreeze([

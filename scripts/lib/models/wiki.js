@@ -246,8 +246,8 @@ function buildWikiRenderModel(input, collection, item) {
         share: shareServices.length > 0 ? {
           services: shareServices,
           permalink: item.route.permalink,
-          shortlink: typeof input.page?.shortlink === "string" && input.page.shortlink
-            ? input.page.shortlink
+          shortlink: typeof frontMatter.shortlink === "string" && frontMatter.shortlink
+            ? frontMatter.shortlink
             : item.route.permalink,
           title: `${item.title} - ${String(siteConfig.title || "")}`,
           image: cardCover,
