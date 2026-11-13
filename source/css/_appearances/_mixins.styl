@@ -20,7 +20,8 @@ appearance-glass-surface()
   backdrop-filter: none
   -webkit-backdrop-filter: none
   glass-material($border-card-l)
-  > *
+  // 背景层保持绝对定位，避免被内容层堆叠规则改成普通流内元素
+  > *:not(.site-region__cloud):not(.site-region__decoration)
     position: relative
     z-index: 0
   > .site-region__decoration
