@@ -2,6 +2,7 @@
 
 const assert = require("node:assert/strict");
 const test = require("node:test");
+const path = require("node:path");
 
 const { registerConfigHotReload } = require("../scripts/events/lib/config-hot-reload");
 
@@ -69,7 +70,7 @@ test("Hexo server 保存 _config.stellar.yml 后重读并触发生成", async ()
 
 test("配置热重载只监听站点配置并在退出时解除轮询", async () => {
   const current = fixture();
-  assert.equal(current.watchedFile(), "/tmp/stellar-config-watch/_config.stellar.yml");
+  assert.equal(current.watchedFile(), path.join("/tmp/stellar-config-watch", "_config.stellar.yml"));
   current.exit();
   assert.equal(current.unwatched(), true);
 });

@@ -81,7 +81,7 @@
     document.body.appendChild(sprite);
   }
 
-  function icon(name) {
+  function mmIcon(name) {
     ensureSprite();
     return (
       '<svg class="mm-i" width="14" height="14" aria-hidden="true"><use href="#mm-i-' + name + '"></use></svg>'
@@ -318,8 +318,8 @@
   function buildBar() {
     const bar = document.createElement('div');
     bar.className = 'mm-bar';
-    bar.appendChild(button('expand', icon('expand'), '放大预览'));
-    bar.appendChild(button('copy', icon('copy'), '复制 mermaid 源码'));
+    bar.appendChild(button('expand', mmIcon('expand'), '放大预览'));
+    bar.appendChild(button('copy', mmIcon('copy'), '复制 mermaid 源码'));
     return bar;
   }
 
@@ -331,7 +331,7 @@
         pad.appendChild(document.createElement('span'));
         return;
       }
-      pad.appendChild(button(item.act, icon(item.icon), item.title));
+      pad.appendChild(button(item.act, mmIcon(item.icon), item.title));
     });
     return pad;
   }
@@ -589,7 +589,7 @@
     const body = document.createElement('div');
     body.className = 'mm-modal-viewer';
 
-    const close = button('close', icon('close'), '关闭预览', 'mm-modal-close');
+    const close = button('close', mmIcon('close'), '关闭预览', 'mm-modal-close');
     close.addEventListener('click', closeModal);
 
     card.appendChild(body);
