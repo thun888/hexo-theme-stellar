@@ -390,6 +390,8 @@ profiles:
 
   # 配置设置页默认布局。
   settings:
+    # 控制是否生成主题内建设置页；路径与自有页面冲突时可关闭。
+    enabled: true
     # 设置设置页的生成路径。
     path: /settings/
     # 配置设置页的关于信息。
@@ -426,6 +428,8 @@ profiles:
     path: /404.html
     # 设置错误页插图地址；null 表示不显示插图。
     image: https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/404/1c830bfcd517d.svg
+    # 设置锁定文章页插图地址；null 回落到 image。
+    lock_image: null
     # 配置错误页评论区。
     comments:
       # 控制是否显示错误页评论区。
@@ -614,6 +618,8 @@ appearance:
     page:
       # 设置页面背景图片；null 表示不使用图片。
       image: null
+      # 无背景图时仍渲染背景层，供站点脚本（如云背景 canvas）作画布。
+      canvas: false
       # 配置页面背景遮罩。
       backdrop:
         # 设置页面背景遮罩的模糊半径。
@@ -910,6 +916,10 @@ features:
     spotlight: false
     # 控制是否启用 3D 倾斜。
     tilt: false
+    # 设置光照颜色（任意 CSS 颜色值）；null 使用主题默认值。
+    spotlight_color: null
+    # 设置最大倾斜角度，单位度；运行时限制在 0~8。
+    max_tilt: 3
   # 配置 Heti 中文排版增强。
   heti:
     # 自定义资源地址；null 使用主题默认资源。
@@ -918,6 +928,14 @@ features:
     css: https://unpkg.com/heti@0.9/umd/heti.min.css
     # 控制是否启用 Heti。
     enabled: false
+  # 配置 AI 摘要（chuckle-post-ai）；其余键原样透传给插件。
+  tianli_gpt:
+    # 控制是否启用 AI 摘要。
+    enabled: false
+    # 设置插件脚本地址；null 表示不加载。
+    js: null
+    # 设置生效范围；可选 all、post、wiki、topic 或页面 layout。
+    field: post
   # 配置数学公式渲染。
   math:
     # 设置数学公式 Provider；可选值为 katex、mathjax 或 null。

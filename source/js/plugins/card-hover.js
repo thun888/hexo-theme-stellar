@@ -14,6 +14,8 @@
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   let lifecycleBound = false;
   let effects = { spotlight: false, tilt: false };
+  let spotlightColor = null;
+  let activeMaxTilt = MAX_TILT;
 
   function canAnimate() {
     return !reduceMotion.matches && finePointer.matches;
@@ -105,13 +107,18 @@
       spotlight.className = 'card-hover__spotlight';
       spotlight.setAttribute('aria-hidden', 'true');
       element.appendChild(spotlight);
+      if (spotlightColor) {
+        element.style.setProperty('--card-hover-spotlight-color', spotlightColor);
+      } else {
+        element.style.removeProperty('--card-hover-spotlight-color');
+      }
     }
 
     const state = {
       element: element,
       spotlight: spotlight,
       hasTilt: hasTilt,
-      maxTilt: MAX_TILT,
+      maxTilt: activeMaxTilt,
       frame: null,
       pointer: null,
       onPointerEnter: null,
@@ -155,7 +162,16 @@
   }
 
   function mountAll(root, options) {
-    if (options) effects = { spotlight: options.spotlight === true, tilt: options.tilt === true };
+    if (options) {
+      effects = { spotlight: options.spotlight === true, tilt: options.tilt === true };
+      spotlightColor = typeof options.spotlightColor === 'string' && options.spotlightColor.trim()
+        ? options.spotlightColor.trim()
+        : null;
+      const requestedTilt = Number(options.maxTilt);
+      activeMaxTilt = Number.isFinite(requestedTilt)
+        ? Math.min(8, Math.max(0, requestedTilt))
+        : MAX_TILT;
+    }
     bindLifecycle();
     if (!canAnimate()) {
       unmountAll();

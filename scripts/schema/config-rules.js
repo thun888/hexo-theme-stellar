@@ -1,6 +1,6 @@
 "use strict";
 
-const { SHARE_SERVICE_IDS } = require("../lib/share-services");
+const { SHARE_SERVICE_IDS, SHARE_SERVICE_ALIASES } = require("../lib/share-services");
 
 function literal(value) {
   return { kind: "literal", value };
@@ -179,6 +179,8 @@ const CONFIG_RULES = Object.freeze([
   ["profiles.*.rightbar.widgets", { type: ["array", "null"], defaultValue: null, items: widgetItems }],
   ["profiles.*.listing_nav.tabs", { validator: "navigation_tabs", items: navigationTab }],
   ["profiles.error.image", { type: ["string", "null"], validator: "nullable_resource" }],
+  ["profiles.error.lock_image", { type: ["string", "null"], validator: "nullable_resource" }],
+  ["profiles.settings.enabled", { type: ["boolean"] }],
   ["profiles.settings.about.items", { items: aboutItem }],
   ["profiles.*.comments.title", { type: ["string", "null"] }],
   ["profiles.*.comments.id", { type: ["string", "null"], normalizer: "nullable_trimmed_string", validator: "nullable_non_empty_string" }],
@@ -197,7 +199,7 @@ const CONFIG_RULES = Object.freeze([
   ["article.listing.excerpt_length", { minimum: 0, validator: "non_negative_integer" }],
   ["article.category_colors", stringRecord("css_color")],
   ["article.footer.license", { type: ["boolean", "string"], validator: "license_value" }],
-  ["article.footer.share", { items: item("string", { defaultValue: "", values: SHARE_SERVICE_IDS }), normalizer: "trimmed_string_list" }],
+  ["article.footer.share", { items: item("string", { defaultValue: "", values: [...SHARE_SERVICE_IDS, ...Object.keys(SHARE_SERVICE_ALIASES)] }), normalizer: "trimmed_string_list" }],
   ["article.related_posts_limit", { minimum: 0, validator: "non_negative_integer" }],
   ["profiles.notebook.listing.excerpt_length", { minimum: 0, validator: "non_negative_integer" }],
   ["profiles.notebook.listing.per_page", { type: ["number", "null"], minimum: 0, validator: "nullable_non_negative_integer" }],
@@ -264,6 +266,10 @@ const CONFIG_RULES = Object.freeze([
   ["tags.coding.api", { type: ["string", "null"] }],
   ["tags.biliinfo.api", { type: ["string", "null"] }],
   ["tags.sites.screenshot_api", { type: ["string", "null"] }],
+  ["features.card_hover.spotlight_color", { type: ["string", "null"], validator: "nullable_non_empty_string" }],
+  ["features.card_hover.max_tilt", { minimum: 0, maximum: 8 }],
+  ["features.tianli_gpt", parameterBag],
+  ["appearance.backgrounds.page.canvas", { type: ["boolean"] }],
   ["features.lazy_loading.transition", { values: ["blur", "fade"] }],
   ["features.lightbox.selector", { validator: "css_selector" }],
   ["features.math.provider", { type: ["string", "null"], values: [null, "katex", "mathjax"] }],

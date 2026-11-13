@@ -604,6 +604,7 @@ function pageViewModelSchema(profile) {
       properties: {
         services: array(stringItem, { default: literal([]), example: ["qrcode", "email"], required: true }),
         permalink: field("string", { default: inherited("item.route.permalink"), example: "https://example.com/blog/hello/", required: true }),
+        shortlink: field("string", { default: inherited("front-matter shortlink，缺省回落到 permalink"), example: "https://example.com/s/abc", required: true }),
         title: field("string", { default: computed("由文章标题与站点标题组合"), example: "Hello - Stellar", required: true }),
         image: field("string", { default: inherited("item.cover"), example: "/cover.webp", required: true }),
         summary: field("string", { default: computed("由 description/excerpt/content 截断"), example: "文章摘要", required: true })
@@ -631,7 +632,7 @@ function pageViewModelSchema(profile) {
         pageType: field("string", { default: literal("content"), example: "content", required: true }),
         articleStyle: field(["string", "null"], { default: inherited("item.presentation.article.style"), example: "tech", required: true }),
         indent: field("boolean", { default: computed("由 article.paragraphIndent 与 style 解析"), example: false, required: true }),
-        siteBackground: field("boolean", { default: derived("hexo.stellar.config.appearance.backgrounds.page.image"), example: false, required: true }),
+        siteBackground: field("boolean", { default: derived("hexo.stellar.config.appearance.backgrounds.page.image 或 page.canvas"), example: false, required: true }),
         blogPath: field("string", { default: derived("site.index_generator.path"), example: "blog", required: true }),
         ...renderRegionsSchema(factory),
         breadcrumbs: array(breadcrumbItem, { default: literal([]), example: [{ name: "思考", path: "blog/categories/thinking" }], required: true })
@@ -778,7 +779,7 @@ function pageViewModelSchema(profile) {
         pageType: field("string", { default: literal("content"), example: "content", required: true }),
         articleStyle: field(["string", "null"], { default: inherited("item.presentation.article.style"), example: "tech", required: true }),
         indent: field("boolean", { default: computed("由 article.paragraphIndent 与 style 解析"), example: false, required: true }),
-        siteBackground: field("boolean", { default: derived("hexo.stellar.config.appearance.backgrounds.page.image"), example: false, required: true }),
+        siteBackground: field("boolean", { default: derived("hexo.stellar.config.appearance.backgrounds.page.image 或 page.canvas"), example: false, required: true }),
         wikiIndexPath: field("string", { default: derived("hexo.stellar.config.profiles.wikiIndex.path"), example: "wiki", required: true }),
         algoliaFilterPath: field("string", { default: computed("由页面路径生成 Algolia 搜索的两段目录范围"), example: "wiki/stellar/", required: true }),
         ...renderRegionsSchema(factory),
@@ -893,7 +894,7 @@ function pageViewModelSchema(profile) {
         pageType: field("string", { default: literal("content"), example: "content", required: true }),
         articleStyle: field(["string", "null"], { default: inherited("item.presentation.article.style"), example: "tech", required: true }),
         indent: field("boolean", { default: computed("由 article.paragraphIndent 与 style 解析"), example: false, required: true }),
-        siteBackground: field("boolean", { default: derived("appearance.backgrounds.page.image"), example: false, required: true }),
+        siteBackground: field("boolean", { default: derived("appearance.backgrounds.page.image 或 page.canvas"), example: false, required: true }),
         notebookIndexPath: field("string", { default: derived("hexo.stellar.config.profiles.notebooks.path"), example: "notebooks", required: true }),
         notebookPath: field("string", { default: inherited("collection.route.baseDir"), example: "notes/dev", required: true }),
         algoliaFilterPath: field("string", { default: inherited("collection.route.baseDir"), example: "notes/dev", required: true }),

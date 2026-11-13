@@ -431,9 +431,9 @@ const CONTRIBUTIONS = defineContributions([
     tests: [RUNTIME_TEST, RUNTIME_CONSUMPTION_TEST],
     defaultsOwner: CONFIG_OWNER("features.card_hover.spotlight"),
     project(context) {
-      const { spotlight = false, tilt = false } = context.features.cardHover || {};
+      const { spotlight = false, tilt = false, spotlightColor = null, maxTilt = 3 } = context.features.cardHover || {};
       if (!spotlight && !tilt) return null;
-      return configResult({ spotlight, tilt, assets: context.assets.features?.cardHover || {} });
+      return configResult({ spotlight, tilt, spotlightColor, maxTilt, assets: context.assets.features?.cardHover || {} });
     }
   },
   {
