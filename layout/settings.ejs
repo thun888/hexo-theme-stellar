@@ -104,4 +104,10 @@ function linkAttributes(url) {
       <% } %>
     </div>
   </section>
+<% var mergedContent = typeof page.content === 'string' ? page.content.trim() : '' %>
+<% if (mergedContent.length > 0) { %>
+  <section class="settings-section settings-section--content">
+    <div class="settings-section__body md-text content"><%- page.content %></div>
+  </section>
+<% } %>
 </article>
