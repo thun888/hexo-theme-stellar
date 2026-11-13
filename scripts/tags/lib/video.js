@@ -44,20 +44,42 @@ module.exports = ctx => function (args) {
       lowLatencyMode = (args.lowLatencyMode == 'true');
     }
     let id = videoCounter++;
+    // hls.js 地址：优先 features.hls.js，其次兼容 1.x 的 plugins.hls.js
+    const hlsJs = ctx.theme.config.features?.hls?.js
+      || ctx.theme.config.plugins?.hls?.js
+      || 'https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js';
+    const videoSrc = JSON.stringify(String(args.src));
+    const hlsUrl = JSON.stringify(String(hlsJs));
     return `<div class="tag-plugin video-player" style="aspect-ratio:${args.ratio || 16 / 9};max-width:${args.width};">
     <video id="video_hls_${id}" controls playsinline webkit-playsinline></video>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      (function () {
         var video = document.getElementById('video_hls_${id}');
-        var src = "${args.src}";
-        if (Hls.isSupported()) {
-          var hls = new Hls({maxBufferLength:${args.cachetime || 30}, maxBufferSize:6000000000, lowLatencyMode:${lowLatencyMode}, startPosition: 0});
-          hls.loadSource(src);
-          hls.attachMedia(video);
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = src;
+        if (!video) return;
+        var src = ${videoSrc};
+        function play() {
+          if (window.Hls && window.Hls.isSupported()) {
+            var hls = new window.Hls({maxBufferLength:${args.cachetime || 30}, maxBufferSize:6000000000, lowLatencyMode:${lowLatencyMode}, startPosition: 0});
+            hls.loadSource(src);
+            hls.attachMedia(video);
+          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = src;
+          }
         }
-      });
+        if (window.Hls) { play(); return; }
+        // 同一页面多个视频共用一次加载
+        window.__stellarHlsLoading = window.__stellarHlsLoading || new Promise(function (resolve, reject) {
+          var script = document.createElement('script');
+          script.src = ${hlsUrl};
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+        window.__stellarHlsLoading.then(play, function () {
+          if (video.canPlayType('application/vnd.apple.mpegurl')) video.src = src;
+        });
+      })();
     </script>
     </div>`;
   }
