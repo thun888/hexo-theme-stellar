@@ -14,6 +14,7 @@
     align-items: center
     margin: auto
     max-width: 100%
+    width: fit-content
     &:has(img.lazy.loading),&:has(img.lazy.error)
       background-color: var(--block)
     &:hover
@@ -23,7 +24,6 @@
         opacity: 1 !important
     img
       display: block
-      width: auto
       max-height: 100%
       object-fit: cover
       border-radius: $border-image
