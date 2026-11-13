@@ -514,6 +514,9 @@ function contentItemSchema() {
     categories: array(stringItem, { default: literal([]), example: ["开发"], required: true }),
     cover: field("string", { default: derived("frontMatter.cover"), example: "/cover.webp", required: true }),
     tagline: field("string", { default: derived("frontMatter.tagline"), example: "开始阅读", required: true }),
+    lock: field("boolean", { default: derived("frontMatter.lock"), example: true, required: true }),
+    lockReason: field("string", { default: derived("frontMatter.lock_reason"), example: "", required: true }),
+    ideaDate: field("string", { default: derived("frontMatter.idea_date"), example: "2026-01-16", required: true }),
     source: sourceSchema(factory, { includeFile: true, default: inherited("collection.source", "page.source"), required: true }),
     route: object({
       path: field("string", { default: literal(""), example: "posts/hello", required: true }),

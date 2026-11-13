@@ -39,10 +39,11 @@ function layoutDiv() {
       el += `<span class="sep"></span>`
     }
     // 构思日期
-    if (page.idea_date) {
+    var ideaDate = postViewModel ? postViewModel.item.ideaDate : page.idea_date
+    if (ideaDate) {
       el += `<span class="text idea">`
       el += `${__("meta.idea") + __("symbol.colon")}`
-      el += `<time datetime="${date_xml(page.idea_date)}">${date(page.idea_date, config.date_format)}</time>`
+      el += `<time datetime="${date_xml(ideaDate)}">${date(ideaDate, config.date_format)}</time>`
       el += `</span>`
       el += `<span class="sep"></span>`
     }

@@ -216,6 +216,11 @@ const FRONT_MATTER_TARGET_DEFINITIONS = [
   ["banner.avatar", ["string", "null"], literal(null)],
   ["banner.headline", ["string", "null"], literal(null)],
   ["banner.tagline", ["string", "null"], literal(null)],
+  // 锁定页：隐藏正文，只显示锁定提示与配图
+  ["lock", "boolean", literal(false)],
+  ["lock_reason", ["string", "null"], literal(null)],
+  // 构思日期：文章页日期行展示
+  ["idea_date", ["string", "null"], literal(null)],
   ["visibility", "object", literal({}), { boundary: "sealed" }],
   ["visibility.listed", "boolean", literal(true)],
   ["visibility.searchable", "boolean", literal(true)],

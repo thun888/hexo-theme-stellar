@@ -541,6 +541,9 @@ function buildContentItemModel(page, frontMatter, collection, source, options = 
     categories: normalizeTerms(page.categories ?? frontMatter.categories),
     cover: typeof frontMatter.cover === "string" ? frontMatter.cover : "",
     tagline: typeof frontMatter.tagline === "string" ? frontMatter.tagline : "",
+    lock: frontMatter.lock === true,
+    lockReason: typeof frontMatter.lockReason === "string" ? frontMatter.lockReason : "",
+    ideaDate: typeof frontMatter.ideaDate === "string" ? frontMatter.ideaDate : "",
     source: {
       file: String(page.source || source || ""),
       ...cloneValue(options.source || collection.source || {}),

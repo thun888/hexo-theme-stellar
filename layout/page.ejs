@@ -38,31 +38,21 @@ function postArticleClass(article) {
   return str
 }
 
+function lockedPage(item) {
+  page.comment_title = ''
+  page.header = false
+  page.robots = 'none'
+  page.rightbar = []
+  return partial('_partial/main/article/locked', {lockReason: item.lockReason})
+}
+
 function postLayoutDiv() {
   var item = postViewModel.item
   var article = postViewModel.render.article
   var el = ''
   // 锁定文章：渲染锁定页面，跳过正文
-  if (page.lock == true) {
-    page.comment_title = '';
-    page.header = false;
-    page.robots = 'none';
-    page.rightbar = [];
-    var lockImage = stellar_config('profiles.error')?.lockImage || stellar_config('profiles.error')?.image
-    el += `<article class='md-text error-page'>`
-    if (lockImage) {
-      el += `<h1><img id='error' src='${lockImage}' alt='locked'></h1>`
-    }
-    el += `<p class='what'><strong>${__('page.lock.what')}</strong></p>`
-    if (page.lock_reason) {
-      el += `<p class='why'>${page.lock_reason}</p>`
-    } else {
-      el += `<p class='why'>${__('page.lock.why')}</p>`
-    }
-    el += `<br><br>`
-    el += `<a class='button' id='back' href='${config.root}'>${__('page.lock.action')}</a>`
-    el += `</article>`
-    return el
+  if (item.lock === true) {
+    return lockedPage(item)
   }
   if (item.presentation.banner?.headline || item.title || item.content.length > 0) {
     el += partial('_partial/main/navbar/article_banner', {viewModel: postViewModel})
@@ -93,6 +83,9 @@ function wikiLayoutDiv() {
   var item = wikiViewModel.item
   var article = wikiViewModel.render.article
   var el = ''
+  if (item.lock === true) {
+    return lockedPage(item)
+  }
   if (article.banner?.headline || item.title || item.content.length > 0 || article.readmeHtml.length > 0) {
     el += partial('_partial/main/navbar/article_banner', {viewModel: wikiViewModel})
   }
@@ -118,6 +111,9 @@ function notebookLayoutDiv() {
   var item = notebookViewModel.item
   var article = notebookViewModel.render.article
   var el = ''
+  if (item.lock === true) {
+    return lockedPage(item)
+  }
   if (article.banner?.headline || item.title || item.content.length > 0) {
     el += partial('_partial/main/navbar/article_banner', {viewModel: notebookViewModel})
   }
