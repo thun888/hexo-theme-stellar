@@ -221,6 +221,8 @@ const FRONT_MATTER_TARGET_DEFINITIONS = [
   ["lock_reason", ["string", "null"], literal(null)],
   // 构思日期：文章页日期行展示
   ["idea_date", ["string", "null"], literal(null)],
+  // AI 摘要开关：tianli_gpt 脚本按页读取，缺省启用
+  ["useai", "boolean", literal(true)],
   ["visibility", "object", literal({}), { boundary: "sealed" }],
   ["visibility.listed", "boolean", literal(true)],
   ["visibility.searchable", "boolean", literal(true)],
