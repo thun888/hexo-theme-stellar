@@ -2,7 +2,7 @@
 // AI 摘要（chuckle-post-ai / tianli_gpt）
 // 读取 features.tianli_gpt（其余键原样透传给插件）
 var aiConf = stellar_config('features.tianliGpt')
-var aiEnabled = !!(aiConf && (aiConf.enabled === true || aiConf.enable === true) && aiConf.js)
+var aiEnabled = !!(aiConf && aiConf.enabled === true && aiConf.js)
 var aiUseai = page.useai === undefined ? true : page.useai
 var aiField = (aiConf && aiConf.field) || 'post'
 var aiProfile = content_config(page).collection?.profile || page.layout
@@ -24,8 +24,7 @@ if (aiEnabled && aiUseai && aiMatched) {
       if (article.dataset.aiSummaryMounted === 'true') return;
       article.dataset.aiSummaryMounted = 'true';
       new window.ChucklePostAI(Object.assign({
-        el: 'article.content',
-        css: '/css/_plugins/tianli_gpt'
+        el: 'article.content'
       }, <%- script_json(aiConf) %>));
     }
     if (document.readyState === 'loading') {
