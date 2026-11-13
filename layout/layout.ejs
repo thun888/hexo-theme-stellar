@@ -25,7 +25,8 @@ var appearance = stellar_config('appearance')
 var html = ''
 
 function siteBackground(enabled) {
-  return enabled ? '<div class="site-background"><div class="site-background__blur"></div></div>' : ''
+  // canvas#background-canvas 供站点自定义脚本（如云背景）绘制，不参与主题渲染
+  return enabled ? '<div class="site-background"><div class="site-background__blur"><canvas id="background-canvas"></canvas></div></div>' : ''
 }
 
 function coverSlot(viewModel) {
@@ -172,7 +173,7 @@ if (renderViewModel) {
     },
     head: partial('_partial/head'),
     bodyBegin: stellar_inject('bodyBegin', pageConfig.inject?.bodyBegin),
-    siteBackground: siteBackground(appearance.backgrounds.page.image),
+    siteBackground: siteBackground(appearance.backgrounds.page.image || appearance.backgrounds.page.canvas === true),
     cover: coverSlot(),
     regions: {
       topbar: topbarRegion,

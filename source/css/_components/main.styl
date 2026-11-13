@@ -25,6 +25,13 @@ body > .site-background
     --blur-px: 0
     --blur-sat: 200%
     blur-effect()
+    // 站点自定义绘制层（如云背景）
+    canvas#background-canvas
+      display: block
+      position: absolute
+      inset: 0
+      width: 100%
+      height: 100%
     if hexo-config('appearance.backgrounds.page.backdrop.saturation')
       --blur-sat: convert(hexo-config('appearance.backgrounds.page.backdrop.saturation'))
     if hexo-config('appearance.backgrounds.page.backdrop.radius')

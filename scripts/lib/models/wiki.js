@@ -187,7 +187,7 @@ function buildWikiRenderModel(input, collection, item) {
       pageType: "content",
       articleStyle,
       indent: articleIndentEnabled(item.presentation.article),
-      siteBackground: Boolean(appearance.backgrounds.page.image),
+      siteBackground: Boolean(appearance.backgrounds.page.image) || appearance.backgrounds.page.canvas === true,
       wikiIndexPath: profilePath(requireLayoutProfiles(stellarConfig).wikiIndex.path),
       algoliaFilterPath: (() => {
         const matched = `${item.route.path}/`.match(/(.*?)\/(.*?)\//i);
@@ -246,6 +246,9 @@ function buildWikiRenderModel(input, collection, item) {
         share: shareServices.length > 0 ? {
           services: shareServices,
           permalink: item.route.permalink,
+          shortlink: typeof input.page?.shortlink === "string" && input.page.shortlink
+            ? input.page.shortlink
+            : item.route.permalink,
           title: `${item.title} - ${String(siteConfig.title || "")}`,
           image: cardCover,
           summary: truncate(stripHTML(descriptionSource), { length: 120 })

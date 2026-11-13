@@ -57,14 +57,26 @@ export function mount(root, context) {
     if (!COLOR_SCHEMES.has(mode)) {
       throw new TypeError(`[stellar color-scheme-switch] unsupported mode ${String(mode)}`);
     }
-    if (mode === 'auto') {
-      documentRef.documentElement.removeAttribute('data-theme');
-    } else {
-      documentRef.documentElement.setAttribute('data-theme', mode);
+    const commit = () => {
+      if (mode === 'auto') {
+        documentRef.documentElement.removeAttribute('data-theme');
+      } else {
+        documentRef.documentElement.setAttribute('data-theme', mode);
+      }
+      if (options.persist !== false) persistColorScheme(storage, mode);
+      dispatch(mode);
+      if (options.notify !== false) context.legacy.stellar?.toast?.(messages[mode]);
+      return mode;
+    };
+    // 初始化/静默应用不做过渡，仅用户切换时启用 View Transitions 揭幕动画
+    const animate = options.notify !== false && typeof documentRef.startViewTransition === 'function';
+    if (!animate) return commit();
+    try {
+      documentRef.startViewTransition(commit);
+    } catch (error) {
+      void error;
+      commit();
     }
-    if (options.persist !== false) persistColorScheme(storage, mode);
-    dispatch(mode);
-    if (options.notify !== false) context.legacy.stellar?.toast?.(messages[mode]);
     return mode;
   }
 

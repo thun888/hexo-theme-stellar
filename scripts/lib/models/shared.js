@@ -305,6 +305,10 @@ function buildPostArticleRender(input, item) {
       share: shareServices.length > 0 ? {
         services: shareServices,
         permalink: item.route.permalink,
+        // 1.x 兼容：front-matter shortlink 优先用于二维码与复制链接
+        shortlink: typeof input.page?.shortlink === "string" && input.page.shortlink
+          ? input.page.shortlink
+          : item.route.permalink,
         title: `${item.title} - ${String(input.siteConfig.title || "")}`,
         image: item.cover || "",
         summary: truncate(stripHTML(summarySource), { length: 120 })
@@ -493,7 +497,7 @@ function buildPostRenderModel(input, collection, item) {
       pageType: "content",
       articleStyle,
       indent: articleIndentEnabled(item.presentation.article),
-      siteBackground: Boolean(appearance.backgrounds.page.image),
+      siteBackground: Boolean(appearance.backgrounds.page.image) || appearance.backgrounds.page.canvas === true,
       blogPath: typeof siteConfig.index_generator?.path === "string" ? normalizeCollectionPath(siteConfig.index_generator.path) : "",
       ...renderRegionLayout(regionLayout),
       breadcrumbs: normalizeCategoryLinks(page.categoryLinks)

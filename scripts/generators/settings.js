@@ -15,6 +15,7 @@ hexo.extend.generator.register("settings", function (locals) {
   const profiles = requireLayoutProfiles(hexo.stellar?.config);
   const profile = profiles.settings;
   const outputPath = generatorPath(profile.path);
+  if (profile.enabled === false) return [];
   const targetRoute = routeIdentity(outputPath);
   const profileConflict = Object.entries(profiles).find(([id, candidate]) => {
     return id !== "settings" && typeof candidate?.path === "string" && routeIdentity(generatorPath(candidate.path)) === targetRoute;
