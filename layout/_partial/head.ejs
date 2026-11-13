@@ -240,7 +240,7 @@ function generate_canonical() {
 
   <link rel="preload" href="<%- url_for(`${stellar_info('main_css')}?v=${stellar_info('version')}`) %>" as="style">
   <link rel="stylesheet" href="<%- url_for(`${stellar_info('main_css')}?v=${stellar_info('version')}`) %>">
-  <style>:root{--text-loading:<%- cssString(__('message.loading')) %>;--text-loading-error:<%- cssString(__('message.loading_failed')) %>}</style>
+  <style>:root{--text-loading:<%- cssString(stellar_config('appearance.loading.text') || __('message.loading')) %>;--text-loading-error:<%- cssString(stellar_config('appearance.loading.error') || __('message.loading_failed')) %>}</style>
 
 
   <% if (config.favicon) { %>

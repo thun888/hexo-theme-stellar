@@ -532,6 +532,20 @@ appearance:
     # 设置搜索栏的渐变。
     search_bar: 'linear-gradient(to right, #04f3ff, #08ffc6, #ddf730, #ffbd19, #ff1fe0, #c418ff, #3b5bff, #04f3ff)'
 
+  # 配置头像光环。
+  avatar:
+    # 设置头像外圈的光环渐变；仅对 avatar 形态的品牌图片生效。
+    gradient: 'conic-gradient(#caf0f8, #d8f3dc, #c8e7a1, #fee9b2, #ffd6a5, #ffc2d1, #bde0fe, #caf0f8)'
+    # 设置光环动画；可选值为 none、auto（悬停旋转）或 always。
+    animate: none
+
+  # 配置加载占位文案。
+  loading:
+    # 设置加载中文案；null 表示使用语言包文案。
+    text: null
+    # 设置加载失败文案；null 表示使用语言包文案。
+    error: null
+
   # 配置全站排版。
   typography:
     # 设置全站 -webkit-font-smoothing；可选值为 auto、none 或 antialiased。
