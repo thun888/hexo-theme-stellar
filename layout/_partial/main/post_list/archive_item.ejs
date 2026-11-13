@@ -4,12 +4,13 @@ if (postViewModel && (!['post', 'topic'].includes(postViewModel.collection?.prof
   throw new Error('Stellar v2: 归档条目缺少合法 PageViewModel.render.listing')
 }
 var item = postViewModel ? postViewModel.render.listing : (typeof post !== 'undefined' ? post : {})
+var locked = postViewModel ? postViewModel.item.lock === true : item.lock === true
 var href = pretty_url(postViewModel ? (item.href || '/') : (item.link || item.path || '/'))
 var itemDate = item.date ? date(item.date, 'MM-DD') : ''
 var itemTitle = item.title || (item.date ? date(item.date, config.date_format) : '')
 %>
 <div class="archive-list">
-  <% if (item.lock == true) { %>
+  <% if (locked) { %>
     <span class="post fs14">
       <% if (itemDate) { %><time><%- escape_html(itemDate) %></time><% } %>
       <span><%- escape_html(itemTitle) %></span>
