@@ -32,4 +32,12 @@ module.exports = ctx => {
   // merge icons: 简单覆盖合并
   const themeIcons = ctx.render.renderSync({ path: path.join(ctx.theme_dir, "_data/icons.yml"), engine: "yaml" });
   runtimeData.icons = Object.assign({}, themeIcons, data.icons || {});
+
+  // merge links: 站点 _data/links/*.yml，key 为文件名（如 projects_my），供 projects/dfriends 标签按组读取
+  const links = {};
+  for (const key of Object.keys(data)) {
+    if (!key.startsWith("links/")) continue;
+    links[key.slice("links/".length)] = data[key];
+  }
+  runtimeData.links = links;
 };

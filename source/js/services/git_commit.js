@@ -1,5 +1,6 @@
-(function () {
-  const els = document.getElementsByClassName('ds-git_commit');
+document.currentScript.stellarMount = function (root, context) {
+  const utils = context.serviceUtils;
+  const els = root.getElementsByClassName('ds-git_commit');
       for (var i = 0; i < els.length; i++) {
         const el = els[i];
         const api = el.dataset.api
@@ -38,7 +39,8 @@
           });
         });
       }
-})();
+  return () => {};
+};
 
 
 function getMeaning(message) {
@@ -51,6 +53,7 @@ function getMeaning(message) {
   const firstLetter = message.charAt(0);
   const secondLetter = message.charAt(1);
   var firstLetterMeaning = '';
+  var secondLetterMeaning = '';
   switch (firstLetter) {
     // A（新增）	D（移除）	M（修改）	E（修订） 	F（修复）  U（升级）
     case 'A':

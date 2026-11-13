@@ -11,7 +11,7 @@ module.exports = ctx => function(args) {
   let name = args[0]
   var el = '<div class="tag-plugin-wrap">'
   if (name) {
-    const links = ctx.theme.config.links || {}
+    const links = ctx.stellar?.data?.links || {}
     el += '<div class="grid-box"><div class="post-list wiki">'
 
     for (let item of (links[name] || [])) {
@@ -39,7 +39,7 @@ module.exports = ctx => function(args) {
         // console.log(tagsList);          
         tagsList.forEach(element => {
         var icon = '';
-        var iconsList = ctx.theme.config.icons || {};
+        var iconsList = ctx.stellar?.data?.icons || {};
         if (element.icon){
           if (element.icon.startsWith('http')){
             icon = `<span class="link-image" style="background-image: url(${element.icon}); border-radius: 25%;"></span>`;

@@ -1,5 +1,6 @@
-(function () {
-  const els = document.getElementsByClassName('ds-fclite');
+document.currentScript.stellarMount = function (root, context) {
+  const utils = context.serviceUtils;
+  const els = root.getElementsByClassName('ds-fclite');
       for (var i = 0; i < els.length; i++) {
         const el = els[i];
         const limit = parseInt(el.getAttribute('limit')) || 10;
@@ -27,4 +28,5 @@
         utils.dom(el).append(htmlBuffer);
         });
       }
-})();
+  return () => {};
+};

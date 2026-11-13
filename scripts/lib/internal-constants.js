@@ -121,7 +121,13 @@ module.exports = deepFreeze({
       artalk: { js: "/js/services/artalk_latest_comment.js" },
       giscus: { js: "/js/services/giscus_latest_comment.js" },
       contributors: { js: "/js/services/contributors.js" },
-      rss: { js: "/js/services/rss.js" }
+      rss: { js: "/js/services/rss.js" },
+      // 本地自定义服务：脚本均实现 document.currentScript.stellarMount 契约
+      coding: { js: "/js/services/coding.js" },
+      biliinfo: { js: "/js/services/biliinfo.js" },
+      livephoto: { js: "/js/services/livephoto.js" },
+      fclite: { js: "/js/services/fclite.js" },
+      git_commit: { js: "/js/services/git_commit.js" }
     }
   }
 });

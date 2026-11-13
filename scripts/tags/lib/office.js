@@ -13,7 +13,7 @@
 module.exports = ctx => function(args) {
   args = ctx.args.map(args, ['width', 'height'], ['src'])
   if (!args.src) {
-    return el;
+    return '';
   }
   let width = args.width ? Number(args.width) : 480;
   let height = args.height ? Number(args.height) : 270;
