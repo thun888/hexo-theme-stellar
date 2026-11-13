@@ -31,28 +31,31 @@
       border-radius: 50%
       corner-shape: round
       object-fit: cover
-
-  // 1.x 头像光环：图片内缩 2px，露出的底色由 --brand-ring 渐变填充
-  .brand-image--ring
-    &::before
-      content: ''
-      position: absolute
-      inset: 0
-      border-radius: 50%
-      corner-shape: round
-      background: var(--brand-ring)
-      opacity: 0
-      transition: opacity .2s
-    img
-      position: relative
-      z-index: 1
-      width: 'calc(100% - %s)' % 4px
-      height: 'calc(100% - %s)' % 4px
-      margin: 2px
-    &.brand-image--ring-auto:hover::before,
-    &.brand-image--ring-always::before
-      opacity: 1
-      animation: brand-ring-spin 4s linear infinite
+    // 1.x 头像光环：图片内缩 2px，露出的底色为 $avatar-ring 渐变
+    if $avatar-animate != 'none'
+      &::before
+        content: ''
+        position: absolute
+        inset: 0
+        border-radius: 50%
+        corner-shape: round
+        background: $avatar-ring
+        opacity: 0
+        transition: opacity .2s
+      img
+        position: relative
+        z-index: 1
+        width: 'calc(100% - %s)' % 4px
+        height: 'calc(100% - %s)' % 4px
+        margin: 2px
+      if $avatar-animate == 'always'
+        &::before
+          opacity: 1
+          animation: brand-avatar-spin 4s linear infinite
+      else
+        &:hover::before
+          opacity: 1
+          animation: brand-avatar-spin 4s linear infinite
 
   .brand-image--icon
     app-icon()
@@ -164,6 +167,6 @@
   &:hover
     color: var(--text-p1)
 
-@keyframes brand-ring-spin
+@keyframes brand-avatar-spin
   to
     transform: rotate(360deg)
