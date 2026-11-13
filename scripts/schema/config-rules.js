@@ -201,6 +201,8 @@ const CONFIG_RULES = Object.freeze([
   ["article.footer.license", { type: ["boolean", "string"], validator: "license_value" }],
   ["article.footer.share", { items: item("string", { defaultValue: "", values: [...SHARE_SERVICE_IDS, ...Object.keys(SHARE_SERVICE_ALIASES)] }), normalizer: "trimmed_string_list" }],
   ["article.related_posts_limit", { minimum: 0, validator: "non_negative_integer" }],
+  ["article.edit_url", { type: ["string", "null"], validator: "nullable_absolute_http_url" }],
+  ["article.report_url", { type: ["string", "null"], validator: "nullable_absolute_http_url" }],
   ["profiles.notebook.listing.excerpt_length", { minimum: 0, validator: "non_negative_integer" }],
   ["profiles.notebook.listing.per_page", { type: ["number", "null"], minimum: 0, validator: "nullable_non_negative_integer" }],
   ["profiles.notebook.listing.sort.field", { values: ["date", "updated", "title"] }],

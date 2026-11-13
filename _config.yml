@@ -489,6 +489,10 @@ article:
   show_reading_time: false
   # 设置相关文章最大数量，0 表示不显示相关文章。
   related_posts_limit: 0
+  # 设置文章页「编辑本文」链接前缀，渲染时追加页面源文件路径；null 表示隐藏按钮。
+  edit_url: null
+  # 设置文章页「内容举报」链接；null 表示隐藏按钮。
+  report_url: null
   # 配置文章页页脚。
   footer:
     # 设置文章许可协议；false 表示不显示许可信息。

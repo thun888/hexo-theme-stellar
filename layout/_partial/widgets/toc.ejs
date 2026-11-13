@@ -29,16 +29,21 @@ function layoutFooter(hasComments) {
     footer += '<span class="ui-icon">' + icon('default:to-comment', '', true) + '</span>'
     footer += '<span>' + __('btn.comments') + '</span></a>'
   }
-  var relativePath = page.source
-  footer += '<a class="' + ui_classes('edit-btn', 'interactive') + '" href="https://github.com/thun888/myblog/edit/main/source/' + relativePath + '">'
-  footer += icon('default:edit')
-  footer += '<span>' + __('btn.edit') + '</span></a>'
+  var editUrl = stellar_config('article.editUrl')
+  if (editUrl) {
+    footer += '<a class="' + ui_classes('edit-btn', 'interactive') + '" href="' + escape_html(editUrl + (page.source || '')) + '">'
+    footer += icon('default:edit')
+    footer += '<span>' + __('btn.edit') + '</span></a>'
+  }
   footer += '<a class="' + ui_classes('delmode-btn', 'interactive') + '" onclick="toggleDeleteMode()">'
   footer += icon('default:trash')
   footer += '<span>' + __('btn.delmode') + '</span></a>'
-  footer += '<a class="' + ui_classes('report-btn', 'interactive') + '" href="https://wj.qq.com/s2/21008541/d4f8/">'
-  footer += icon('default:warning')
-  footer += '<span>' + __('btn.report') + '</span></a>'
+  var reportUrl = stellar_config('article.reportUrl')
+  if (reportUrl) {
+    footer += '<a class="' + ui_classes('report-btn', 'interactive') + '" href="' + escape_html(reportUrl) + '">'
+    footer += icon('default:warning')
+    footer += '<span>' + __('btn.report') + '</span></a>'
+  }
   footer += '</div>'
   return footer
 }
