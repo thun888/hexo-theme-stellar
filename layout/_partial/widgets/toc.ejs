@@ -32,16 +32,16 @@ function layoutFooter(hasComments) {
   var editUrl = stellar_config('article.editUrl')
   if (editUrl) {
     footer += '<a class="' + ui_classes('edit-btn', 'interactive') + '" href="' + escape_html(editUrl + (page.source || '')) + '">'
-    footer += icon('default:edit')
+    footer += '<span class="ui-icon">' + icon('default:edit') + '</span>'
     footer += '<span>' + __('btn.edit') + '</span></a>'
   }
   footer += '<a class="' + ui_classes('delmode-btn', 'interactive') + '" onclick="toggleDeleteMode()">'
-  footer += icon('default:trash')
+  footer += '<span class="ui-icon">' + icon('default:trash') + '</span>'
   footer += '<span>' + __('btn.delmode') + '</span></a>'
   var reportUrl = stellar_config('article.reportUrl')
   if (reportUrl) {
     footer += '<a class="' + ui_classes('report-btn', 'interactive') + '" href="' + escape_html(reportUrl) + '">'
-    footer += icon('default:warning')
+    footer += '<span class="ui-icon">' + icon('default:warning') + '</span>'
     footer += '<span>' + __('btn.report') + '</span></a>'
   }
   footer += '</div>'
