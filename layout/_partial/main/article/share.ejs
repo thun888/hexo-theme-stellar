@@ -19,6 +19,9 @@ function renderAction(service) {
   if (action.kind === 'link') {
     return `<a class="${classes}" href="${escape_html(action.href)}" aria-label="${escape_html(label)}" title="${escape_html(label)}">${iconHtml}</a>`
   }
+  if (action.kind === 'copy') {
+    return `<a class="${classes}" role="button" href="javascript:void(0)" data-copy-link="${escape_html(action.value)}" data-copy-message="${escape_html(__('message.copied'))}" aria-label="${escape_html(label)}" title="${escape_html(label)}">${iconHtml}</a>`
+  }
   if (action.kind === 'toggle') {
     return `<a class="${classes}" onclick="util.toggle(&quot;${escape_html(action.target)}&quot;)" aria-label="${escape_html(label)}" title="${escape_html(label)}">${iconHtml}</a>`
   }
@@ -34,7 +37,7 @@ function layoutDiv() {
   var buttons = share.services.map(renderAction).join('')
   if (buttons.length === 0) return ''
   var qrcode = share.services.includes('qrcode')
-    ? `<div class="share-qrcode" id="share-qrcode" style="opacity:0;height:0"><img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&amp;data=${urlenc(share.permalink)}"/></div>`
+    ? `<div class="share-qrcode" id="share-qrcode" style="opacity:0;height:0"><img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&amp;data=${urlenc(share.shortlink || share.permalink)}"/></div>`
     : ''
   return `
   <div class="article-share${scrollreveal(' ')}" id="share">

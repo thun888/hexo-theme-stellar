@@ -2,6 +2,7 @@
 
 const SHARE_SERVICE_IDS = Object.freeze([
   "qrcode",
+  "link",
   "weibo",
   "x",
   "telegram",
@@ -9,9 +10,16 @@ const SHARE_SERVICE_IDS = Object.freeze([
   "email"
 ]);
 
+// 1.x 兼容别名：qrcode1 / wechat 都指向二维码
+const SHARE_SERVICE_ALIASES = Object.freeze({
+  qrcode1: "qrcode",
+  wechat: "qrcode"
+});
+
 const SHARE_SERVICE_SET = new Set(SHARE_SERVICE_IDS);
 const SHARE_SERVICE_LABELS = Object.freeze({
   qrcode: "QR Code",
+  link: "Copy Link",
   weibo: "Weibo",
   email: "Email",
   x: "X",
@@ -30,14 +38,27 @@ function query(pairs) {
     .join("&");
 }
 
+function normalizeShareService(service) {
+  const raw = text(service).trim();
+  return SHARE_SERVICE_ALIASES[raw] || raw;
+}
+
 function filterShareServices(services) {
   if (!Array.isArray(services)) return [];
-  return services.filter(service => SHARE_SERVICE_SET.has(service));
+  const result = [];
+  for (const service of services) {
+    const normalized = normalizeShareService(service);
+    if (!SHARE_SERVICE_SET.has(normalized) || result.includes(normalized)) continue;
+    result.push(normalized);
+  }
+  return result;
 }
 
 function buildShareAction(service, share = {}) {
   if (!SHARE_SERVICE_SET.has(service)) return null;
   const permalink = text(share.permalink);
+  // 1.x 兼容：二维码与复制链接使用 shortlink
+  const shortlink = text(share.shortlink) || permalink;
   const title = text(share.title);
   const image = text(share.image);
   const summary = text(share.summary);
@@ -49,6 +70,10 @@ function buildShareAction(service, share = {}) {
   if (service === "qrcode") {
     action.kind = "toggle";
     action.target = "share-qrcode";
+    action.permalink = shortlink;
+  } else if (service === "link") {
+    action.kind = "copy";
+    action.value = shortlink;
   } else if (service === "weibo") {
     action.kind = "external";
     action.href = `https://service.weibo.com/share/share.php?${query([
@@ -76,6 +101,8 @@ function buildShareAction(service, share = {}) {
 
 module.exports = {
   SHARE_SERVICE_IDS,
+  SHARE_SERVICE_ALIASES,
+  normalizeShareService,
   buildShareAction,
   filterShareServices
 };

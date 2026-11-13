@@ -922,6 +922,20 @@ const init = {
     window.dispatchEvent(new Event('tabs:register'));
   },
 
+  // 1.x 兼容：分享区的「复制链接」按钮（事件委托，兼容局部导航后重新插入的节点）
+  copyLink: () => {
+    document.addEventListener('click', function (event) {
+      const trigger = event.target.closest('[data-copy-link]');
+      if (!trigger) return;
+      event.preventDefault();
+      const value = trigger.getAttribute('data-copy-link');
+      if (!value || !navigator.clipboard) return;
+      navigator.clipboard.writeText(value).then(function () {
+        hud.toast(trigger.getAttribute('data-copy-message') || 'Copied', 2500);
+      }).catch(function () {});
+    });
+  },
+
   canonicalCheck: () => {
     const canonical = window.canonical;
     // 真实主站域名优先从 encoded（base64）反解，避免被「批量替换域名」的克隆站把提示指向自己
@@ -1043,4 +1057,5 @@ init.toc();
 init.wikiStart();
 init.wikiCover();
 init.leftbarScroll();
+init.copyLink();
 init.canonicalCheck();

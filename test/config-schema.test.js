@@ -33,7 +33,7 @@ test("Theme config loads complete frozen defaults", () => {
   assert.equal(config.profiles.settings.about.items.length, 2);
   assert.equal(config.topbar.brand.style, undefined);
   assert.equal(config.leftbar.brand.style, "regular");
-  assert.deepEqual(config.article.footer.share, SHARE_SERVICE_IDS);
+  assert.deepEqual(config.article.footer.share, SHARE_SERVICE_IDS.filter(id => id !== "link"));
   assert.equal(config.profiles.notebook.footer, undefined);
   assertDeepFrozen(config);
 });
