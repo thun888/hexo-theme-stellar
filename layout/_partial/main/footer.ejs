@@ -1,20 +1,13 @@
 <%
 var siteFooter = stellar_config('footer')
-// 仅在模板确实引用总字数时遍历，避免每页渲染都全量统计
-var footerTotalWords = 0
-if (siteFooter.content && siteFooter.content.indexOf('{site.posts.words}') !== -1) {
-  site.posts.forEach(function(footerPost) {
-    footerTotalWords += word_count(footerPost)
-  })
-}
 var content = siteFooter.content
   ?.replace('{author.name}', (config.author || 'Anonymity'))
   ?.replace('{theme.name}', stellar_info('name'))
   ?.replace('{theme.version}', stellar_info('version'))
   ?.replace('{theme.tree}', stellar_info('tree'))
   ?.replace('{site.posts.length}', site.posts.length)
-  ?.replace('{site.totalpages}', site.pages.length + site.posts.length)
-  ?.replace('{site.posts.words}', footerTotalWords)
+  ?.replace('{site.totalpages}', totalpages(site))
+  ?.replace('{site.posts.words}', totalcount(site))
   ?.replace('{extra.info.buildtime}', new Date().toLocaleDateString('zh-CN'))
 function layoutDiv() {
   var el = ''
