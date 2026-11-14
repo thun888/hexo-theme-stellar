@@ -306,7 +306,6 @@ const CONFIG_RULES = Object.freeze([
   ["inject.head_end", { normalizer: "trusted_text" }],
   ["inject.body_begin", { normalizer: "trusted_text" }],
   ["inject.body_end", { normalizer: "trusted_text" }],
-  ["svg_sprites.enable", { type: ["boolean"] }],
   ["search.algolia.js", resourceField],
   ["comments.*.js", resourceField],
   ["comments.*.css", resourceField],
