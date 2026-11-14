@@ -536,12 +536,18 @@ appearance:
     # 设置搜索栏的渐变。
     search_bar: 'linear-gradient(to right, #04f3ff, #08ffc6, #ddf730, #ffbd19, #ff1fe0, #c418ff, #3b5bff, #04f3ff)'
 
-  # 配置头像光环。
+  # 配置头像外形与光环。
   avatar:
+    # 设置头像形状；可选值为 circle（圆形）或 rounded（圆角矩形）。
+    shape: circle
+    # 设置圆角矩形头像的圆角半径；仅 shape 为 rounded 时生效。
+    radius: 16px
     # 设置头像外圈的光环渐变；仅对 avatar 形态的品牌图片生效。
     gradient: 'conic-gradient(#caf0f8, #d8f3dc, #c8e7a1, #fee9b2, #ffd6a5, #ffc2d1, #bde0fe, #caf0f8)'
     # 设置光环动画；可选值为 none、auto（悬停旋转）或 always。
     animate: none
+    # 设置是否显示光环；false 时忽略 animate，头像也不再内缩。
+    ring: true
 
   # 配置加载占位文案。
   loading:

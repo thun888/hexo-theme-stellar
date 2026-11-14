@@ -37,9 +37,12 @@ $c-theme = convert(hexo-config('appearance.colors.primary'))
 $c-accent = convert(hexo-config('appearance.colors.accent'))
 $c-link = convert(hexo-config('appearance.colors.link'))
 
-// avatar ring
+// avatar
 $avatar-ring = convert(hexo-config('appearance.avatar.gradient'))
 $avatar-animate = hexo-config('appearance.avatar.animate')
+$avatar-ring-enabled = hexo-config('appearance.avatar.ring')
+$avatar-shape = hexo-config('appearance.avatar.shape')
+$avatar-radius = convert(hexo-config('appearance.avatar.radius'))
 
 $c-base-hue = 210deg // 背景/文本颜色的主基调（一般看不出来不需要修改）
 
@@ -54,6 +57,14 @@ $border-image = convert(hexo-config('appearance.shape.radius.image'))
 $border-image-s = convert(hexo-config('appearance.shape.radius.image_small'))
 $border-button = 8px
 $corner-shape = convert(hexo-config('appearance.shape.corner'))
+
+$avatar-border-radius = 50%
+$avatar-corner = round
+$avatar-inner-radius = 50%
+if $avatar-shape == 'rounded'
+  $avatar-border-radius = $avatar-radius
+  $avatar-corner = $corner-shape
+  $avatar-inner-radius = 'calc(%s - 2px)' % $avatar-radius
 
 // shadow
 $boxshadow-card = 0 1px 2px 0px rgba(0, 0, 0, 0.1)
