@@ -52,6 +52,7 @@ module.exports = ctx => function(args) {
     }
     img += `onerror="this.src=&quot;${ctx.utils.iconData('image:onerror')}&quot;"`
     img += '/>'
+    img += `<div class="lazy-icon"></div>`
     if (fancyboxHref) {
       a += ` href="${fancyboxHref}">${img}</a>`
       return a
