@@ -32,13 +32,12 @@
       corner-shape: $avatar-corner
       object-fit: cover
     // 1.x 头像光环：图片内缩 2px，露出的底色为 $avatar-ring 渐变
+    // 光环层放大后由容器裁切，旋转时边缘不会随形状转进来
     if $avatar-ring-enabled and $avatar-animate != 'none'
       &::before
         content: ''
         position: absolute
-        inset: 0
-        border-radius: $avatar-border-radius
-        corner-shape: $avatar-corner
+        inset: -50%
         background: $avatar-ring
         opacity: 0
         transition: opacity .2s
